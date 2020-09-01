@@ -1,11 +1,20 @@
 {
   "name": "catbox",
   "version": "1.0.0",
-  "description": "",
+  "description": "Final Year Project",
   "main": "index.html",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yenwen95/catbox.git"
+  },
+  "author": "1171101541",
+  "license": "ISC",
+  "dependencies": {
+    "bootstrap": "^4.5.2",
+    "jquery": "^3.5.1",
+    "popper.js": "^1.16.1"
+  }
 }
