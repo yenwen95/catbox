@@ -8,12 +8,7 @@ $(document).ready(
             }
         );
 
-        //REGISTER MODAL
-        $('#registerButton').click(
-            function(){
-                $('#registerModal').modal('show');
-            }
-        );
+        
         
     }
 );

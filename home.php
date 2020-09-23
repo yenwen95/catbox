@@ -1,3 +1,10 @@
+<?php include 'controllers/authController.php'?>
+<?php
+	if(empty($_SESSION['id'])){
+		header('location: index.php');
+	}
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,18 +25,18 @@
 	
 		<nav class="navbar">
 			<!-- SYSTEM NAME -->
-			<a class="navbar-brand" href="./home.html">catBox</a>
+			<a class="navbar-brand" href="./index.php">catBox</a>
 
-			
+			<h2>MyBox</h2>
 
-			<!-- SEARCH BAR-->
+			<!-- SEARCH BAR
 			<div class="search-container">
 				<input type="text" placeholder="Search..">
 				<button type="submit"><i class="fa fa-search"></i></button>
 			</div>
-
+			-->
 			<!-- LOGIN BUTTON -->
-			<a class="btn btn-box" href="#">Login</a>
+			<a class="btn btn-box" href="logout.php">Logout</a>
 		</nav>
 	
 	
@@ -38,25 +45,10 @@
 	<div class="wrapper">
 
 
-	
-		<!--  LEFT MENU SIDEBAR
-		Later need to make it collapse when it is smaller screen size  -->
 
+		<!-- LEFT CONTENT  -->
 		<div class="left">
-			<!-- TWO MENU BUTTONS -->
-			<div class="container container-inner">
-				<!-- FIRST BUTTON -->
-				<div class="row">
-					<button class="btn btn-lg btn-box btn-block">MyBox</button>
-					<button class="btn btn-lg btn-box btn-block">ShareBox</button>
-				</div>
-			</div>
-		</div>
-
-
-		<!-- MIDDLE CONTENT  -->
-		<div class="middle">
-			<div class="container container-inner">
+			<div class="container ">
 				<!-- FUNCTION BUTTONS -->
 				<div class="row row-middle">
 					<div class="btn-group" role="group">
@@ -80,11 +72,11 @@
 
 		<!-- RIGHT FILE INFORMATION -->
 		<div class="right">
-			<div class="container container-inner">
+			<div class="container">
 				<!-- FOLDER INFORMATION -->
 				<div class="row">
 					<!-- made this two more wider, take more space -->
-					<div class="card col-12">
+					<div class="card">
 						<div class="card-header col-12">
 							Folder Information
 						</div>

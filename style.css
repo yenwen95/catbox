@@ -12,54 +12,48 @@ html, body{
 a.navbar-brand, .mybox, .mybox:hover{
 	text-decoration: none;
 	color: #E7E8EC;
-}
-
-.search-container{
-	display: flex;
-	justify-content: center;
-	width: 55%
 	
 }
-.search-container input{
-	width: 100%;
-}
+
+
 .wrapper{
 	display: grid;
-	grid-template-columns: 2fr 5fr 2fr;
-	column-gap: 10px;
+	grid-template-columns: 12fr 3fr;
+	column-gap: 15px;
 	height: 100%;
 
 }
 
+
 .left{
-	background-color:#B8C5CE;
-	
-}
-.middle{
 	background-color: #E7E8EC;
 	
+}
+
+.container{
+	margin-left: 3%;
 }
 
 .right{
 	border-left-style: solid;
 	border-left-color: #B8C5CE;
 	border-left-width: thin;
+	margin-left: 20px;
+	width:125%;
 }
 
-.container-inner{
-	margin: 20px auto;
-	align-self: center;
-}
+
 .container-outer{
 	width: 100%;
 	height: 100%;
-	margin: 0 0 0 0;
+	margin-left: 0;
 	padding:0 0;
 	display: block;
 
 }
 .row{
-	margin: 20px 20px;
+	margin: 20px 0px;
+	
 }
 .btn-box{
 	border: solid;
@@ -77,11 +71,13 @@ a.navbar-brand, .mybox, .mybox:hover{
 	border-bottom-style: solid;
 	border-bottom-color:rgba(57, 41, 67,0.5);
 	border-bottom-width: thin;
-	padding: 10px 0px;
+	padding: 10px 5px;
+	width:95%;
 }
 
 .card{
 	padding: 0 0;
+	width:100%;	
 }
 
 .body-bg {
@@ -90,4 +86,39 @@ a.navbar-brand, .mybox, .mybox:hover{
 
 .form-row{
 	margin: 5%;
+}
+
+.modal{
+	border-color: #392943;
+
+}
+
+.modal-header{
+	background-color: #392943;
+	color: #f6f7fc;
+}
+button.close{
+	text-decoration: none;
+	color:#ffffff;
+}
+.modal-body{
+	background-color: #f6f7fc;
+}
+div.form-row > a{
+	color: #b3b3b3;
+}
+
+.register-container{
+	background-color: #f6f7fc;
+	width:50%;
+	display: block;
+	margin: auto;
+	padding:0;
+	padding-bottom: 20px;
+}
+
+.register-header{
+	background-color: #918B8D;
+	color:#f6f7fc;
+	padding:20px;
 }
