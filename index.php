@@ -1,6 +1,9 @@
 <?php include 'controllers/authController.php' ?>
+
 <!DOCTYPE html>
 <html>
+<!-- The Main Page, before login, this page can login and click button to redirect to register.php
+     Login function will use authController.php  -->
 <head>
     <meta charset = "utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -13,14 +16,15 @@
 	
     <title>home page</title>
 </head>
-<body class="body-bg">
+<body class="body-color">
 
 	<!--  HEADER  -->
 	
 		<nav class="navbar">
 			<!-- SYSTEM NAME -->
-            <a class="navbar-brand" href="index.php">catBox</a>
-            <a  class="mybox" href="home.html">MyBox</a>
+            <a href="./index.php"><img width="50px" height="40px" src="img/logo.png" alt="logo" /></a>
+            <p class="mr-auto mb-0">catBox</p>
+         
 
 
 			<!-- LOGIN BUTTON -->
@@ -49,7 +53,7 @@
                             </div>
                             <div class="form-row">
                                 <a href="register.php" >Not Yet Register?</a>
-                                <a class="ml-auto">Forgot Password?</a>
+                                <a href="enter_email.php" class="ml-auto">Forgot Password?</a>
                             </div>
                             <div class="form-row">
                                 <button type="button" class="btn btn-secondary btn-sm ml-auto" data-dismiss="modal">Cancel</button>
@@ -64,20 +68,76 @@
         
 
         <!-- CONTENT -->
-        <div>
-        <?php if (count($errors) > 0): ?>
-            <div class="alert alert-danger">
-                <?php foreach ($errors as $error): ?>
-                    <li>
-                        <?php echo $error; ?>
-                    </li>
-                <?php endforeach;?>
-            </div>
-        <?php endif;?>
-        </div>            
         
-        <!-- FOOTER -->
+         
 
+        <div class="container">
+              
+            <!-- DISPLAY ERROR -->
+            <div class="row m-0 mt-1 d-flex justify-content-center">
+                <?php if (count($errors) > 0): ?>
+                    <div class="alert alert-danger">
+                        <?php foreach ($errors as $error): ?>
+                            <li>
+                                <?php echo $error; ?>
+                            </li>
+                        <?php endforeach;?>
+                    </div>
+                <?php endif;?>
+            </div>  
+
+            <!-- DISPLAY MESSAGE FROM VERIFICATION -->
+            <div class="row m-0 mt-1 d-flex justify-content-center">
+                <?php if (isset($_SESSION['message'])): ?>
+                    <div class="alert alert-success">
+                        <?php
+                            echo $_SESSION['message'];
+                            unset($_SESSION['message']);
+                            unset($_SESSION['type']);
+                        ?>
+                    </div>
+                <?php endif; ?>
+            </div>
+                     <!-- background images -->
+            <div class="row image-holder mb-0 ">
+               
+                <img class="bg-img1 img-responsive" src="./img/paws.png" alt="paws" />
+                <img class="bg-img2 img-responsive" src="./img/paws.png" alt="paws" />
+                
+                <div class="img-div">
+                    <img class="bg-img3 img-responsive" src="./img/laptop.png" alt="laptop" />
+                    <img class="bg-img4 img-responsive" src="./img/phone.png" alt="phone" />
+                </div>
+               
+          </div>
+            
+            <!-- BUTTONS -->
+            <div class="row">  
+                <div class="container mt-n3">    
+                <div class="row mt-0 mb-1">
+                    <p class="mx-auto  text-color">Secure and store your files in catBox</p>
+                </div> 
+                <div class="row m-0 d-flex justify-content-center">
+                    
+                    <span class="col-5 col-sm-4 ">
+                        <a href="home.php"  class="btn btn-lg btn-block btn-design1 text-size">Open your box</a>
+                    </span>
+                    <span class="col-5 col-sm-4">
+                        <a href="register.php" class="btn btn-lg btn-block btn-design2 text-size">Try it now!</a>
+                    </span>
+  
+                </div>
+                </div>
+            </div>   
+           
+
+            <!-- CONTENT ONE -->
+            <!-- Background paws -->
+         
+        
+            <!-- FOOTER -->
+        </div> 
+                 
 
      
 	<!-- jquery, popper.js, bootstrap script -->

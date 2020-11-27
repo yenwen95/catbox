@@ -12,23 +12,30 @@
 	<!--  custom css  -->
 	<link rel="stylesheet" href="style.css">
 	
-    <title>Verification</title>
+    <title>CATBOX</title>
 </head>
-<body class="body-bg">
+<body class="body-color">
     <div class="container">
         <div class="row">
-            
-            <?php if(!$_SESSION['verified']): ?>
-                <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                    You need to verify you email address! Sign into your email account 
-                    and click on the verification link we just emailed you at 
-                     <strong><?php echo $_SESSION['email']; ?></strong>
-                </div>
+            <?php if(($_SESSION['action'] == "register") || ($_SESSION['action'] == "login") ): ?>
+                <?php if(!$_SESSION['verified']): ?>
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        You need to verify you email address! Sign into your email account 
+                        and click on the verification link we just emailed you at 
+                        <strong><?php echo $_SESSION['email']; ?></strong>
+                    </div>
+                    <a class="btn btn-lg btn-primary btn-block" href="index.php">Go Back</a>
+                <?php endif;?>
             <?php else: ?>
-                <a class="btn btn-lg btn-primary btn-block" href="home.html">I'm verified!!!</a>
+                <div class="alert alert-success alert-difmissible fade show" role="alert">
+                    We sent an email to <b><?php echo $_SESSION['email']; ?></b> to help you recover your account.
+                    Please login into your email account and click on the link we sent to reset your password.
+                </div> 
+                <a class="btn btn-lg btn-primary btn-block" href="index.php">Go Back</a>
             <?php endif;?>
-
+            
         </div>
+
 
         
 

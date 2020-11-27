@@ -1,6 +1,7 @@
 <?php include 'controllers/authController.php' ?>
 <!DOCTYPE html>
 <html>
+<!-- Registration page, after registration will enter verification page which is verify.php -->
 <head>
     <meta charset = "utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -13,10 +14,11 @@
 	
     <title>Registration</title>
 </head>
-<body class="body-bg">
+<body class="body-color">
     <nav class="navbar">
         <!-- SYSTEM NAME -->
-        <a class="navbar-brand" href="index.php">catBox</a>
+        <a href="./index.php"><img width="50px" height="40px" src="img/logo.png" alt="logo" /></a>
+        <p class="mr-auto mb-0">catBox</p>
         
 
 
@@ -24,11 +26,55 @@
         <a id="loginButton" class="btn btn-box" >Login</a>
     </nav>
 
+ <!-- LOGIN MODAL -->
+ <div id="loginModal" class="modal fade" role="dialog">
+            <div class="modal-dialog modal-md" role="content">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Login</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        
+                        <form method="post" action="index.php">
+                        
+                            <div class="form-row">
+                                <label>Username or Email address</label>
+                                <input type="text" name="username" class="form-control" id="exampleInputEmail" value="<?php echo $username; ?>">
+                            </div>  
+                            <div class="form-row">
+                                <label>Password</label>
+                                <input type="password" name="password" class="form-control" id="exampleUsername">
+                            </div>
+                            <div class="form-row">
+                                <a href="register.php" >Not Yet Register?</a>
+                                <a href="enter_email.php" class="ml-auto">Forgot Password?</a>
+                            </div>
+                            <div class="form-row">
+                                <button type="button" class="btn btn-secondary btn-sm ml-auto" data-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn btn-box btn-sm ml-1" name="login-btn">Sign In</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- background image -->
+       
+           
+
     <!-- REGISTER FORM -->
     
-    <div class="container register-container">
+    <div class="container">
+    <div class="img-div">
+        <img class="bg-img5" src="./img/paws.png" alt="paws" />
+        
+        <img class="bg-img6" src="./img/paws.png" alt="paws" />
+    </div>   
+        <div class="register-container">
         <div class="register-header">
-            <h4>Please Provide Your Information: </h4>
+            <p class="mb-0">Please Provide Your Information: </p>
             <?php if (count($errors) > 0): ?>
             <div class="alert alert-danger">
                 <?php foreach ($errors as $error): ?>
@@ -66,6 +112,7 @@
                 </div>
             </form>
         </div> 
+        </div>
     </div>
  
   
