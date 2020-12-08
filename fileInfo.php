@@ -2,10 +2,9 @@
     include 'controllers/authController.php';
     $username = $_SESSION['username'];
     $action = $_POST['action'];
+  
    
-    
-   
-
+    //SHOW FILE INFO
     if($action == "showFileInfoMyBox"){
         $filename = $_POST['filename'];
         $fetchInfo = "SELECT * FROM Files WHERE filename = '".$filename."' && username = '$username'";

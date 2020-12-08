@@ -21,6 +21,12 @@ $(function(){
             }
         );
 
+        $("#previewButton").click(
+            function(){
+                $('#previewModal').modal('show');
+            }
+        );
+
        document.querySelector('#getFile').onchange = function(){
            document.querySelector('#getFileName').textContent = this.files[0].name;
        }
@@ -117,9 +123,29 @@ function getFileInfo(id, FileID){
          }
      );
 
+     
+     $('#downloadButton').unbind("click");
+     $("#downloadButton").click(
+         function(){
+            if(mybox === "flex"){
+                action = "downloadFile";
+                document.getElementById("downloadButton").href = "downloadFile.php?action=" + action + "&path=" + filename;
+            } else if(sharebox === "flex"){
+                action = "downloadShareFile";
+               
+                document.getElementById("downloadButton").href = "downloadFile.php?action=" + action + "&path=" + FileID;
+                
+            }
+
+         }
+     );
+
+
 }
 
  // UNDONE  -->  document.getElementById("showFileInfo").innerHTML = "<p>No File is selected...</p>";
+
+
 
 //Automatic showing the file info
 function showFileInfo(filename, action){

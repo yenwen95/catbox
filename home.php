@@ -100,7 +100,7 @@ foreach($files as $file){
 			<div class="modal-dialog modal-sm" role="content">
 				<div class="modal-content">
 					<div class="modal-body">
-					<a type="button" class="close-uploadModal" data-dismiss="modal">&times;</a>
+						<a type="button" class="close-uploadModal" data-dismiss="modal">&times;</a>
 						<div class="container" id="shareDiv">
 							<div class="row">
 								<p class="mb-1">Shared with: </p>
@@ -114,6 +114,21 @@ foreach($files as $file){
 				</div>
 			</div>
 		</div>
+
+	<!-- PREVIEW MODAL -->
+	<div id="previewModal" class="modal fade" role="dialog">
+		<div class="modal-dialog modal-md" role="content">
+			<div class="modal-content">
+				<div class="modal-body">
+					<a type="button" class="close-uploadModal" data-dismiss="modal">&times;</a>
+					<div class="container">
+						hi
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
 
 	<div id="mySidebar" class="sidebar">
 <!-- LEFT CONTENT (MENU TO SWITCH FROM OWN SPACE and SHARED FILE) -->
@@ -185,6 +200,8 @@ foreach($files as $file){
 							<a class="btn btn-box" id="addButton">Add</a>
 							<a class="btn btn-box" id="delButton">Delete</a>
 							<a class="btn btn-box" id="shareButton">Share</a>
+							<a class="btn btn-box" id="downloadButton" href="">Download</a>
+							<a class="btn btn-box" id="previewButton">Preview</a>
 						</div>
 					</div>
 					
