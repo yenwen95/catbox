@@ -99,6 +99,36 @@
 
     //IF USER WANT TO UNSHARE THE FILE
     
+    if($action == "previewFile"){
+        $return_arr = array();
+      $filename = $_POST['filename'];
+      $path = $username.'/'.$filename;
+
+      $file = './file_dir/'.$path;
+      $info = pathinfo($file);
+
+      $return_arr['path'] = $path;
+      $return_arr['filetype'] = $info["extension"];
+
+      echo json_encode($return_arr);
+  }
+  
+  if($action == "previewShareFile"){
+      $return_arr = array();
+      $fileID = $_POST['filename'];
+      $fetchInfo = "SELECT filepath FROM Files WHERE id = '$fileID'";
+      $result = mysqli_query($con, $fetchInfo);
+      while($row = mysqli_fetch_array($result)){
+          $file = $row['filepath'];
+          $info = pathinfo($file);
+          $path = substr($row['filepath'], 11);
+          $return_arr['path'] = $path;
+          $return_arr['filetype'] = $info["extension"];
+      }
+
+
+      echo json_encode($return_arr);
+  }
     
 
 ?>

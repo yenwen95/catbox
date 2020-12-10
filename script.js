@@ -21,11 +21,7 @@ $(function(){
             }
         );
 
-        $("#previewButton").click(
-            function(){
-                $('#previewModal').modal('show');
-            }
-        );
+      
 
        document.querySelector('#getFile').onchange = function(){
            document.querySelector('#getFileName').textContent = this.files[0].name;
@@ -132,11 +128,24 @@ function getFileInfo(id, FileID){
                 document.getElementById("downloadButton").href = "downloadFile.php?action=" + action + "&path=" + filename;
             } else if(sharebox === "flex"){
                 action = "downloadShareFile";
-               
                 document.getElementById("downloadButton").href = "downloadFile.php?action=" + action + "&path=" + FileID;
                 
             }
 
+         }
+     );
+     
+     $('#previewButton').unbind("click");
+     $("#previewButton").one("click",
+         function(){
+             $('#previewModal').modal('show');
+             if(mybox === "flex"){
+                action="previewFile";
+                previewFile(filename, action);
+             }else if(sharebox === "flex"){
+                action="previewShareFile";
+                previewFile(FileID, action);
+             }
          }
      );
 
@@ -145,6 +154,35 @@ function getFileInfo(id, FileID){
 
  // UNDONE  -->  document.getElementById("showFileInfo").innerHTML = "<p>No File is selected...</p>";
 
+//Preview File
+function previewFile(filename, action){
+    $.ajax({
+        url: 'fileInfo.php',
+        type: 'post',
+        data: {filename: filename, action: action},
+        dataType: 'JSON',
+        success: function(return_arr){
+          var type = return_arr['filetype'];
+            var path = return_arr['path'];
+            var imgbox = document.getElementById("previewImg");
+            var framebox = document.getElementById("previewFrame");
+            imgbox.style.display = "none";
+            framebox.style.display = "none";
+            
+            if(type == "jpg" || type == "png" ){  
+                 //use <img>
+                 framebox.style.display = "none";
+                 imgbox.style.display = "block";
+                  $('#previewImg').attr("src", src="https://catboxtest.000webhostapp.com/file_dir/" + path);
+            }else{ 
+                //use <iframe>
+                imgbox.style.display = "none";
+                framebox.style.display = "block";
+               $("#previewFrame").attr("src", src="https://docs.google.com/viewer?url=https://catboxtest.000webhostapp.com/file_dir/" + path + "&embedded=true");
+            }
+        }
+    });
+}
 
 
 //Automatic showing the file info

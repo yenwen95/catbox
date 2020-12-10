@@ -115,20 +115,20 @@ foreach($files as $file){
 			</div>
 		</div>
 
-	<!-- PREVIEW MODAL -->
+		<!-- PREVIEW MODAL -->
 	<div id="previewModal" class="modal fade" role="dialog">
 		<div class="modal-dialog modal-md" role="content">
 			<div class="modal-content">
 				<div class="modal-body">
 					<a type="button" class="close-uploadModal" data-dismiss="modal">&times;</a>
-					<div class="container">
-						hi
+					<div class="container" >
+					    <img id="previewImg" src="" width="100%" height="100%"/>
+						<iframe id="previewFrame" src="" width="100%" height="350px"></iframe>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-
 
 	<div id="mySidebar" class="sidebar">
 <!-- LEFT CONTENT (MENU TO SWITCH FROM OWN SPACE and SHARED FILE) -->
@@ -177,6 +177,7 @@ foreach($files as $file){
 			</div>
 		</nav>
 	
+	<!-- Scrollable DIV -->
 
 		<div class="wrapper" id="myBox">
 			
@@ -184,17 +185,7 @@ foreach($files as $file){
 			<!-- MIDDLE CONTENT  -->
 			<div class="middle">
 				<div class="container ml-3 ">
-					<!-- FUNCTION BUTTONS 
-					<div class="row row-middle">
-						<div class="btn-group" role="group">
-							<button type="button" class="btn btn-box">Add</button>
-							<button type="button" class="btn btn-box">Edit</button>
-							<button type="button" class="btn btn-box">Delete</button>
-							<button type="button" class="btn btn-box">Share</button>
-							<button type="button" class="btn btn-box">Preview</button>
-						</div>
-					</div>
-					-->
+					<!-- FUNCTION BUTTONS -->
 					<div class="row row-middle mb-1">
 						<div class="btn-group" role="group">
 							<a class="btn btn-box" id="addButton">Add</a>
