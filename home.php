@@ -77,17 +77,18 @@ foreach($files as $file){
 				<div class="modal-content">
 					<div class="modal-body">
 					<a type="button" class="close-uploadModal" data-dismiss="modal">&times;</a>
-						<form action="fileUpload.php" method="post" enctype="multipart/form-data" class="sm-form">
+						<!--form id="uploadForm" action="fileUpload.php" method="post" enctype="multipart/form-data" class="sm-form"-->
+						<form id="uploadForm" method="post" action="" enctype="multipart/form-data" class="sm-form">
 							<div class="form-row">
 								<p class="mb-1">Select a file:</p>
 								<div class="custom-file">
-    								<input type="file" name="getFile" class="custom-file-input" id="getFile"
+    								<input type="file" name="getFile" class="custom-file-input " id="getFile"
       									aria-describedby="inputGroupFileAddon01">
-    								<label class="custom-file-label" for="getFile" id="getFileName">Choose file</label>
+    								<label class="custom-file-label long" for="getFile" id="getFileName">Choose file</label>
   								</div>
 							</div>
 							<div class="form-row">
-								<button type="submit" class="btn btn-box mt-2" name="upload-btn">Upload</button>
+								<button id="uploadButton" type="button" value="Upload" class="btn btn-box mt-2">Upload</button>
 							</div>
 						</form>
 					</div>
@@ -132,9 +133,7 @@ foreach($files as $file){
 
 	<div id="mySidebar" class="sidebar">
 <!-- LEFT CONTENT (MENU TO SWITCH FROM OWN SPACE and SHARED FILE) -->
-				<h3>catBox</h3>
-		
-
+			<h3>catBox</h3>
 			<ul class="list-unstyled components">
 				<li>
 					<a href="./index.php">Home</a>
@@ -150,13 +149,12 @@ foreach($files as $file){
 	</div>	
 
 
-
 	<!--  MAIN CONTAINER -->
 	
 	<div id="main" class="container-outer">
-	<!--  HEADER  -->
+		<!--  HEADER  -->
 	
-		<nav class="navbar navbar-expand-lg">
+		<nav class="navbar navbar-expand-lg  fixed-top">
 			<div class="container-fluid">
 				<!-- SYSTEM NAME -->
 				<button  type="button"  class="btn-menu" value="open" onclick="toggleNav(this)" >&#9776;</button>
@@ -176,6 +174,7 @@ foreach($files as $file){
 				<a class="btn btn-box" href="logout.php">Logout</a>
 			</div>
 		</nav>
+
 	
 	<!-- Scrollable DIV -->
 
@@ -183,10 +182,10 @@ foreach($files as $file){
 			
 			
 			<!-- MIDDLE CONTENT  -->
-			<div class="middle">
-				<div class="container ml-3 ">
+			<div class="middle ">
+				<div class="container ml-3">
 					<!-- FUNCTION BUTTONS -->
-					<div class="row row-middle mb-1">
+					<div class="row row-middle mb-1 ">
 						<div class="btn-group" role="group">
 							<a class="btn btn-box" id="addButton">Add</a>
 							<a class="btn btn-box" id="delButton">Delete</a>
@@ -199,15 +198,17 @@ foreach($files as $file){
 
 
 					<!-- FILE TITLE -->
-					<div class="row row-middle m-0 p-0">
+					<div class="row row-middle m-0 p-0 ">
 						<div class="col-3 pb-1">Name</div>
 						<div class="col-3 pb-1">Created</div>
 						<div class="col-3 pb-1">Type</div>
 						<div class="col-3 pb-1">Size</div>
 					</div>
 
-					<div id="myBoxMiddle">
+				
+					<div id="myBoxMiddle" class="scrollable" >
 						<!-- SHOW FILES -->
+					
 						<?php 
 							$username = $_SESSION['username'];
 							$fetchFile = "SELECT * from Files where username = '$username'";
@@ -215,8 +216,8 @@ foreach($files as $file){
 							$num=1;
 							while($row = mysqli_fetch_array($result)){
 						?>
-							<div class="row row-middle m-0 p-0 off-select" id="row_<?php echo $num;?>" onclick="getFileInfo(<?php echo $num; ?>)">
-								<div class="col-3 pb-1" id="file_<?php echo $num; ?>" value="<?php echo $row['filename'] ?>"><?php echo $row['filename'] ?></div>
+							<div class="row row-middle m-0 p-0 off-select " id="row_<?php echo $num;?>" onclick="getFileInfo(<?php echo $num; ?>)">
+								<div class="col-3 pb-1 long" id="file_<?php echo $num; ?>" value="<?php echo $row['filename'] ?>"><?php echo $row['filename'] ?></div>
 								<div class="col-3 pb-1"><?php echo $row['createtime'] ?></div>
 								<div class="col-3 pb-1"><?php echo $row['filetype'] ?></div>
 								<div class="col-3 pb-1"><?php echo $row['filesize'] ?></div>
@@ -225,9 +226,12 @@ foreach($files as $file){
 								$num++; 
 							}
 						?>
+						
 					</div>
+					
+					
 
-					<div id="shareBoxMiddle">
+					<div id="shareBoxMiddle" class="scrollable">
 						
 						<?php
 							$username = $_SESSION['username'];
@@ -275,7 +279,7 @@ foreach($files as $file){
 							
 						?>
 							<div class="row row-middle m-0 p-0 off-select" id="row_<?php echo $num;?>" onclick="getFileInfo(<?php echo $num; ?>, <?php echo $ID; ?>)">
-								<div class="col-3 pb-1 " ><?php echo $row['filename'] ?></div>
+								<div class="col-3 pb-1 long" ><?php echo $row['filename'] ?></div>
 								<div class="col-3 pb-1 "><?php echo $row['createtime'] ?></div>
 								<div class="col-3 pb-1 "><?php echo $row['filetype'] ?></div>
 								<div class="col-3 pb-1"><?php echo $row['filesize'] ?></div>

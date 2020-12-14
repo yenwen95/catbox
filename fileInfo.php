@@ -4,9 +4,64 @@
     $action = $_POST['action'];
   
    
+    //UPLOAD FILE
+    if($action == "uploadFile"){
+
+        $status = "";
+
+        //UPLOAD
+        if(isset($_FILES['getFile']['name'])){
+
+
+            $defaultDir = "./file_dir/";
+            $userFolder = $defaultDir.$username.'/';
+            $fileExists = 0;
+            $fileName = $_FILES['getFile']['name'];
+
+            $query = "SELECT filename FROM Files WHERE filename = '$fileName' and username = '$username'";
+            $result = $con->query($query) or die("Error: ". mysqli_error($con));
+
+            while($row = mysqli_fetch_array($result)){
+                if($row['filename'] == $fileName){
+                    $fileExists = 1;
+                }
+            }
+
+            //Check the file is existing in the database or not
+            if($fileExists == 0){
+            // $targetDir = "file_dir/";
+                $filePath = $userFolder.$fileName;
+                $fileTempName = $_FILES['getFile']['tmp_name'];
+                $fileSize = $_FILES['getFile']['size'];
+                $fileType = $_FILES['getFile']['type'];
+                //$username = $_SESSION['username'];
+                $result = move_uploaded_file($fileTempName, $filePath);
+
+                if($result){
+                    $query = "INSERT INTO Files(filename, filetype, filesize, filepath, createtime, username) VALUES ('$fileName', '$fileType', '$fileSize', '$filePath', curdate(), (SELECT username from Users where username = '$username'))";
+                    $con->query($query) or die ("Error: ".mysqli_error($con));
+                    exit();
+                }
+                else{
+                    echo "Sorry! There was an error in uploading your file";
+                }
+                mysqli_close($con);
+                $status = "no";
+            }
+            else{
+                mysqli_close($con);
+                $status = "exist";
+                
+            }
+        }
+        echo json_encode($status);
+
+    }
+
+
     //SHOW FILE INFO
     if($action == "showFileInfoMyBox"){
-        $filename = $_POST['filename'];
+        $filename = $_POST['file'];
         $fetchInfo = "SELECT * FROM Files WHERE filename = '".$filename."' && username = '$username'";
         $result = mysqli_query($con, $fetchInfo);
         $return_arr = array();
@@ -17,12 +72,13 @@
             $return_arr['filesize'] = $row['filesize'];
             $return_arr['createtime'] = $row['createtime'];
             $return_arr['shared_users'] = $row['shared_users'];
+            $return_arr['action'] = $action;
         }
         echo json_encode($return_arr);
     }
 
     if($action == "showFileInfoShareBox"){
-        $fileID = $_POST['fileID'];
+        $fileID = $_POST['file'];
         $fetchInfo = "SELECT * FROM Files WHERE id = '$fileID'";
         $result = mysqli_query($con, $fetchInfo);
         $return_arr = array();
@@ -33,6 +89,7 @@
             $return_arr['filesize'] = $row['filesize'];
             $return_arr['createtime'] = $row['createtime'];
             $return_arr['username'] = $row['username'];
+            $return_arr['action'] = $action;
         }
         echo json_encode($return_arr);
     }
@@ -101,7 +158,7 @@
     
     if($action == "previewFile"){
         $return_arr = array();
-      $filename = $_POST['filename'];
+      $filename = $_POST['file'];
       $path = $username.'/'.$filename;
 
       $file = './file_dir/'.$path;
@@ -115,7 +172,7 @@
   
   if($action == "previewShareFile"){
       $return_arr = array();
-      $fileID = $_POST['filename'];
+      $fileID = $_POST['file'];
       $fetchInfo = "SELECT filepath FROM Files WHERE id = '$fileID'";
       $result = mysqli_query($con, $fetchInfo);
       while($row = mysqli_fetch_array($result)){

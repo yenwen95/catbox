@@ -74,9 +74,9 @@ a.btn-box:hover {
 }
 
 .container-outer {
-  height: 100%;
+  height: 100vh;
   display: block;
-  padding: 0;
+  padding: 60 0 0 0;
   margin: 0;
 }
 
@@ -85,6 +85,7 @@ a.btn-box:hover {
   grid-template-columns: 12fr 5fr;
   column-gap: 15px;
   height: 100%;
+  padding-top: 10vh;
 }
 
 .middle {
@@ -305,7 +306,6 @@ a.btn-box:hover {
   color: #e7e8ec;
 }
 .row-middle {
-  margin-left: 0;
   border-bottom-style: solid;
   border-bottom-color: rgba(57, 41, 67, 0.5);
   border-bottom-width: thin;
@@ -433,4 +433,27 @@ a {
 
 .info-text {
   font-size: 1.2vw;
+}
+
+.scrollable {
+  position: relative;
+  height: 67vh;
+  overflow-y: auto;
+}
+
+.scrollable::-webkit-scrollbar {
+  width: 10px;
+}
+
+.scrollable::-webkit-scrollbar-thumb {
+  background: rgba(141, 140, 140, 0.322);
+}
+.scrollable::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.long {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

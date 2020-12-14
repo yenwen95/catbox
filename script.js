@@ -1,6 +1,4 @@
 $(function(){
-       
-
         //LOGIN MODAL
         
         $('#loginButton').click(
@@ -20,8 +18,77 @@ $(function(){
                 $('#shareModal').modal('show');
             }
         );
+/*
+        $('#uploadButton').click(
+            function(){
+               var formData = new FormData();
+               var files = $('#getFile')[0].files;
 
-      
+               if(files.length > 0){
+                   formData.append('getFile', files[0]);
+               
+
+                $.ajax({
+                    url: 'fileUpload.php',
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function(status){
+                        if(status == "exist"){
+                            console.log("ho");
+                            var error = '<div class="form-row">'+
+                                            '<div class="alert alert-danger"> File exists! </div>' +
+                                        '</div>'; 
+                            $('#uploadForm').append(error);  
+                            
+                        }else{
+                            $('#uploadModal').modal('hide');
+                            //does not show the new file after successfully upload, need to refresh
+                        }
+                    }
+                });
+                }
+            }
+        );
+
+*/
+
+        $('#uploadButton').click(
+            function(){
+            var action = "uploadFile";
+            var formData = new FormData();
+            var files = $('#getFile')[0].files;
+
+            if(files.length > 0){
+                formData.append('getFile', files[0]);
+                formData.append('action',action);
+
+                $.ajax({
+                    url: 'fileInfo.php',
+                    type: 'POST',
+                    data: formData,
+                    dataType: 'JSON',
+                    contentType: false,
+                    processData: false,
+                    success: function(status){
+                        if(status == "exist"){
+                            console.log(status);
+                            var error = '<div class="form-row">'+
+                                            '<div class="alert alert-danger"> File exists! </div>' +
+                                        '</div>'; 
+                            $('#uploadForm').append(error);  
+                            
+                        }else{
+                            console.log(status);
+                            $('#uploadModal').modal('hide');
+                            //does not show the new file after successfully upload, need to refresh
+                        }
+                    }
+                });
+                }
+            }
+        );
 
        document.querySelector('#getFile').onchange = function(){
            document.querySelector('#getFileName').textContent = this.files[0].name;
@@ -38,6 +105,8 @@ $(function(){
 
     }
 );
+
+
 
 //SHOWING shareBox
 function displayShareBox(){
@@ -97,7 +166,7 @@ function getFileInfo(id, FileID){
         showFileInfo(filename, action);
     } else if(sharebox === "flex"){
         action = "showFileInfoShareBox";
-        showFileInfoShareBox(FileID, action);
+        showFileInfo(FileID, action);
     }
 
 
@@ -155,14 +224,14 @@ function getFileInfo(id, FileID){
  // UNDONE  -->  document.getElementById("showFileInfo").innerHTML = "<p>No File is selected...</p>";
 
 //Preview File
-function previewFile(filename, action){
+function previewFile(file, action){
     $.ajax({
         url: 'fileInfo.php',
         type: 'post',
-        data: {filename: filename, action: action},
+        data: {file: file, action: action},
         dataType: 'JSON',
         success: function(return_arr){
-          var type = return_arr['filetype'];
+            var type = return_arr['filetype'];
             var path = return_arr['path'];
             var imgbox = document.getElementById("previewImg");
             var framebox = document.getElementById("previewFrame");
@@ -171,14 +240,16 @@ function previewFile(filename, action){
             
             if(type == "jpg" || type == "png" ){  
                  //use <img>
-                 framebox.style.display = "none";
-                 imgbox.style.display = "block";
-                  $('#previewImg').attr("src", src="https://catboxtest.000webhostapp.com/file_dir/" + path);
+                framebox.style.display = "none";
+                imgbox.style.display = "block";
+                $('#previewImg').attr("src", src="./file_dir/" + path);
+                  //$('#previewImg').attr("src", src="https://catboxtest.000webhostapp.com/file_dir/" + path);
             }else{ 
                 //use <iframe>
                 imgbox.style.display = "none";
                 framebox.style.display = "block";
-               $("#previewFrame").attr("src", src="https://docs.google.com/viewer?url=https://catboxtest.000webhostapp.com/file_dir/" + path + "&embedded=true");
+                $("#previewFrame").attr("src", src="https://docs.google.com/viewer?url=https://calibre-ebook.com/downloads/demos/demo.docx&embedded=true");
+               //$("#previewFrame").attr("src", src="https://docs.google.com/viewer?url=https://catboxtest.000webhostapp.com/file_dir/" + path + "&embedded=true");
             }
         }
     });
@@ -186,51 +257,40 @@ function previewFile(filename, action){
 
 
 //Automatic showing the file info
-function showFileInfo(filename, action){
+function showFileInfo(file, action){
    
-       //DEFAULT function --> SHOW FILE INFO
+    //DEFAULT function --> SHOW FILE INFO
     $.ajax({
         url: 'fileInfo.php',
         type: 'post',
-        data: {filename: filename, action: action},
+        data: {file: file, action: action},
         dataType: 'JSON',
         success: function(return_arr){
-            console.log(return_arr);
-            $("#name").text(return_arr.filename);
-            $("#type").text(return_arr.filetype);
-            $("#size").text(return_arr.filesize);
-            $("#timecreate").text(return_arr.createtime);
-                var shareUser = return_arr.shared_users;
-                if(shareUser == '0' || shareUser == 'NULL'){
-                    $("#sharewith").text("");
-                }else{
-                    $("#sharewith").text(shareUser.slice(0,-1));
-                
-                }
+            var act = return_arr['action'];
+            if(act == "showFileInfoMyBox"){
+                $("#name").text(return_arr.filename);
+                $("#type").text(return_arr.filetype);
+                $("#size").text(return_arr.filesize);
+                $("#timecreate").text(return_arr.createtime);
+                    var shareUser = return_arr.shared_users;
+                    if(shareUser.trim() == ''){
+                        $("#sharewith").text("");
+                    }else{
+                        $("#sharewith").text(shareUser.slice(0,-1));
+                    }
+            }else if(act == "showFileInfoShareBox"){
+                $("#name").text(return_arr.filename);
+                $("#type").text(return_arr.filetype);
+                $("#size").text(return_arr.filesize);
+                $("#timecreate").text(return_arr.createtime);
+                $("#shareby").text(return_arr.username);
+            }
+            
         }
     });
     
 }
 
-function showFileInfoShareBox(fileID, action){
-    
-    //DEFAULT function --> SHOW FILE INFO FOR SHARE BOX
-    $.ajax({
-        url: 'fileInfo.php',
-        type: 'post',
-        data: {fileID: fileID, action: action},
-        dataType: 'JSON',
-        success: function(return_arr){
-            console.log(return_arr);
-            $("#name").text(return_arr.filename);
-            $("#type").text(return_arr.filetype);
-            $("#size").text(return_arr.filesize);
-            $("#timecreate").text(return_arr.createtime);
-            $("#shareby").text(return_arr.username);
-        }
-    });
- 
-}
 
 //DELETE FUNCTION
 function delFile(filename, action, id){
@@ -269,5 +329,7 @@ function shareFile(filename, action, checkUser){
                 $('#shareModal').modal('hide');
            }
        }
-   })
+   });
 }
+
+
