@@ -183,7 +183,7 @@ foreach($files as $file){
 			
 			<!-- MIDDLE CONTENT  -->
 			<div class="middle ">
-				<div class="container ml-3">
+				<div class="container ml-3" id="mainContainer">
 					<!-- FUNCTION BUTTONS -->
 					<div class="row row-middle mb-1 ">
 						<div class="btn-group" role="group">
@@ -206,28 +206,6 @@ foreach($files as $file){
 					</div>
 
 				
-					<div id="myBoxMiddle" class="scrollable" >
-						<!-- SHOW FILES -->
-					
-						<?php 
-							$username = $_SESSION['username'];
-							$fetchFile = "SELECT * from Files where username = '$username'";
-							$result = mysqli_query($con, $fetchFile);
-							$num=1;
-							while($row = mysqli_fetch_array($result)){
-						?>
-							<div class="row row-middle m-0 p-0 off-select " id="row_<?php echo $num;?>" onclick="getFileInfo(<?php echo $num; ?>)">
-								<div class="col-3 pb-1 long" id="file_<?php echo $num; ?>" value="<?php echo $row['filename'] ?>"><?php echo $row['filename'] ?></div>
-								<div class="col-3 pb-1"><?php echo $row['createtime'] ?></div>
-								<div class="col-3 pb-1"><?php echo $row['filetype'] ?></div>
-								<div class="col-3 pb-1"><?php echo $row['filesize'] ?></div>
-							</div>
-							<?php
-								$num++; 
-							}
-						?>
-						
-					</div>
 					
 					
 

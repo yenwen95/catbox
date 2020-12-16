@@ -1,13 +1,40 @@
 <?php 
     include 'controllers/authController.php';
     $username = $_SESSION['username'];
-    $action = $_POST['action'];
-  
+
    
+    //DISPLAY FILE LIST
+    if(isset($_GET['display'])){
+       echo '<div id="myBoxMiddle" class="scrollable" >';
+						
+	    $fetchFile = "SELECT * from Files where username = '$username'";
+	    $result = mysqli_query($con, $fetchFile);
+        $num=1;
+        while($row = mysqli_fetch_array($result)){
+						
+			echo '<div class="row row-middle m-0 p-0 off-select " id="row_'.$num.'" onclick="getFileInfo('.$num.')">';
+            echo '<div class="col-3 pb-1 long" id="file_'.$num.'" value="'.$row['filename'].'">'.$row['filename'].'</div>';
+            echo '<div class="col-3 pb-1">'.$row['createtime'].'</div>';
+            echo '<div class="col-3 pb-1">'.$row['filetype'].'</div>';
+            echo '<div class="col-3 pb-1">'.$row['filesize'].'</div>';
+            echo '</div>';
+							
+            $num++; 
+        }
+				
+						
+        echo '</div>';
+
+
+    }
+
+if(isset($_POST['action'])){
+    $action = $_POST['action'];
+
     //UPLOAD FILE
     if($action == "uploadFile"){
 
-        $status = "";
+        $status = "no";
 
         //UPLOAD
         if(isset($_FILES['getFile']['name'])){
@@ -18,16 +45,18 @@
             $fileExists = 0;
             $fileName = $_FILES['getFile']['name'];
 
+            //Check the file is existing in the database or not
             $query = "SELECT filename FROM Files WHERE filename = '$fileName' and username = '$username'";
             $result = $con->query($query) or die("Error: ". mysqli_error($con));
 
             while($row = mysqli_fetch_array($result)){
                 if($row['filename'] == $fileName){
                     $fileExists = 1;
+                    $status = "exist";
                 }
             }
 
-            //Check the file is existing in the database or not
+           
             if($fileExists == 0){
             // $targetDir = "file_dir/";
                 $filePath = $userFolder.$fileName;
@@ -40,17 +69,16 @@
                 if($result){
                     $query = "INSERT INTO Files(filename, filetype, filesize, filepath, createtime, username) VALUES ('$fileName', '$fileType', '$fileSize', '$filePath', curdate(), (SELECT username from Users where username = '$username'))";
                     $con->query($query) or die ("Error: ".mysqli_error($con));
-                    exit();
                 }
                 else{
                     echo "Sorry! There was an error in uploading your file";
                 }
                 mysqli_close($con);
-                $status = "no";
+           
             }
             else{
                 mysqli_close($con);
-                $status = "exist";
+               
                 
             }
         }
@@ -187,6 +215,7 @@
       echo json_encode($return_arr);
   }
     
+}
 
 ?>
 	

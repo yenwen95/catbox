@@ -1,61 +1,28 @@
 $(function(){
-        //LOGIN MODAL
-        
+    
         $('#loginButton').click(
             function(){
                 $('#loginModal').modal('show');
             }
         );
-         
-        $('#addButton').click(
-            function () {
-                $('#uploadModal').modal('show');
-            }
-        );
 
-        $("#shareButton").click(
-            function(){
-                $('#shareModal').modal('show');
-            }
-        );
-/*
-        $('#uploadButton').click(
-            function(){
-               var formData = new FormData();
-               var files = $('#getFile')[0].files;
+        $('#main').on('click', '#addButton', function(){
+            $('#uploadModal').modal('show');
+        });
 
-               if(files.length > 0){
-                   formData.append('getFile', files[0]);
-               
+        $('#main').on('click', '#shareButton', function(){
+            $('#shareModal').modal('show');
+        });
+     
+        displayFileList();
 
-                $.ajax({
-                    url: 'fileUpload.php',
-                    type: 'POST',
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    success: function(status){
-                        if(status == "exist"){
-                            console.log("ho");
-                            var error = '<div class="form-row">'+
-                                            '<div class="alert alert-danger"> File exists! </div>' +
-                                        '</div>'; 
-                            $('#uploadForm').append(error);  
-                            
-                        }else{
-                            $('#uploadModal').modal('hide');
-                            //does not show the new file after successfully upload, need to refresh
-                        }
-                    }
-                });
-                }
-            }
-        );
+        document.querySelector('#getFile').onchange = function(){
+            document.querySelector('#getFileName').textContent = this.files[0].name;
+        }
+     
+ 
 
-*/
-
-        $('#uploadButton').click(
-            function(){
+      $('#uploadModal').on('click', '#uploadButton', function(){
             var action = "uploadFile";
             var formData = new FormData();
             var files = $('#getFile')[0].files;
@@ -73,39 +40,53 @@ $(function(){
                     processData: false,
                     success: function(status){
                         if(status == "exist"){
-                            console.log(status);
                             var error = '<div class="form-row">'+
                                             '<div class="alert alert-danger"> File exists! </div>' +
                                         '</div>'; 
-                            $('#uploadForm').append(error);  
-                            
+                            $('#uploadForm').append(error); 
                         }else{
-                            console.log(status);
                             $('#uploadModal').modal('hide');
-                            //does not show the new file after successfully upload, need to refresh
+                            $("#main").load(location.href + " #main");
+                            displayFileList();
+
                         }
                     }
                 });
                 }
             }
         );
-
-       document.querySelector('#getFile').onchange = function(){
-           document.querySelector('#getFileName').textContent = this.files[0].name;
-       }
-    
-       $("div.off-select").click(
-           function(){
-               $("div.off-select").not(this).removeClass('on-select');
-                $(this).toggleClass("on-select");
-       });
-
      
-
+  
+        
+        
+         
+ 
+       
 
     }
 );
 
+function displayFileList(display){
+    var display = "displayFileList";
+    $.ajax({
+        url: 'fileInfo.php',
+        type: 'GET',
+        data: {display: display},
+        dataType: 'html',
+        success: function(fileList){
+            $('#mainContainer').append(fileList);
+
+            $(".off-select").on("click",
+             function(){ 
+                $(this).siblings(".off-select").removeClass("on-select");
+                $(this).toggleClass("on-select");
+         }
+     );
+        }
+
+    });
+
+}
 
 
 //SHOWING shareBox
@@ -155,6 +136,7 @@ function closeNav(){
 
 //When clicking the file
 function getFileInfo(id, FileID){
+
     var action = "";
     var filename =  document.getElementById("file_"+id).textContent;
 
@@ -171,8 +153,7 @@ function getFileInfo(id, FileID){
 
 
      $("#delButton").unbind("click");
-     $("#delButton").click(
-         function(){
+     $('#main').on('click', '#delButton', function(){
              action = "deleteFile";
             delFile(filename, action, id);
            
@@ -180,8 +161,7 @@ function getFileInfo(id, FileID){
      );
 
      $('#share-btn').unbind("click");
-     $("#share-btn").click(
-         function(){
+     $('#shareModal').on('click', '#share-btn', function(){
              action = "shareFile";
              checkUser = document.querySelector("#checkUser").value;
              shareFile(filename, action, checkUser);
@@ -190,8 +170,7 @@ function getFileInfo(id, FileID){
 
      
      $('#downloadButton').unbind("click");
-     $("#downloadButton").click(
-         function(){
+     $('#main').on('click', '#downloadButton', function(){
             if(mybox === "flex"){
                 action = "downloadFile";
                 document.getElementById("downloadButton").href = "downloadFile.php?action=" + action + "&path=" + filename;
