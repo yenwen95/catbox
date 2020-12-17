@@ -4,26 +4,117 @@
 
    
     //DISPLAY FILE LIST
-    if(isset($_GET['display'])){
-       echo '<div id="myBoxMiddle" class="scrollable" >';
+    if(isset($_GET['displayFile'])){
+        $displayFile = $_GET['displayFile'];
+
+        if($displayFile == "displayFileList"){
+            echo '<div id="myBoxMiddle" class="scrollable" >';
 						
-	    $fetchFile = "SELECT * from Files where username = '$username'";
-	    $result = mysqli_query($con, $fetchFile);
-        $num=1;
-        while($row = mysqli_fetch_array($result)){
-						
-			echo '<div class="row row-middle m-0 p-0 off-select " id="row_'.$num.'" onclick="getFileInfo('.$num.')">';
-            echo '<div class="col-3 pb-1 long" id="file_'.$num.'" value="'.$row['filename'].'">'.$row['filename'].'</div>';
-            echo '<div class="col-3 pb-1">'.$row['createtime'].'</div>';
-            echo '<div class="col-3 pb-1">'.$row['filetype'].'</div>';
-            echo '<div class="col-3 pb-1">'.$row['filesize'].'</div>';
+            $fetchFile = "SELECT * from Files where username = '$username'";
+            $result = mysqli_query($con, $fetchFile);
+            $num=1;
+            $x = "";
+            while($row = mysqli_fetch_array($result)){
+                
+
+                echo '<div class="row row-middle m-0 p-0 off-select " id="row_'.$num.'" onclick="getFileInfo('.$num.', '.$x.')">';
+                echo '<div class="col-3 pb-1 long" id="file_'.$num.'" value="'.$row['filename'].'">'.$row['filename'].'</div>';
+                echo '<div class="col-3 pb-1">'.$row['createtime'].'</div>';
+                $shortType = "";            
+                $type = $row['filetype'];
+                if($type == "text/plain"){
+                    $shortType = "text";
+                    echo '<div class="col-3 pb-1 long">'.$shortType.'</div>';
+                }elseif($type == "application/pdf"){
+                    $shortType = "pdf";
+                    echo '<div class="col-3 pb-1 long">'.$shortType.'</div>';
+                }elseif($type == "application/msword" || $type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document"){
+                    $shortType = "word";
+                    echo '<div class="col-3 pb-1 long">'.$shortType.'</div>';
+                }elseif($type == "application/vnd.openxmlformats-officedocument.presentationml.presentation"){
+                    $shortType = "powerpoint";
+                    echo '<div class="col-3 pb-1 long">'.$shortType.'</div>';
+                }elseif($type == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"){
+                    $shortType = "excel";
+                    echo '<div class="col-3 pb-1 long">'.$shortType.'</div>';
+                }
+                else{
+                    echo '<div class="col-3 pb-1 long">'.$row['filetype'].'</div>';
+                }
+               
+                echo '<div class="col-3 pb-1">'.$row['filesize'].'</div>';
+                echo '</div>';
+                                
+                $num++; 
+            }
+                    
+                            
             echo '</div>';
-							
-            $num++; 
         }
-				
+
+        if($displayFile == "displayShareFileList"){
+            echo '<div id="shareBoxMiddle" class="scrollable">';
 						
-        echo '</div>';
+					
+							$username = $_SESSION['username'];
+							$fetchInfo = "SELECT shared_users, id, username from Files";
+							$result = mysqli_query($con, $fetchInfo);
+							while($row = mysqli_fetch_row($result)){
+								$listSharedUsers[] = array($row[0]);
+								$listID[] = array($row[1]);
+								$listUserName[] = array($row[2]); 
+							}
+							
+			
+							$foundPos = array();
+							$foundFileID = array();
+							
+							for($i = 0; $i< count($listSharedUsers); $i++){
+								$sharedUsers = $listSharedUsers[$i];
+								$splitedUsers = explode(",", $sharedUsers[0]);
+								
+
+								for($j=0; $j<count($splitedUsers); $j++){
+									if($splitedUsers[$j] == $username){
+										array_push($foundPos, $i);
+									
+									}
+								}
+
+							}
+
+							for($i=0; $i<count($foundPos); $i++){
+								 $pos = $foundPos[$i];
+								array_push($foundFileID, $listID[$pos]);
+							}
+
+
+							$i=0;
+							
+							while($i<count($foundFileID)){
+								$ID = $foundFileID[$i][0];
+								
+								$fetchFile = "SELECT * from Files where id = '$ID'";
+								$result = mysqli_query($con, $fetchFile);
+								$num=1;
+								$row = mysqli_fetch_array($result);
+							
+	
+						echo	'<div class="row row-middle m-0 p-0 off-select" id="row_'.$num.'" onclick="getFileInfo('.$num.', '.$ID.')">';
+						echo	'<div class="col-3 pb-1 long" id="file_'.$num.'">'.$row['filename'].'</div>';
+						echo	'<div class="col-3 pb-1 ">'.$row['createtime'].'</div>';
+						echo    '<div class="col-3 pb-1 long">'.$row['filetype'].'</div>';
+						echo    '<div class="col-3 pb-1">'.$row['filesize'].'</div>';
+						echo 	'</div>';
+							
+								$i++;
+								$num++; 
+							}
+							
+					echo '</div>';
+
+        }
+     
 
 
     }

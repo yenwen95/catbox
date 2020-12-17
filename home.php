@@ -139,10 +139,10 @@ foreach($files as $file){
 					<a href="./index.php">Home</a>
 				</li>
 				<li>
-					<a href="./home.php">myBox</a>
+					<a id="gotoMyBox">myBox</a>
 				</li>
 				<li>
-					<a onclick="displayShareBox()">shareBox</a>
+					<a id="gotoShareBox" >shareBox</a>
 				</li>
 			</ul>
 		
@@ -209,67 +209,7 @@ foreach($files as $file){
 					
 					
 
-					<div id="shareBoxMiddle" class="scrollable">
-						
-						<?php
-							$username = $_SESSION['username'];
-							$fetchInfo = "SELECT shared_users, id, username from Files";
-							$result = mysqli_query($con, $fetchInfo);
-							while($row = mysqli_fetch_row($result)){
-								$listSharedUsers[] = array($row[0]);
-								$listID[] = array($row[1]);
-								$listUserName[] = array($row[2]); 
-							}
-							
-			
-							$foundPos = array();
-							$foundFileID = array();
-							
-							for($i = 0; $i< count($listSharedUsers); $i++){
-								$sharedUsers = $listSharedUsers[$i];
-								$splitedUsers = explode(",", $sharedUsers[0]);
-								
-
-								for($j=0; $j<count($splitedUsers); $j++){
-									if($splitedUsers[$j] == $username){
-										array_push($foundPos, $i);
-									
-									}
-								}
-
-							}
-
-							for($i=0; $i<count($foundPos); $i++){
-								 $pos = $foundPos[$i];
-								array_push($foundFileID, $listID[$pos]);
-							}
-
-
-							$i=0;
-							
-							while($i<count($foundFileID)){
-								$ID = $foundFileID[$i][0];
-								
-								$fetchFile = "SELECT * from Files where id = '$ID'";
-								$result = mysqli_query($con, $fetchFile);
-								$num=1;
-								$row = mysqli_fetch_array($result);
-							
-						?>
-							<div class="row row-middle m-0 p-0 off-select" id="row_<?php echo $num;?>" onclick="getFileInfo(<?php echo $num; ?>, <?php echo $ID; ?>)">
-								<div class="col-3 pb-1 long" ><?php echo $row['filename'] ?></div>
-								<div class="col-3 pb-1 "><?php echo $row['createtime'] ?></div>
-								<div class="col-3 pb-1 "><?php echo $row['filetype'] ?></div>
-								<div class="col-3 pb-1"><?php echo $row['filesize'] ?></div>
-							</div>
-							<?php
-								$i++;
-								$num++; 
-							}
-						?>
-
-							
-					</div>
+				
 
 				</div>
 			</div>

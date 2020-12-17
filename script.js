@@ -6,6 +6,16 @@ $(function(){
             }
         );
 
+        $('#mySidebar').on('click', '#gotoMyBox',function(){
+            var displayFile = "displayFileList";
+            displayBox(displayFile);
+        });
+
+        $('#mySidebar').on('click', '#gotoShareBox',function(){
+            var displayFile = "displayShareFileList";
+            displayBox(displayFile);
+        });
+
         $('#main').on('click', '#addButton', function(){
             $('#uploadModal').modal('show');
         });
@@ -13,8 +23,10 @@ $(function(){
         $('#main').on('click', '#shareButton', function(){
             $('#shareModal').modal('show');
         });
-     
-        displayFileList();
+
+        var displayFile = "displayFileList";
+        var page = "mybox";
+        displayFileList(displayFile, page);
 
         document.querySelector('#getFile').onchange = function(){
             document.querySelector('#getFileName').textContent = this.files[0].name;
@@ -47,7 +59,9 @@ $(function(){
                         }else{
                             $('#uploadModal').modal('hide');
                             $("#main").load(location.href + " #main");
-                            displayFileList();
+                            var displayFile = "displayFileList";
+                            var page = "mybox";
+                            displayFileList(displayFile, page);
 
                         }
                     }
@@ -57,31 +71,62 @@ $(function(){
         );
      
   
-        
-        
-         
- 
-       
-
     }
 );
 
-function displayFileList(display){
-    var display = "displayFileList";
+
+/*  FILE LISTING ORDER METHOD
+
+Default = order by name (acs) a -> z
+
+Name (dcs) z -> a
+
+createdTime (acs) latest -> oldest
+
+createdTime (decs) oldest -> latest
+
+file type (group by file type, order file type name, acs) 
+
+file type (group by file type, order file type name, decs)
+
+file size (acs) smallest -> largest
+ 
+file size (decs) largest -> smallest
+
+
+*/
+
+//show certain file type name
+
+
+
+function displayFileList(displayFile, page){
+    
     $.ajax({
         url: 'fileInfo.php',
         type: 'GET',
-        data: {display: display},
+        data: {displayFile: displayFile},
         dataType: 'html',
         success: function(fileList){
             $('#mainContainer').append(fileList);
 
-            $(".off-select").on("click",
-             function(){ 
+            $('#myBoxMiddle').on('click', '.off-select', function(){ 
                 $(this).siblings(".off-select").removeClass("on-select");
                 $(this).toggleClass("on-select");
-         }
-     );
+            });
+
+            $('#shareBoxMiddle').on('click', '.off-select', function(){ 
+                $(this).siblings(".off-select").removeClass("on-select");
+                $(this).toggleClass("on-select");
+            });
+
+           if(page == "sharebox"){
+            var mybox = document.getElementById("myBoxRight");
+            var shareBox = document.getElementById("shareBoxRight");
+            mybox.style.display = "none";
+            shareBox.style.display = "flex";
+           }
+
         }
 
     });
@@ -89,28 +134,17 @@ function displayFileList(display){
 }
 
 
-//SHOWING shareBox
-function displayShareBox(){
-    var mybox = document.getElementById("myBoxMiddle");
-    var mybox2 = document.getElementById("myBoxRight");
-
-    var shareBox = document.getElementById("shareBoxMiddle");
-    var shareBox2 = document.getElementById("shareBoxRight");
-
-    if((mybox.style.display === "none") || (shareBox.style.display === "block")){
-        mybox.style.display = "block";
-        mybox2.style.display = "flex";
-
-        shareBox.style.display = "none";
-        shareBox2.style.display = "none";
-    }else{
-        mybox.style.display = "none";
-        mybox2.style.display = "none";
-
-        shareBox.style.display = "block";
-        shareBox2.style.display = "flex";
+//CHANGING Between mybox and sharebox at SideBar
+function displayBox(displayFile){
+    if(displayFile == "displayShareFileList"){
+        $("#main").load(location.href + " #main");
+        var page = "sharebox";
+        displayFileList(displayFile, page);
+    }else if(displayFile == "displayFileList"){
+        $("#main").load(location.href + " #main");
+        var page = "mybox";
+        displayFileList(displayFile, page);
     }
-
 }
 
 //SHOWING SIDEBAR
@@ -138,15 +172,14 @@ function closeNav(){
 function getFileInfo(id, FileID){
 
     var action = "";
+  
     var filename =  document.getElementById("file_"+id).textContent;
 
-    var mybox = $("#myBoxRight").css("display");
-    var sharebox = $("#shareBoxRight").css("display");
 
-    if(mybox === "flex"){
+    if(FileID == "" || FileID == undefined){
         action = "showFileInfoMyBox";
         showFileInfo(filename, action);
-    } else if(sharebox === "flex"){
+    } else{
         action = "showFileInfoShareBox";
         showFileInfo(FileID, action);
     }
@@ -171,10 +204,10 @@ function getFileInfo(id, FileID){
      
      $('#downloadButton').unbind("click");
      $('#main').on('click', '#downloadButton', function(){
-            if(mybox === "flex"){
+            if(FileID == "" || FileID == undefined){
                 action = "downloadFile";
                 document.getElementById("downloadButton").href = "downloadFile.php?action=" + action + "&path=" + filename;
-            } else if(sharebox === "flex"){
+            } else{
                 action = "downloadShareFile";
                 document.getElementById("downloadButton").href = "downloadFile.php?action=" + action + "&path=" + FileID;
                 
@@ -187,10 +220,10 @@ function getFileInfo(id, FileID){
      $("#previewButton").one("click",
          function(){
              $('#previewModal').modal('show');
-             if(mybox === "flex"){
+             if(FileID == "" || FileID == undefined){
                 action="previewFile";
                 previewFile(filename, action);
-             }else if(sharebox === "flex"){
+             }else{
                 action="previewShareFile";
                 previewFile(FileID, action);
              }
