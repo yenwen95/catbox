@@ -139,10 +139,10 @@ foreach($files as $file){
 					<a href="./index.php">Home</a>
 				</li>
 				<li>
-					<a id="gotoMyBox">myBox</a>
+					<a id="gotoMyBox" class="boxes">myBox</a>
 				</li>
 				<li>
-					<a id="gotoShareBox" >shareBox</a>
+					<a id="gotoShareBox" class="boxes">shareBox</a>
 				</li>
 			</ul>
 		
@@ -198,11 +198,11 @@ foreach($files as $file){
 
 
 					<!-- FILE TITLE -->
-					<div class="row row-middle m-0 p-0 ">
-						<div class="col-3 pb-1">Name</div>
-						<div class="col-3 pb-1">Created</div>
-						<div class="col-3 pb-1">Type</div>
-						<div class="col-3 pb-1">Size</div>
+					<div id="sortFile" class="row row-middle m-0 p-0 ">
+						<div id="sortByName" class="col-3 pb-1">Name</div>
+						<div id="sortByTime" class="col-3 pb-1">Created</div>
+						<div id="sortByType" class="col-3 pb-1">Type</div>
+						<div id="sortBySize" class="col-3 pb-1">Size</div>
 					</div>
 
 				

@@ -6,15 +6,8 @@ $(function(){
             }
         );
 
-        $('#mySidebar').on('click', '#gotoMyBox',function(){
-            var displayFile = "displayFileList";
-            displayBox(displayFile);
-        });
-
-        $('#mySidebar').on('click', '#gotoShareBox',function(){
-            var displayFile = "displayShareFileList";
-            displayBox(displayFile);
-        });
+        
+   
 
         $('#main').on('click', '#addButton', function(){
             $('#uploadModal').modal('show');
@@ -24,9 +17,13 @@ $(function(){
             $('#shareModal').modal('show');
         });
 
-        var displayFile = "displayFileList";
+       
+
+        //Automatic show the user's file when enter the user page
         var page = "mybox";
-        displayFileList(displayFile, page);
+        var displayFile = "displayFileList";
+        var sortType = "default";
+        displayFileList(displayFile, page, sortType);
 
         document.querySelector('#getFile').onchange = function(){
             document.querySelector('#getFileName').textContent = this.files[0].name;
@@ -61,7 +58,8 @@ $(function(){
                             $("#main").load(location.href + " #main");
                             var displayFile = "displayFileList";
                             var page = "mybox";
-                            displayFileList(displayFile, page);
+                            var sortType = "default"
+                            displayFileList(displayFile, page, sortType);
 
                         }
                     }
@@ -74,38 +72,54 @@ $(function(){
     }
 );
 
+function getStatusBox(){
+   
+}
+
+//CHANGING Between mybox and sharebox at SideBar
+function displayBox(displayFile,page, sortType){
+    $("#main").load(location.href + " #main");
+    displayFileList(displayFile, page, sortType);
+
+  
+}
+
+
 
 /*  FILE LISTING ORDER METHOD
 
-Default = order by name (acs) a -> z
+Default = order by name (asc)   []
 
-Name (dcs) z -> a
+Name (desc) z -> a 
 
-createdTime (acs) latest -> oldest
+createdTime (asc) latest -> oldest 
 
-createdTime (decs) oldest -> latest
+createdTime (desc) oldest -> latest
 
-file type (group by file type, order file type name, acs) 
+file type (group by file type, order file type name, asc) 
 
-file type (group by file type, order file type name, decs)
+file type (group by file type, order file type name, desc)
 
-file size (acs) smallest -> largest
+file size (asc) smallest -> largest
  
-file size (decs) largest -> smallest
+file size (desc) largest -> smallest
 
 
 */
 
-//show certain file type name
 
 
 
-function displayFileList(displayFile, page){
-    
+// display the actual file list
+function displayFileList(displayFile, page, sortType){
+    console.log(displayFile);
+    console.log(page);
+    console.log(sortType);
+
     $.ajax({
         url: 'fileInfo.php',
         type: 'GET',
-        data: {displayFile: displayFile},
+        data: {displayFile: displayFile, sortType: sortType},
         dataType: 'html',
         success: function(fileList){
             $('#mainContainer').append(fileList);
@@ -119,6 +133,36 @@ function displayFileList(displayFile, page){
                 $(this).siblings(".off-select").removeClass("on-select");
                 $(this).toggleClass("on-select");
             });
+
+                
+            //Click sidebar button to display the user's files (call function)
+            $('#mySidebar').on('click', '#gotoMyBox',function(){
+                page = "mybox";
+                displayFile = "displayFileList";
+                sortType = "default";
+               
+                displayBox(displayFile,page, sortType);
+               
+            });
+            
+            //Click sidebar button to display the shared files (call function)
+            $('#mySidebar').on('click', '#gotoShareBox',function(){
+                displayFile = "displayShareFileList";
+                page = "sharebox";
+                sortType = "default";
+                
+                displayBox(displayFile,page, sortType);
+                
+            });
+
+            
+            $('#sortFile').on('click', '#sortByName', function(){
+                order=""
+                sortType = "sortByNameASC";
+                $("#main").load(location.href + " #main");
+                displayFileList(displayFile, page, sortType);
+            });
+            
 
            if(page == "sharebox"){
             var mybox = document.getElementById("myBoxRight");
@@ -134,18 +178,7 @@ function displayFileList(displayFile, page){
 }
 
 
-//CHANGING Between mybox and sharebox at SideBar
-function displayBox(displayFile){
-    if(displayFile == "displayShareFileList"){
-        $("#main").load(location.href + " #main");
-        var page = "sharebox";
-        displayFileList(displayFile, page);
-    }else if(displayFile == "displayFileList"){
-        $("#main").load(location.href + " #main");
-        var page = "mybox";
-        displayFileList(displayFile, page);
-    }
-}
+
 
 //SHOWING SIDEBAR
 function toggleNav(event){
@@ -185,7 +218,8 @@ function getFileInfo(id, FileID){
     }
 
 
-     $("#delButton").unbind("click");
+    
+     $("#main").off('click', '#delButton');
      $('#main').on('click', '#delButton', function(){
              action = "deleteFile";
             delFile(filename, action, id);
@@ -193,7 +227,8 @@ function getFileInfo(id, FileID){
          }
      );
 
-     $('#share-btn').unbind("click");
+    
+     $('#shareModal').off('click', '#share-btn');
      $('#shareModal').on('click', '#share-btn', function(){
              action = "shareFile";
              checkUser = document.querySelector("#checkUser").value;
@@ -202,7 +237,7 @@ function getFileInfo(id, FileID){
      );
 
      
-     $('#downloadButton').unbind("click");
+     $('#main').off('click', '#downloadButton');
      $('#main').on('click', '#downloadButton', function(){
             if(FileID == "" || FileID == undefined){
                 action = "downloadFile";
@@ -216,7 +251,7 @@ function getFileInfo(id, FileID){
          }
      );
      
-     $('#previewButton').unbind("click");
+     $('#main').off('click', '#previewButton');
      $("#previewButton").one("click",
          function(){
              $('#previewModal').modal('show');
