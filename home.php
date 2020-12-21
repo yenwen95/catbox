@@ -199,7 +199,7 @@ foreach($files as $file){
 
 					<!-- FILE TITLE -->
 					<div id="sortFile" class="row row-middle m-0 p-0 ">
-						<div id="sortByName" class="col-3 pb-1">Name</div>
+						<div id="sortByName" class="col-3 pb-1" >Name</div>
 						<div id="sortByTime" class="col-3 pb-1">Created</div>
 						<div id="sortByType" class="col-3 pb-1">Type</div>
 						<div id="sortBySize" class="col-3 pb-1">Size</div>

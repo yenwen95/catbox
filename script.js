@@ -1,3 +1,5 @@
+var order;
+
 $(function(){
     
         $('#loginButton').click(
@@ -5,9 +7,7 @@ $(function(){
                 $('#loginModal').modal('show');
             }
         );
-
-        
-   
+ 
 
         $('#main').on('click', '#addButton', function(){
             $('#uploadModal').modal('show');
@@ -17,12 +17,12 @@ $(function(){
             $('#shareModal').modal('show');
         });
 
-       
 
+     
         //Automatic show the user's file when enter the user page
         var page = "mybox";
         var displayFile = "displayFileList";
-        var sortType = "default";
+        var sortType = "sortByDefault";
         displayFileList(displayFile, page, sortType);
 
         document.querySelector('#getFile').onchange = function(){
@@ -58,7 +58,7 @@ $(function(){
                             $("#main").load(location.href + " #main");
                             var displayFile = "displayFileList";
                             var page = "mybox";
-                            var sortType = "default"
+                            var sortType = "sortByDefault"
                             displayFileList(displayFile, page, sortType);
 
                         }
@@ -72,16 +72,11 @@ $(function(){
     }
 );
 
-function getStatusBox(){
-   
-}
 
 //CHANGING Between mybox and sharebox at SideBar
 function displayBox(displayFile,page, sortType){
     $("#main").load(location.href + " #main");
     displayFileList(displayFile, page, sortType);
-
-  
 }
 
 
@@ -107,8 +102,19 @@ file size (desc) largest -> smallest
 
 */
 
-
-
+//Active ascending and descending order
+function changeOrder(type){
+    
+    if(order == "DESC"){
+        sortType = type+"DESC";
+        order = "ASC";
+ 
+    }else{
+        sortType = type+"ASC";
+        order = "DESC";
+    }
+    return sortType;
+}
 
 // display the actual file list
 function displayFileList(displayFile, page, sortType){
@@ -136,32 +142,57 @@ function displayFileList(displayFile, page, sortType){
 
                 
             //Click sidebar button to display the user's files (call function)
+            $('#mySidebar').off('click','#gotoMyBox');
             $('#mySidebar').on('click', '#gotoMyBox',function(){
                 page = "mybox";
                 displayFile = "displayFileList";
-                sortType = "default";
-               
+                sortType = "sortByDefault";           
                 displayBox(displayFile,page, sortType);
                
             });
             
             //Click sidebar button to display the shared files (call function)
+            $('#mySidebar').off('click','#gotoShareBox');
             $('#mySidebar').on('click', '#gotoShareBox',function(){
                 displayFile = "displayShareFileList";
                 page = "sharebox";
-                sortType = "default";
-                
+                sortType = "sortByDefault";
                 displayBox(displayFile,page, sortType);
                 
             });
 
-            
-            $('#sortFile').on('click', '#sortByName', function(){
-                order=""
-                sortType = "sortByNameASC";
-                $("#main").load(location.href + " #main");
-                displayFileList(displayFile, page, sortType);
+            $('#sortFile').off('click', '#sortByName');
+            $('#sortFile').on('click', '#sortByName', function(e){
+                e.preventDefault();
+                var type = "sortByName";
+                sortType = changeOrder(type);
+                displayBox(displayFile, page, sortType);
             });
+
+            $('#sortFile').off('click', '#sortByTime');
+            $('#sortFile').on('click', '#sortByTime', function(e){
+                e.preventDefault();
+                var type = "sortByTime";
+                sortType = changeOrder(type);
+                displayBox(displayFile, page, sortType);
+            });
+
+            $('#sortFile').off('click', '#sortByType');
+            $('#sortFile').on('click', '#sortByType', function(e){
+                e.preventDefault();
+                var type = "sortByType";
+                sortType = changeOrder(type);
+                displayBox(displayFile, page, sortType);
+            });
+
+            $('#sortFile').off('click', '#sortBySize');
+            $('#sortFile').on('click', '#sortBySize', function(e){
+                e.preventDefault();
+                var type = "sortBySize";
+                sortType = changeOrder(type);
+                displayBox(displayFile, page, sortType);
+            });
+            
             
 
            if(page == "sharebox"){

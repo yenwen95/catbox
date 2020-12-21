@@ -41,15 +41,49 @@
 
    }
 
+   
+    function formatSize($bytes){
+        if($bytes >= 1073741824){
+            $bytes = number_format($bytes/1073741824, 2).' GB';
+        }elseif($bytes >= 1048576){
+            $bytes = number_format($bytes/1048576, 2).' MB';
+        }elseif($bytes >= 1024){
+            $bytes = number_format($bytes/1024, 2).' KB';
+        }elseif($bytes > 1){
+            $bytes = $bytes.' bytes';
+        }elseif($bytes == 1){
+            $bytes = $bytes.' byte';
+        }else{
+            $bytes = '0 bytes';
+        }
+
+        return $bytes;
+    }
+
     //DISPLAY FILE LIST
     if(isset($_GET['displayFile'])){
         $displayFile = $_GET['displayFile'];
         $sortType = $_GET['sortType'];
+     
 
-        if($sortType == "default"){
-            $sortQuery = "ORDER BY filetype, filename ASC"; //DEFAULT
+        if($sortType == "sortByDefault"){
+            $sortQuery = "ORDER BY filetype, filename ASC";  //DEFAULT
         }elseif($sortType == "sortByNameASC"){
             $sortQuery = "ORDER BY filename ASC";
+        }elseif($sortType == "sortByNameDESC"){
+            $sortQuery = "ORDER BY filename DESC";
+        }elseif($sortType == "sortByTimeASC"){
+            $sortQuery = "ORDER BY createtime ASC";
+        }elseif($sortType == "sortByTimeDESC"){
+            $sortQuery = "ORDER BY createtime DESC";
+        }elseif($sortType == "sortByTypeASC"){
+            $sortQuery = "ORDER BY filetype ASC";
+        }elseif($sortType == "sortByTypeDESC"){
+            $sortQuery = "ORDER BY filetype DESC";
+        }elseif($sortType == "sortBySizeASC"){
+            $sortQuery = "ORDER BY actualsize ASC";
+        }elseif($sortType == "sortBySizeDESC"){
+            $sortQuery = "ORDER BY actualsize DESC";
         }
 
         if($displayFile == "displayFileList"){
@@ -64,7 +98,7 @@
                 $type = $row['filetype'];
                 $fileType = getFileType($type);
                 echo '<div class="row row-middle m-0 p-0 off-select " id="row_'.$num.'" onclick="getFileInfo('.$num.', '.$x.')">';
-                echo '<div class="col-3 pb-1 long" id="file_'.$num.'" value="'.$row['filename'].'">'.$row['filename'].'</div>';
+                echo '<div class="col-3 pb-1 long" id="file_'.$num.'">'.$row['filename'].'</div>';
                 echo '<div class="col-3 pb-1">'.$row['createtime'].'</div>';           
                 echo '<div class="col-3 pb-1 long">'.$fileType.'</div>';
                 echo '<div class="col-3 pb-1">'.$row['filesize'].'</div>';
@@ -78,6 +112,7 @@
         }
 
         if($displayFile == "displayShareFileList"){
+           
             echo '<div id="shareBoxMiddle" class="scrollable">';
 	
             $fetchInfo = "SELECT shared_users, id, username from Files";
@@ -111,32 +146,81 @@
                 array_push($foundFileID, $listID[$pos]);
             }
 
-
             $i=0;
-            
+            $data=array();
             while($i<count($foundFileID)){
                 $ID = $foundFileID[$i][0];
-                
-                $fetchFile = "SELECT * from Files where id = '$ID'".$sortQuery;
+                //different sort method for sharefile, because it displays one by one
+                $fetchFile = "SELECT * from Files where id = '$ID'";
                 $result = mysqli_query($con, $fetchFile);
-                $num=1;
                 $row = mysqli_fetch_array($result);
-                $type = $row['filetype'];
+                $data[] = $row;
+
+                $i++;
+               
+            }
+            
+            function sortByNameDESC($a, $b){
+                return strcasecmp($b['filename'], $a['filename']);
+            }
+            function sortByNameASC($a, $b){
+                return strcasecmp($a['filename'], $b['filename']);
+            }
+            function sortByTypeDESC($a, $b){
+                return $a['filetype'] < $b['filetype'];
+            }
+            function sortByTypeASC($a, $b){
+                return $a['filetype'] > $b['filetype'];
+            }
+            function sortBySizeDESC($a, $b){
+                return $a['actualsize'] < $b['actualsize'];
+            }
+            function sortBySizeASC($a, $b){
+                return $a['actualsize'] > $b['actualsize'];
+            }
+            function sortByTimeASC($a, $b){
+                 $t1 = strtotime($a['createtime']);
+                 $t2 = strtotime($b['createtime']);
+                return $t1 > $t2;
+            }
+            function sortByTimeDESC($a, $b){
+                $t1 = strtotime($a['createtime']);
+                $t2 = strtotime($b['createtime']);
+               return $t1 < $t2;
+           }
+
+
+
+
+            function sortByDefault($a, $b){
+                return [$a['filetype'], $a['filename']] <=> [$b['filetype'],$b['filename']];
+            }
+
+          //files to be sorted
+            $sorted = $data;  
+           //sort file at here
+            usort($sorted, $sortType);
+
+            //to display sorted files
+            $num =1;
+            foreach($sorted as $s){
+                //different sort method for sharefile, because it displays one by one
+            
+                $type = $s['filetype'];
                 $fileType = getFileType($type);
 
-                echo	'<div class="row row-middle m-0 p-0 off-select" id="row_'.$num.'" onclick="getFileInfo('.$num.', '.$ID.')">';
-                echo	'<div class="col-3 pb-1 long" id="file_'.$num.'">'.$row['filename'].'</div>';
-                echo	'<div class="col-3 pb-1 ">'.$row['createtime'].'</div>';
+                echo	'<div class="row row-middle m-0 p-0 off-select" id="row_'.$num.'" onclick="getFileInfo('.$num.', '.$s['id'].')">';
+                echo	'<div class="col-3 pb-1 long" id="file_'.$num.'">'.$s['filename'].'</div>';
+                echo	'<div class="col-3 pb-1 ">'.$s['createtime'].'</div>';
                 echo    '<div class="col-3 pb-1 long">'.$fileType.'</div>';
-                echo    '<div class="col-3 pb-1">'.$row['filesize'].'</div>';
+                echo    '<div class="col-3 pb-1">'.$s['filesize'].'</div>';
                 echo 	'</div>';
-            
-                $i++;
-                $num++; 
+                $num++;
+               
             }
             
             echo '</div>';
-
+            
         }
      
 
@@ -176,14 +260,15 @@ if(isset($_POST['action'])){
             // $targetDir = "file_dir/";
                 $filePath = $userFolder.$fileName;
                 $fileTempName = $_FILES['getFile']['tmp_name'];
-                $fileSize = $_FILES['getFile']['size'];
+                $actualSize = $_FILES['getFile']['size'];
+                $fileSize = formatSize($actualSize);
                 $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
 
                 //$username = $_SESSION['username'];
                 $result = move_uploaded_file($fileTempName, $filePath);
 
                 if($result){
-                    $query = "INSERT INTO Files(filename, filetype, filesize, filepath, createtime, username) VALUES ('$fileName', '$fileType', '$fileSize', '$filePath', curdate(), (SELECT username from Users where username = '$username'))";
+                    $query = "INSERT INTO Files(filename, filetype, filesize, actualsize, filepath, createtime, username) VALUES ('$fileName', '$fileType', '$fileSize','$actualSize', '$filePath', curdate(), (SELECT username from Users where username = '$username'))";
                     $con->query($query) or die ("Error: ".mysqli_error($con));
                 }
                 else{
@@ -202,6 +287,7 @@ if(isset($_POST['action'])){
 
     }
 
+  
 
     //SHOW FILE INFO
     if($action == "showFileInfoMyBox"){
@@ -336,6 +422,7 @@ if(isset($_POST['action'])){
   }
     
 }
+
 
 ?>
 	
