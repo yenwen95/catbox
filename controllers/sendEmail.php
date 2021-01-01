@@ -41,29 +41,31 @@ use PHPMailer\PHPMailer\Exception;
                             font-size: 1.3em;
                         }
                         a {
+                            background: #592f80;
                             text-decoration: none;
                             padding: 8px 15px;
                             border-radius: 5px;
-                            color: #E7E8EC; 
+                            color: #E7E8EC;
                         }
                         .btn-box{
-	                        border: solid;
-                        	border-color: #074B78;
-                        	background-color: #074B78;
-	                        color: #E7E8EC; 
-	
+                            border: solid;
+                            border-color: #074B78;
+                            background-color: #074B78;
+                            color: #E7E8EC; 
+
                         }
                         .btn-box:hover{
-	                        background-color: #0969aa;
-	                        color: #E7E8EC; 
-	                        border-color: #0969aa;
+                            background-color: #0969aa;
+                            color: #E7E8EC; 
+                            border-color: #0969aa;
                         }
                     </style>
                 </head>
                 <body>
                         <div class="wrapper">
                             <p>Thank you for signing up on our site. Please click on the link below to verify your account: </p>
-                            <!-- This <a> needs to be changed in 000webhost -->
+                           
+                            <!--a class="btn-box" href="https://catboxtest.000webhostapp.com/verify_email.php?token=' . $token . '">Verify Email!</a -->
                             <a class="btn-box" href="http://localhost/verify_email.php?token=' . $token . '">Verify Email</a>  
                         </div>
                 </body>
@@ -130,7 +132,7 @@ function sendPasswordResetEmail($userEmail, $token){
                 <body>
                         <div class="wrapper">
                             <p>Please click on the link below to change your password:  </p>
-                            <!-- This <a> needs to be changed in 000webhost -->
+                            <!-- <a class="btn-box" href="https://catboxtest.000webhostapp.com/reset_password.php?token=' . $token . '">Reset Password</a> -->
                             <a class="btn-box" href="http://localhost/reset_password.php?token=' . $token . '">Reset Password</a>  
                         </div>
                 </body>
@@ -172,24 +174,7 @@ function  sendPasswordResetSuccessEmail($userEmail, $username) {
                 .wrapper{
                     padding: 20px;
                     font-size: 1.3em;
-                }
-                a {
-                    text-decoration: none;
-                    padding: 8px 15px;
-                    border-radius: 5px;
-                }
-                .btn-box{
-                    border: solid;
-                    border-color: #074B78;
-                    background-color: #074B78;
-                    color: #E7E8EC; 
-
-                }
-                .btn-box:hover{
-                    background-color: #0969aa;
-                    color: #E7E8EC; 
-                    border-color: #0969aa;
-                }
+                }  
             </style>
         </head>
         <body>

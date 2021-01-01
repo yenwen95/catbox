@@ -97,11 +97,11 @@
             while($row = mysqli_fetch_array($result)){
                 $type = $row['filetype'];
                 $fileType = getFileType($type);
-                echo '<div class="row row-middle m-0 p-0 off-select " id="row_'.$num.'" onclick="getFileInfo('.$num.', '.$x.')">';
-                echo '<div class="col-3 pb-1 long" id="file_'.$num.'">'.$row['filename'].'</div>';
-                echo '<div class="col-3 pb-1">'.$row['createtime'].'</div>';           
-                echo '<div class="col-3 pb-1 long">'.$fileType.'</div>';
-                echo '<div class="col-3 pb-1">'.$row['filesize'].'</div>';
+                echo '<div class="row row-middle m-0 p-0 off-select" id="row_'.$num.'" onclick="getFileInfo('.$num.', '.$x.')">';
+                echo '<div class="col-12 col-sm-4 p-0 pb-2 pt-2 pt-sm-1 pb-sm-1 d-flex d-sm-block"><div class="long mr-1 col-7 col-sm-12 d-sm-block" id="file_'.$num.'">'.$row['filename'].'</div><p class="m-0 pt-1 mr-2 small d-sm-none">Created at: '.$row['createtime'].'</p></div>';
+                echo '<div class="d-none d-sm-block col-sm-3 pb-1 pt-1">'.$row['createtime'].'</div>';           
+                echo '<div class="d-none d-sm-block col-sm-3 pb-1 pt-1">'.$fileType.'</div>';
+                echo '<div class="d-none d-sm-block col-sm-2 pb-1 pt-1">'.$row['filesize'].'</div>';
                 echo '</div>';
                                 
                 $num++; 
@@ -210,10 +210,10 @@
                 $fileType = getFileType($type);
 
                 echo	'<div class="row row-middle m-0 p-0 off-select" id="row_'.$num.'" onclick="getFileInfo('.$num.', '.$s['id'].')">';
-                echo	'<div class="col-3 pb-1 long" id="file_'.$num.'">'.$s['filename'].'</div>';
-                echo	'<div class="col-3 pb-1 ">'.$s['createtime'].'</div>';
-                echo    '<div class="col-3 pb-1 long">'.$fileType.'</div>';
-                echo    '<div class="col-3 pb-1">'.$s['filesize'].'</div>';
+                echo	'<div class="col-12 col-sm-4 p-0 pb-2 pt-2 pt-sm-1 pb-sm-1 d-flex d-sm-block"><div class="long mr-1 col-7 col-sm-12 d-sm-block" id="file_'.$num.'">'.$s['filename'].'</div><p class="m-0 pt-1 mr-2 small d-sm-none">Created at: '.$s['createtime'].'</p></div>';
+                echo	'<div class="d-none d-sm-block col-sm-3 pb-1 pt-1">'.$s['createtime'].'</div>';
+                echo    '<div class="d-none d-sm-block col-sm-3 pb-1 pt-1">'.$fileType.'</div>';
+                echo    '<div class="d-none d-sm-block col-sm-2 pb-1 pt-1">'.$s['filesize'].'</div>';
                 echo 	'</div>';
                 $num++;
                

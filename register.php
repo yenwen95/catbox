@@ -10,12 +10,13 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<!--  custom css  -->
-	<link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/indexStyle.css">
 	
     <title>Registration</title>
 </head>
 <body class="body-color">
-    <nav class="navbar">
+    <nav class="navbar navbar-expand-lg  fixed-top">
         <!-- SYSTEM NAME -->
         <a href="./index.php"><img width="50px" height="40px" src="img/logo.png" alt="logo" /></a>
         <p class="mr-auto mb-0">catBox</p>
@@ -67,51 +68,51 @@
     <!-- REGISTER FORM -->
     
     <div class="container">
-    <div class="img-div">
-        <img class="bg-img5" src="./img/paws.png" alt="paws" />
-        
-        <img class="bg-img6" src="./img/paws.png" alt="paws" />
-    </div>   
+        <div class="img-div">
+            <img class="bg-img5" src="./img/paws.png" alt="paws" />
+            
+            <img class="bg-img6" src="./img/paws.png" alt="paws" />
+        </div>   
         <div class="register-container">
-        <div class="register-header">
-            <p class="mb-0">Please Provide Your Information: </p>
-            <?php if (count($errors) > 0): ?>
-            <div class="alert alert-danger">
-                <?php foreach ($errors as $error): ?>
-                <li>
-                <?php echo $error; ?>
-                </li>
-                <?php endforeach;?>
-            </div>
-            <?php endif;?>
-        </div>  
-        <div >    
-            <form method="POST" action="register.php">
-                <div class="form-row"> 
-                    <label for="username">Username</label>
-                    <input type="text" class="form-control" name="username" value="<?php echo $username; ?>" placeholder="Enter your username">
+            <div class="register-header">
+                <p class="mb-0">Please Provide Your Information: </p>
+                <?php if (count($errors) > 0): ?>
+                <div class="alert alert-danger">
+                    <?php foreach ($errors as $error): ?>
+                    <li>
+                    <?php echo $error; ?>
+                    </li>
+                    <?php endforeach;?>
                 </div>
-                <div class="form-row">
-                    <label for="Name">Name</label>
-                    <input type="text" class="form-control" name="name" value="<?php echo $name; ?>" placeholder="Enter your name">
-                </div>
-                <div class="form-row">
-                    <label for="exampleInputEmail">Email address</label>
-                    <input type="email" class="form-control" name="email" value="<?php echo $email; ?>" placeholder="Enter your email">
-                </div>        
-                <div class="form-row">
-                    <label for="examplePassword">Password</label>
-                    <input type="password" class="form-control" name="password1" placeholder="Enter your password">
-                </div>
-                <div class="form-row">
-                    <label for=exampleConfirmPassword">Confirm Your Password</label>
-                    <input type="password" class="form-control" name="password2" placeholder="Enter your password">
-                </div>
-                <div class="form-row">
-                    <button type="submit" class="btn btn-box btn-sm ml-1" name="register-btn">Submit</button>
-                </div>
-            </form>
-        </div> 
+                <?php endif;?>
+            </div>  
+            <div >    
+                <form method="POST" action="register.php">
+                    <div class="form-row"> 
+                        <label for="username">Username</label>
+                        <input type="text" class="form-control" name="username" value="<?php echo $username; ?>" placeholder="Enter your username">
+                    </div>
+                    <div class="form-row">
+                        <label for="Name">Name</label>
+                        <input type="text" class="form-control" name="name" value="<?php echo $name; ?>" placeholder="Enter your name">
+                    </div>
+                    <div class="form-row">
+                        <label for="exampleInputEmail">Email address</label>
+                        <input type="email" class="form-control" name="email" value="<?php echo $email; ?>" placeholder="Enter your email">
+                    </div>        
+                    <div class="form-row">
+                        <label for="examplePassword">Password</label>
+                        <input type="password" class="form-control" name="password1" placeholder="Enter your password">
+                    </div>
+                    <div class="form-row">
+                        <label for="exampleConfirmPassword">Confirm Your Password</label>
+                        <input type="password" class="form-control" name="password2" placeholder="Enter your password">
+                    </div>
+                    <div class="form-row">
+                        <button type="submit" class="btn btn-box btn-sm ml-1" name="register-btn">Submit</button>
+                    </div>
+                </form>
+            </div> 
         </div>
     </div>
  
@@ -126,7 +127,7 @@
 	<script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
     
     <!-- custom javascript -->
-    <script src="script.js"></script>
+    <script src="./js/script.js"></script>
     
 
 </body>

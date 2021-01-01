@@ -1,0 +1,194 @@
+/*for phone device*/
+body {
+  overflow: hidden;
+}
+@media only screen and (max-width: 768px) {
+  #main > .wrapper {
+    display: block;
+    width: 100%;
+    height: 100vh;
+  }
+  #addButton {
+    border-radius: 4px;
+  }
+  #myBoxMiddle.scrollable {
+    position: relative;
+    height: 80vh;
+    overflow-y: auto;
+  }
+  #myBoxMiddle.scrollable::-webkit-scrollbar {
+    width: 15px;
+  }
+}
+
+.wrapper {
+  display: grid;
+  grid-template-columns: 12fr 5fr;
+  column-gap: 15px;
+  height: 100%;
+}
+
+.middle {
+  background-color: #e7e8ec;
+  height: 100%;
+}
+.middle > .container {
+  height: 100%;
+}
+
+.right {
+  border-left-style: solid;
+  border-left-color: rgba(57, 41, 67, 0.5);
+  border-left-width: thin;
+  width: 90%;
+  height: 100%;
+}
+
+#openSidebar {
+  /*top left*/
+  background-color: #392943;
+  color: #f1f1f1;
+  border: none;
+}
+
+#closeSidebar {
+  width: 35px;
+  height: 35px;
+  line-height: 35px;
+  text-align: center;
+  position: absolute;
+  top: 25px;
+  right: 5px;
+  cursor: pointer;
+  color: #ffffff;
+  -webkit-o-transition: all 0.3s;
+  transition: all 0.3s;
+}
+#closeSidebar:hover {
+  background: #f1f1f1;
+  color: #392943;
+}
+.overlay,
+.overlayMobile {
+  display: none;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 995;
+  opacity: 0;
+  transition: all 0.5s;
+}
+.overlay.active,
+.overlayMobile.active {
+  display: block;
+  opacity: 1;
+}
+
+.sidebar {
+  height: 100vh;
+  width: 150px;
+  position: fixed;
+  z-index: 999;
+  top: 30px;
+  left: -150px;
+  background-color: #392943;
+  overflow-x: hidden;
+  padding-top: 60px;
+  transition: 0.3s;
+  color: #e7e8ec;
+}
+
+/*Problem: if filename too long, last button will cannot see*/
+
+#fileInfoMobile {
+  background-color: #f1f1f1;
+  width: 100vw;
+  position: absolute;
+  z-index: 997;
+  bottom: 0vh;
+  height: 70vh;
+  overflow: hidden;
+  transition: 0.3s;
+}
+#fileInfoMobile.fileInfoMobileClose {
+  bottom: -100vh;
+  height: 0;
+}
+
+.sidebar a {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 25px;
+  background: #392943;
+  color: #b1b1b1;
+  display: block;
+  transition: 0.3s;
+  cursor: pointer;
+}
+.sidebar a:hover {
+  background: #f1f1f1;
+  color: #392943;
+}
+
+.sidebar.active {
+  left: 0px;
+}
+#main {
+  transition: all 0.3s; /* If you want a transition effect */
+  width: 100%;
+  height: 100%;
+  display: block;
+  position: absolute;
+  padding: 60 0 0 0;
+  margin: 0;
+}
+
+#shareBoxRight,
+#shareBoxRightMobile {
+  display: none;
+}
+.scrollable {
+  position: relative;
+  height: 67vh;
+  overflow-y: auto;
+}
+
+.scrollable::-webkit-scrollbar {
+  width: 10px;
+}
+
+.scrollable::-webkit-scrollbar-thumb {
+  background: rgba(141, 140, 140, 0.322);
+}
+.scrollable::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+.name,
+.shareby,
+.sharewith {
+  word-wrap: break-word;
+}
+
+.long {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.on-select {
+  background-color: rgba(141, 140, 140, 0.322);
+}
+
+#sortFile {
+  border-top-style: solid;
+  border-top-width: thin;
+  border-top-color: rgba(57, 41, 67, 0.5);
+}
+.sortClass:hover {
+  background-color: rgba(141, 140, 140, 0.322);
+}
+
+.fa-arrow-up,
+.fa-arrow-down {
+  color: rgba(57, 41, 67, 0.5);
+}

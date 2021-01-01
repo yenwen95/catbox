@@ -13,11 +13,35 @@ $(function(){
             $('#uploadModal').modal('show');
         });
 
-        $('#main').on('click', '#shareButton', function(){
+        $('#main').on('click', '#shareButton, #shareButtonMobile', function(){
             $('#shareModal').modal('show');
         });
 
+        $('#closeSidebar, .overlay, .overlayMobile').on('click', function(){
+            $('#mySidebar').removeClass('active');
+            $('.overlay').removeClass('active');
+            $('.overlayMobile').removeClass('active');
+            $('#fileInfoMobile').addClass('fileInfoMobileClose');
+        });
 
+        $('#openSidebar').on('click', function(){
+            $('#mySidebar').addClass('active');
+            $('.overlay').addClass('active');
+        });
+
+       
+          
+    
+
+        //CLICK ANYWHERE to remove action
+        hide = true;
+        $('body').on('click', function(){
+            if(hide) {
+                $('.off-select').removeClass('on-select'); 
+                clearFileInfo();
+            }
+            hide = true;
+        });
      
         //Automatic show the user's file when enter the user page
         var page = "mybox";
@@ -30,7 +54,8 @@ $(function(){
         }
      
  
-
+        //Problem: one file will append one error, if two file exist, there will have two error 
+        //Problem: need to clear the input box that has filename after upload one file, same for others input box
       $('#uploadModal').on('click', '#uploadButton', function(){
             var action = "uploadFile";
             var formData = new FormData();
@@ -67,6 +92,8 @@ $(function(){
                 }
             }
         );
+
+
      
   
     }
@@ -81,26 +108,7 @@ function displayBox(displayFile,page, sortType){
 
 
 
-/*  FILE LISTING ORDER METHOD
 
-Default = order by name (asc)   []
-
-Name (desc) z -> a 
-
-createdTime (asc) latest -> oldest 
-
-createdTime (desc) oldest -> latest
-
-file type (group by file type, order file type name, asc) 
-
-file type (group by file type, order file type name, desc)
-
-file size (asc) smallest -> largest
- 
-file size (desc) largest -> smallest
-
-
-*/
 
 //Active ascending and descending order
 function changeOrder(type){
@@ -128,18 +136,58 @@ function displayFileList(displayFile, page, sortType){
         data: {displayFile: displayFile, sortType: sortType},
         dataType: 'html',
         success: function(fileList){
+            var arrowUp = "fas fa-arrow-up";
+            var arrowDown = "fas fa-arrow-down";
+
+            if(sortType == "sortByNameASC"){
+                $('#nameArrow').toggleClass(arrowUp);
+            }else if(sortType == "sortByNameDESC"){
+                $('#nameArrow').toggleClass(arrowDown);
+            }
+
+            else if(sortType == "sortByTimeASC"){
+                $('#timeArrow').toggleClass(arrowUp);
+            }else if(sortType == "sortByTimeDESC"){
+                $('#timeArrow').toggleClass(arrowDown);
+            }
+
+            else if(sortType == "sortByTypeASC"){
+                $('#typeArrow').toggleClass(arrowUp);
+            }else if(sortType == "sortByTypeDESC"){
+                $('#typeArrow').toggleClass(arrowDown);
+            }
+
+            else if(sortType == "sortBySizeASC"){
+                $('#sizeArrow').toggleClass(arrowUp);
+            }else if(sortType == "sortBySizeDESC"){
+                $('#sizeArrow').toggleClass(arrowDown);
+            }
+
+            else if(sortType == "sortByDefault"){
+                $('#nameArrow, #timeArrow, #sizeArrow, #typeArrow').toggleClass(arrowUp);
+               
+            }
+
             $('#mainContainer').append(fileList);
+            
+          
 
             $('#myBoxMiddle').on('click', '.off-select', function(){ 
                 $(this).siblings(".off-select").removeClass("on-select");
                 $(this).toggleClass("on-select");
+                $('#fileInfoMobile').removeClass('fileInfoMobileClose');  //toggle file infomation
+                hide = false;
             });
-
+           
+           
             $('#shareBoxMiddle').on('click', '.off-select', function(){ 
                 $(this).siblings(".off-select").removeClass("on-select");
                 $(this).toggleClass("on-select");
+                $('#fileInfoMobile').removeClass('fileInfoMobileClose');  //togle file information
+                hide = false;
             });
 
+            
                 
             //Click sidebar button to display the user's files (call function)
             $('#mySidebar').off('click','#gotoMyBox');
@@ -160,6 +208,7 @@ function displayFileList(displayFile, page, sortType){
                 displayBox(displayFile,page, sortType);
                 
             });
+
 
             $('#sortFile').off('click', '#sortByName');
             $('#sortFile').on('click', '#sortByName', function(e){
@@ -197,10 +246,16 @@ function displayFileList(displayFile, page, sortType){
 
            if(page == "sharebox"){
             var mybox = document.getElementById("myBoxRight");
+            var myboxMobile = document.getElementById("myBoxRightMobile");
             var shareBox = document.getElementById("shareBoxRight");
+            var shareBoxMobile = document.getElementById("shareBoxRightMobile");
             mybox.style.display = "none";
+            myboxMobile.style.display = "none";
             shareBox.style.display = "flex";
+            shareBoxMobile.style.display = "flex";
            }
+
+         
 
         }
 
@@ -208,29 +263,16 @@ function displayFileList(displayFile, page, sortType){
 
 }
 
-
-
-
-//SHOWING SIDEBAR
-function toggleNav(event){
-    if(event.value == "open"){
-        openNav();
-        event.value = "close";
-    }else if(event.value == "close"){
-        closeNav();
-        event.value = "open";
-    }
+function clearFileInfo(){
+    $('#name').empty();
+    $('#type').empty();
+    $('#size').empty();
+    $('#timecreate').empty();
+    $('#sharewith').empty();
+    $('#shareby').empty();
 }
 
-function openNav(){
-    document.getElementById("mySidebar").style.width = "150px";
-    document.getElementById("main").style.marginLeft = "150px";
-}
 
-function closeNav(){
-    document.getElementById("mySidebar").style.width = "0";
-    document.getElementById("main").style.marginLeft = "0";
-}
 
 //When clicking the file
 function getFileInfo(id, FileID){
@@ -238,7 +280,8 @@ function getFileInfo(id, FileID){
     var action = "";
   
     var filename =  document.getElementById("file_"+id).textContent;
-
+    $('.overlayMobile').addClass('active');
+   
 
     if(FileID == "" || FileID == undefined){
         action = "showFileInfoMyBox";
@@ -250,8 +293,8 @@ function getFileInfo(id, FileID){
 
 
     
-     $("#main").off('click', '#delButton');
-     $('#main').on('click', '#delButton', function(){
+     $("#main").off('click', '#delButton, #delButtonMobile');
+     $('#main').on('click', '#delButton, #delButtonMobile', function(){
              action = "deleteFile";
             delFile(filename, action, id);
            
@@ -266,9 +309,8 @@ function getFileInfo(id, FileID){
              shareFile(filename, action, checkUser);
          }
      );
-
      
-     $('#main').off('click', '#downloadButton');
+     $('#main').off('click', '#downloadButton, #downloadButtonMobile');
      $('#main').on('click', '#downloadButton', function(){
             if(FileID == "" || FileID == undefined){
                 action = "downloadFile";
@@ -281,9 +323,21 @@ function getFileInfo(id, FileID){
 
          }
      );
+     $('#main').on('click', '#downloadButtonMobile', function(){
+        if(FileID == "" || FileID == undefined){
+            action = "downloadFile";
+            document.getElementById("downloadButtonMobile").href = "downloadFile.php?action=" + action + "&path=" + filename;
+        } else{
+            action = "downloadShareFile";
+            document.getElementById("downloadButtonMobile").href = "downloadFile.php?action=" + action + "&path=" + FileID;
+            
+        }
+
+     }
+ );
      
-     $('#main').off('click', '#previewButton');
-     $("#previewButton").one("click",
+     $('#main').off('click', '#previewButton, #previewButtonMobile');
+     $("#previewButton,  #previewButtonMobile").one("click",
          function(){
              $('#previewModal').modal('show');
              if(FileID == "" || FileID == undefined){
@@ -346,22 +400,23 @@ function showFileInfo(file, action){
         success: function(return_arr){
             var act = return_arr['action'];
             if(act == "showFileInfoMyBox"){
-                $("#name").text(return_arr.filename);
-                $("#type").text(return_arr.filetype);
-                $("#size").text(return_arr.filesize);
-                $("#timecreate").text(return_arr.createtime);
+                $(".name").text(return_arr.filename);
+                $(".type").text(return_arr.filetype);
+                $(".size").text(return_arr.filesize);
+                $(".timecreate").text(return_arr.createtime);
+
                     var shareUser = return_arr.shared_users;
                     if(shareUser.trim() == ''){
-                        $("#sharewith").text("");
+                        $(".sharewith").text("");
                     }else{
-                        $("#sharewith").text(shareUser.slice(0,-1));
+                        $(".sharewith").text(shareUser.slice(0,-1));
                     }
             }else if(act == "showFileInfoShareBox"){
-                $("#name").text(return_arr.filename);
-                $("#type").text(return_arr.filetype);
-                $("#size").text(return_arr.filesize);
-                $("#timecreate").text(return_arr.createtime);
-                $("#shareby").text(return_arr.username);
+                $(".name").text(return_arr.filename);
+                $(".type").text(return_arr.filetype);
+                $(".size").text(return_arr.filesize);
+                $(".timecreate").text(return_arr.createtime);
+                $(".shareby").text(return_arr.username);
             }
             
         }
@@ -380,6 +435,8 @@ function delFile(filename, action, id){
         success: function(status){
             if(status == "success"){
                 $("#row_"+id).remove();
+                $('.overlayMobile').removeClass('active');
+                $('#fileInfoMobile').addClass('fileInfoMobileClose');
             }else{
                 console.log("fail");
             }

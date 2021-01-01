@@ -1,0 +1,176 @@
+html,
+body {
+  height: 100%;
+  padding: 0;
+  width: 100%;
+  font-size: 1em; /*normal size*/
+  padding-top: 20px;
+}
+
+@media only screen and (max-width: 768px) {
+  body {
+    padding-top: 10px;
+    background-color: #e7e8ec;
+    font-size: 1em;
+  }
+}
+
+.body-color {
+  background-color: #b8c5ce;
+}
+
+/*any device smaller than laptop*/
+.index-banner {
+  color: #525252;
+  font-size: 1.6em;
+  text-align: center;
+}
+
+.index-btn {
+  font-size: 1.2em;
+}
+input,
+label,
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input::placeholder {
+  font-size: 1em;
+}
+
+/*laptop size*/
+@media only screen and (min-device-width: 1030px) {
+  .index-banner {
+    color: #525252;
+    font-size: 2.5em;
+    text-align: center;
+  }
+
+  .index-btn {
+    font-size: 1.4em;
+  }
+}
+
+.info-text {
+  font-size: 0.8em;
+}
+
+.navbar {
+  background-color: #392943;
+  color: #e7e8ec;
+  padding: 5px 20px;
+}
+a {
+  text-decoration: none;
+}
+
+a.navbar-brand,
+a.btn-box,
+a.btn-box:hover {
+  color: #e7e8ec;
+}
+
+.container {
+  z-index: 5;
+  padding: 0;
+}
+
+.row {
+  margin: 20px 0px;
+}
+
+.row-middle {
+  border-bottom-style: solid;
+  border-bottom-color: rgba(57, 41, 67, 0.5);
+  border-bottom-width: thin;
+  padding: 10px 5px;
+  width: 95%;
+}
+
+.btn-design1 {
+  background-color: #c3e1f6;
+  color: #353434;
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.btn-design2 {
+  background-color: #074b78;
+  color: #f1f1f1;
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.btn-design1:hover {
+  background-color: #8fadc2;
+  color: #353434;
+}
+.btn-design2:hover {
+  background-color: #4284b1;
+  color: #f1f1f1;
+}
+
+.btn-box {
+  border: solid;
+  border-color: #074b78;
+  background-color: #074b78;
+  padding: 2px 7px;
+  cursor: pointer;
+  color: #e7e8ec;
+}
+.btn-box:hover {
+  background-color: #0969aa;
+  border-color: #0969aa;
+  color: #e7e8ec;
+}
+
+button.close,
+button.close:hover {
+  text-decoration: none;
+  color: #ffffff;
+}
+button.close-homeModal {
+  text-decoration: none;
+  color: #074b78;
+}
+
+.card {
+  padding: 0 0;
+  width: 100%;
+}
+
+.form-row {
+  margin: 5%;
+}
+
+div.form-row > a {
+  color: #b3b3b3;
+}
+
+.modal {
+  border-color: #392943;
+}
+
+.modal-header {
+  background-color: #392943;
+  color: #f6f7fc;
+}
+
+.modal-body {
+  background-color: #f6f7fc;
+  font-size: 1em;
+}
+
+.register-container {
+  position: absolute;
+  background-color: #f6f7fc;
+  width: 70%;
+  display: block;
+  left: 15%;
+  padding: 0;
+  z-index: 5;
+  font-size: 2vw;
+}
+
+.register-header {
+  background-color: #918b8d;
+  color: #f6f7fc;
+  padding: 10px 20px;
+  font-size: 3vw;
+}

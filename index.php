@@ -12,15 +12,16 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<!--  custom css  -->
-	<link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/indexStyle.css">
 	
-    <title>home page</title>
+    <title>catBox</title>
 </head>
 <body class="body-color">
 
 	<!--  HEADER  -->
 	
-		<nav class="navbar">
+		<nav class="navbar navbar-expand-lg  fixed-top">
 			<!-- SYSTEM NAME -->
             <a href="./index.php"><img width="50px" height="40px" src="img/logo.png" alt="logo" /></a>
             <p class="mr-auto mb-0">catBox</p>
@@ -115,15 +116,15 @@
             <div class="row">  
                 <div class="container mt-n3">    
                 <div class="row mt-0 mb-1">
-                    <p class="mx-auto  text-color">Secure and store your files in catBox</p>
+                    <p class="mx-auto  index-banner">Secure and store your files in catBox</p>
                 </div> 
-                <div class="row m-0 d-flex justify-content-center">
+                <div class="row m-0 mb-2 d-flex justify-content-center">
                     
-                    <span class="col-5 col-sm-4 ">
-                        <a href="home.php"  class="btn btn-lg btn-block btn-design1 text-size">Open your box</a>
+                    <span class="col-12 mb-3 col-sm-4 ">
+                        <a href="home.php"  class="btn btn-lg btn-block btn-design1 index-btn">Open your box</a>
                     </span>
-                    <span class="col-5 col-sm-4">
-                        <a href="register.php" class="btn btn-lg btn-block btn-design2 text-size">Try it now!</a>
+                    <span class="col-12 col-sm-4">
+                        <a href="register.php" class="btn btn-lg btn-block btn-design2 index-btn">Try it now!</a>
                     </span>
   
                 </div>
@@ -146,7 +147,7 @@
 	<script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
     
     <!-- custom javascript -->
-    <script src="script.js"></script>
+    <script src="./js/script.js"></script>
 
 </body>
 
