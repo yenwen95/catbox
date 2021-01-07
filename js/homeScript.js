@@ -2,12 +2,6 @@ var order;
 
 $(function(){
     
-        $('#loginButton').click(
-            function(){
-                $('#loginModal').modal('show');
-            }
-        );
- 
 
         $('#main').on('click', '#addButton', function(){
             $('#uploadModal').modal('show');
@@ -29,8 +23,6 @@ $(function(){
             $('.overlay').addClass('active');
         });
 
-       
-          
     
 
         //CLICK ANYWHERE to remove action
@@ -53,7 +45,7 @@ $(function(){
             document.querySelector('#getFileName').textContent = this.files[0].name;
         }
      
- 
+        //Problem: create function allow user to change file name before upload to the system
         //Problem: one file will append one error, if two file exist, there will have two error 
         //Problem: need to clear the input box that has filename after upload one file, same for others input box
       $('#uploadModal').on('click', '#uploadButton', function(){
@@ -264,12 +256,12 @@ function displayFileList(displayFile, page, sortType){
 }
 
 function clearFileInfo(){
-    $('#name').empty();
-    $('#type').empty();
-    $('#size').empty();
-    $('#timecreate').empty();
-    $('#sharewith').empty();
-    $('#shareby').empty();
+    $('.name').empty();
+    $('.type').empty();
+    $('.size').empty();
+    $('.timecreate').empty();
+    $('.sharewith').empty();
+    $('.shareby').empty();
 }
 
 

@@ -38,6 +38,7 @@ body {
 
 .right {
   border-left-style: solid;
+  border-left-color: rgb(57, 41, 67);
   border-left-color: rgba(57, 41, 67, 0.5);
   border-left-width: thin;
   width: 90%;
@@ -74,6 +75,7 @@ body {
   position: fixed;
   width: 100vw;
   height: 100vh;
+  background: rgb(0, 0, 0);
   background: rgba(0, 0, 0, 0.7);
   z-index: 995;
   opacity: 0;
@@ -159,6 +161,7 @@ body {
 }
 
 .scrollable::-webkit-scrollbar-thumb {
+  background: rgb(141, 140, 140);
   background: rgba(141, 140, 140, 0.322);
 }
 .scrollable::-webkit-scrollbar-thumb:hover {
@@ -176,19 +179,23 @@ body {
   white-space: nowrap;
 }
 .on-select {
+  background-color: rgb(141, 140, 140);
   background-color: rgba(141, 140, 140, 0.322);
 }
 
 #sortFile {
   border-top-style: solid;
   border-top-width: thin;
+  border-top-color: rgb(57, 41, 67);
   border-top-color: rgba(57, 41, 67, 0.5);
 }
 .sortClass:hover {
+  background-color: rgb(141, 140, 140);
   background-color: rgba(141, 140, 140, 0.322);
 }
 
 .fa-arrow-up,
 .fa-arrow-down {
+  color: rgb(57, 41, 67);
   color: rgba(57, 41, 67, 0.5);
 }

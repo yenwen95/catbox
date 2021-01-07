@@ -81,6 +81,7 @@ a.btn-box:hover {
 
 .row-middle {
   border-bottom-style: solid;
+  border-bottom-color: rgb(57, 41, 67);
   border-bottom-color: rgba(57, 41, 67, 0.5);
   border-bottom-width: thin;
   padding: 10px 5px;
@@ -90,11 +91,13 @@ a.btn-box:hover {
 .btn-design1 {
   background-color: #c3e1f6;
   color: #353434;
+  box-shadow: 0 8px 16px 0 rgb(0, 0, 0), 0 6px 20px 0 rgb(0, 0, 0);
   box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 .btn-design2 {
   background-color: #074b78;
   color: #f1f1f1;
+  box-shadow: 0 8px 16px 0 rgb(0, 0, 0), 0 6px 20px 0 rgb(0, 0, 0);
   box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 .btn-design1:hover {
@@ -155,22 +158,4 @@ div.form-row > a {
 .modal-body {
   background-color: #f6f7fc;
   font-size: 1em;
-}
-
-.register-container {
-  position: absolute;
-  background-color: #f6f7fc;
-  width: 70%;
-  display: block;
-  left: 15%;
-  padding: 0;
-  z-index: 5;
-  font-size: 2vw;
-}
-
-.register-header {
-  background-color: #918b8d;
-  color: #f6f7fc;
-  padding: 10px 20px;
-  font-size: 3vw;
 }

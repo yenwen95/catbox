@@ -27,8 +27,8 @@
         <a id="loginButton" class="btn btn-box" >Login</a>
     </nav>
 
- <!-- LOGIN MODAL -->
- <div id="loginModal" class="modal fade" role="dialog">
+        <!-- LOGIN MODAL -->
+        <div id="loginModal" class="modal fade" role="dialog">
             <div class="modal-dialog modal-md" role="content">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -73,8 +73,10 @@
             
             <img class="bg-img6" src="./img/paws.png" alt="paws" />
         </div>   
-        <div class="register-container">
-            <div class="register-header">
+
+
+        <div class="register-container mt-2">
+            <div class="register-header p-3">
                 <p class="mb-0">Please Provide Your Information: </p>
                 <?php if (count($errors) > 0): ?>
                 <div class="alert alert-danger">
@@ -114,6 +116,7 @@
                 </form>
             </div> 
         </div>
+
     </div>
  
   

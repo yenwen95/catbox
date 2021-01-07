@@ -1,4 +1,20 @@
-/* INDEX */
+.register-container {
+  position: absolute;
+  background-color: #f6f7fc;
+  width: 70%;
+  display: block;
+  left: 15%;
+  padding: 0;
+  z-index: 5;
+}
+
+.register-header {
+  background-color: #918b8d;
+  color: #f6f7fc;
+  padding: 10px 20px;
+  font-size: 1.6em;
+}
+
 .img-holder {
   position: relative;
   display: block;
@@ -182,17 +198,6 @@
     position: absolute;
     left: 325px;
     top: 130px;
-  }
-
-  .register-container {
-    position: absolute;
-    background-color: #f6f7fc;
-    width: 50%;
-    display: block;
-    left: 25%;
-    padding: 0;
-    z-index: 5;
-    font-size: 2vw;
   }
 
   .bg-img5 {
