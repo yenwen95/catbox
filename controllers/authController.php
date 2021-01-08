@@ -47,16 +47,17 @@ $name = $_POST["name"];
 $email = $_POST["email"];
 $token = bin2hex(random_bytes(50));
 $password1 = $_POST["password1"];
+$verified="0";
 $action = "register";
 
-$check_username = "SELECT * FROM Users WHERE username = '$username'";
-$check_email =  "SELECT * FROM Users WHERE email = '$email'";
+$check_username = $con->prepare("SELECT * FROM Users WHERE username = ?");
+$check_email =  $con->prepare("SELECT * FROM Users WHERE email = ?");
 
-$result = mysqli_query($con, $check_username);
-$row = mysqli_fetch_array($result);
+$check_username->execute([$username]);
+$row = $check_username->fetch(PDO::FETCH_ASSOC);
 
-$result1 = mysqli_query($con,$check_email);
-$row1 = mysqli_fetch_array($result1);
+$check_email->execute([$email]);
+$row1 = $check_email->fetch(PDO::FETCH_ASSOC);
 
     if($row > 0){
         $errors['username'] = "Username already exists";
@@ -66,13 +67,20 @@ $row1 = mysqli_fetch_array($result1);
     }
     if(count($errors) === 0){
         
-        $query = "INSERT INTO Users (`username`, `name`, `email`, `password`, `token`, `verified`, `role`)
-                    VALUES('$username','$name', '$email', '$password1', '$token','0','$role')";
-        $result3 = mysqli_query($con, $query);
-        if($result3){
-            
+       try{
+            $query = $con->prepare("INSERT INTO Users (username, name, email, password, token, verified, role)
+            VALUES(:username,:name, :email, :password, :token,:verified,:role)");
+            $query->bindParam(':username',$username);
+            $query->bindParam(':name',$name); 
+            $query->bindParam(':email',$email);          
+            $query->bindParam(':password',$password1);
+            $query->bindParam(':token',$token);
+            $query->bindParam(':verified',$verified);
+            $query->bindParam(':role',$role);
+            $query->execute();
+
             sendVerificationEmail($email, $token);
-            $user_id = mysqli_insert_id($con);
+            $user_id = $con->lastInsertId();
             $_SESSION['id'] = $user_id;
             $_SESSION['username'] = $username;
             $_SESSION['name'] = $name;
@@ -82,11 +90,13 @@ $row1 = mysqli_fetch_array($result1);
            
             header('location: verify.php');
             exit();
-        }
-        else{
-           
-            echo "Database error: Could not register user";
-        }
+       }catch(PDOException $e){
+           echo "Database error: Could not register user";
+       }
+            
+            
+        
+       
     }
 
     
@@ -101,23 +111,20 @@ if(isset($_POST['login-btn'])){
     if(empty($_POST['password'])){
         $errors['password'] = 'Password required';
     }
-    $username = mysqli_real_escape_string($con, $_POST['username']);
-    $password = mysqli_real_escape_string($con, $_POST['password']);
+    $username = $_POST['username'];
+    $password = $_POST['password'];
 
     $action = "login";
 
     if(count($errors) === 0){
-        $query = "SELECT * FROM Users WHERE username='$username' or email='$username'";
-        $result = mysqli_query($con, $query);
-        if(!$result){
-            echo "Could not execute query";
-        }
-        
-        $user = mysqli_fetch_row($result);
+        $query = $con->prepare("SELECT * FROM Users WHERE username= ? or email= ? ");
+        $query->execute([$username, $password]);
+
+        $user = $query->fetch();
         //for password
-        $query1 = "SELECT password FROM Users WHERE username='$username' or email='$username' ";
-        $result1 = mysqli_query($con, $query1);
-        $row = mysqli_fetch_array($result1);
+        $query1 = $con->prepare("SELECT password FROM Users WHERE username=? or email=? ");
+        $query1->execute([$username,$password]);
+        $row = $query1->fetch();
         
             if( "$password" == "$row[0]"){
                 $_SESSION['id'] = $user[0];
@@ -138,20 +145,20 @@ if(isset($_POST['login-btn'])){
                 $errors['login_fail'] = "Wrong username or email or password";
             }
     }
-    mysqli_close($con);
+   $con = null;
 }    
 
 
 //ENTER EMAIL TO SENT PASSWORD RESET EMAIL
 
 if(isset($_POST['reset-password-btn'])){
-    $email = mysqli_real_escape_string($con, $_POST['email']);
-    $query = "SELECT email FROM Users WHERE email='$email'";
-    $result = mysqli_query($con, $query);
+    $email = $_POST['email'];
+    $query = $con->prepare("SELECT email FROM Users WHERE email=?");
+    $query->execute([$email]);
 
     if(empty($email)){
         array_push($errors, "Your email is required");
-    }else if(mysqli_num_rows($result) <= 0){
+    }else if($query->fetch() <= 0){
         array_push($errors, "No user exists on our system with the email");
     }
 
@@ -162,8 +169,9 @@ if(isset($_POST['reset-password-btn'])){
     $_SESSION['email'] = $email;
     $_SESSION['action'] = $action;
     if(count($errors) == 0){
-        $sql = "UPDATE Users set token = '$token' WHERE email = '$email'";
-        $result = mysqli_query($con, $sql);
+        $query = $con->prepare("UPDATE Users set token = ? WHERE email = ?");
+        $query->execute([$token,$email]);
+        $result = $query->fetch();
 
         sendPasswordResetEmail($email, $token);
         header('location: verify.php');
@@ -176,8 +184,8 @@ if(isset($_POST['reset-password-btn'])){
 
 //NEW PASSWORD, make sure is the same browser, because different browser different session
 if(isset($_POST['new-password-btn'])){
-    $new_pass1 = mysqli_real_escape_string($con, $_POST['new_pass1']);
-    $new_pass2 = mysqli_real_escape_string($con, $_POST['new_pass2']);
+    $new_pass1 = $_POST['new_pass1'];
+    $new_pass2 = $_POST['new_pass2'];
 
     $token = $_SESSION['token'];
     if(empty($new_pass1) || empty($new_pass2)){
@@ -189,12 +197,14 @@ if(isset($_POST['new-password-btn'])){
     }
     if(count($errors) == 0){
       
-        $query = "SELECT email FROM Users WHERE token = '$token' LIMIT 1";
-        $result = mysqli_query($con, $query);
-        $email = mysqli_fetch_assoc($result)['email'];
+        $query = $con->prepare("SELECT email FROM Users WHERE token = ? LIMIT 1");
+        $query->execute([$token]);
+        $result = $query->fetch();
+        $email = $result['email'];
 
-        $sql = "UPDATE Users SET password='$new_pass1' WHERE email = '$email'";
-        $result1 = mysqli_query($con, $sql);
+        $sql = $con->prepare("UPDATE Users SET password= ? WHERE email = ?");
+        $sql->execute([$new_pass1, $email]);
+        $result1 = $sql->fetch();
 
         $username = $_SESSION['username'];
         sendPasswordResetSuccessEmail($email, $username);

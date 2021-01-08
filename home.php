@@ -18,14 +18,17 @@ if(!file_exists($userFolder)){
 
 //CHECKING FILES CONSISTENCY IN BOTH DATABASE AND SERVER
 //  CONDITION 1: record in database but not in server, delete record in db
-$query = "SELECT filepath FROM Files WHERE username = '$username'";
-$result = mysqli_query($con, $query);
+$query = $con->prepare("SELECT filepath FROM Files WHERE username = ?");
+$query->execute([$username]);
 
-while($row = mysqli_fetch_array($result)){
+
+while($row = $query->fetch()){
     if(!file_exists($row['filepath'])){
 		$path = $row['filepath'];
-        $deleteRow = "DELETE FROM Files where filepath = '$path'";
-        $con->query($deleteRow) or die ("Error: ".mysqli_error($con));
+		$deleteRow = $con->prepare("DELETE FROM Files where filepath = ?");
+		$deleteRow->execute($path);
+
+		
     }
 }
 
@@ -39,10 +42,10 @@ foreach(scandir($folder) as $file){
 }
 	
 foreach($files as $file){
-	$query1 = "SELECT filename FROM Files WHERE username = '$username' && filename = '$file'";
-	$result1 = mysqli_query($con, $query1);
+	$query1 = $con->prepare("SELECT filename FROM Files WHERE username = ? && filename = ?");
+	$query1->execute([$username, $file]);
 
-	if(mysqli_num_rows($result1) === 0){
+	if($query1->fetch() === 0){
 		unlink($userFolder.$file);
 	}
 }
