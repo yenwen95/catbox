@@ -284,7 +284,7 @@ function getFileInfo(id, FileID){
     }
 
 
-    
+ 
      $("#main").off('click', '#delButton, #delButtonMobile');
      $('#main').on('click', '#delButton, #delButtonMobile', function(){
              action = "deleteFile";
@@ -426,6 +426,7 @@ function delFile(filename, action, id){
         dataType: 'JSON',
         success: function(status){
             if(status == "success"){
+                console.log("ok");
                 $("#row_"+id).remove();
                 $('.overlayMobile').removeClass('active');
                 $('#fileInfoMobile').addClass('fileInfoMobileClose');

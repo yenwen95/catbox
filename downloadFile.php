@@ -24,9 +24,10 @@ if(isset($_GET['action'])){
     }elseif($action == "downloadShareFile"){
         if(isset($_GET['path'])){
             $fileID = basename($_GET['path']);
-            $query = "SELECT filename, filepath FROM Files WHERE id = '$fileID'";
-            $result = mysqli_query($con, $query);
-            $file = mysqli_fetch_array($result);
+            $query = $con->prepare("SELECT filename, filepath FROM Files WHERE id = ?");
+            $query->execute([$fileID]);
+            $file = $query->fetch();
+
             $filepath = $file['filepath'];
             $filename = $file['filename'];
 

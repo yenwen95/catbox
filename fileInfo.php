@@ -2,6 +2,10 @@
     include 'controllers/authController.php';
     $username = $_SESSION['username'];
 
+
+
+    //Problem: add codes to close databse
+
    function getFileType($type){
         $shortType = "";
         if($type == "txt"){
@@ -88,13 +92,13 @@
 
         if($displayFile == "displayFileList"){
             echo '<div id="myBoxMiddle" class="scrollable" >';
-			$fetchFile = "SELECT * from Files where username = '$username' ".$sortQuery; //DEFAULT			
-           
-            $result = mysqli_query($con, $fetchFile);
+			$fetchFile = $con->prepare("SELECT * from Files where username = ? ".$sortQuery); //DEFAULT			
+            $fetchFile->execute([$username]);
+          
             $num=1;
             $x = "";
 
-            while($row = mysqli_fetch_array($result)){
+            while($row = $fetchFile->fetch()){
                 $type = $row['filetype'];
                 $fileType = getFileType($type);
                 echo '<div class="row row-middle m-0 p-0 off-select" id="row_'.$num.'" onclick="getFileInfo('.$num.', '.$x.')">';
@@ -115,9 +119,10 @@
            
             echo '<div id="shareBoxMiddle" class="scrollable">';
 	
-            $fetchInfo = "SELECT shared_users, id, username from Files";
-            $result = mysqli_query($con, $fetchInfo);
-            while($row = mysqli_fetch_row($result)){
+            $fetchInfo = $con->prepare("SELECT shared_users, id, username from Files");
+            $fetchInfo->execute();
+
+            while($row = $fetchInfo->fetch()){
                 $listSharedUsers[] = array($row[0]);
                 $listID[] = array($row[1]);
                 $listUserName[] = array($row[2]); 
@@ -151,9 +156,10 @@
             while($i<count($foundFileID)){
                 $ID = $foundFileID[$i][0];
                 //different sort method for sharefile, because it displays one by one
-                $fetchFile = "SELECT * from Files where id = '$ID'";
-                $result = mysqli_query($con, $fetchFile);
-                $row = mysqli_fetch_array($result);
+                $fetchFile = $con->prepare("SELECT * from Files where id = ?");
+                $fetchFile->execute([$ID]);
+
+                $row = $fetchFile->fetch();
                 $data[] = $row;
 
                 $i++;
@@ -245,10 +251,10 @@ if(isset($_POST['action'])){
             $fileName = $_FILES['getFile']['name'];
 
             //Check the file is existing in the database or not
-            $query = "SELECT filename FROM Files WHERE filename = '$fileName' and username = '$username'";
-            $result = $con->query($query) or die("Error: ". mysqli_error($con));
-
-            while($row = mysqli_fetch_array($result)){
+            $query = $con->prepare("SELECT filename FROM Files WHERE filename = ? && username = ?");
+            $query->execute([$fileName, $username]);
+            
+            while($row = $query->fetch()){
                 if($row['filename'] == $fileName){
                     $fileExists = 1;
                     $status = "exist";
@@ -268,17 +274,26 @@ if(isset($_POST['action'])){
                 $result = move_uploaded_file($fileTempName, $filePath);
 
                 if($result){
-                    $query = "INSERT INTO Files(filename, filetype, filesize, actualsize, filepath, createtime, username) VALUES ('$fileName', '$fileType', '$fileSize','$actualSize', '$filePath', curdate(), (SELECT username from Users where username = '$username'))";
-                    $con->query($query) or die ("Error: ".mysqli_error($con));
+                    $query = $con->prepare("INSERT INTO Files(filename, filetype, filesize, actualsize, filepath, createtime, username)
+                         VALUES (:filename, :filetype, :filesize, :actualsize, :filepath, curdate(), (SELECT username from Users where username = :username))");
+                    $query->bindParam(':filename', $fileName);
+                    $query->bindParam(':filetype', $fileType);
+                    $query->bindParam(':filesize', $fileSize);
+                    $query->bindParam(':actualsize', $actualSize);
+                    $query->bindParam(':filepath', $filePath);
+                    $query->bindParam(':username', $username);
+                    $query->execute();
+
+ 
                 }
                 else{
                     echo "Sorry! There was an error in uploading your file";
                 }
-                mysqli_close($con);
+              $con = null;
            
             }
             else{
-                mysqli_close($con);
+                $con = null;
                
                 
             }
@@ -292,11 +307,12 @@ if(isset($_POST['action'])){
     //SHOW FILE INFO
     if($action == "showFileInfoMyBox"){
         $filename = $_POST['file'];
-        $fetchInfo = "SELECT * FROM Files WHERE filename = '".$filename."' && username = '$username'";
-        $result = mysqli_query($con, $fetchInfo);
+        $fetchInfo = $con->prepare("SELECT filename, filetype, filesize, createtime, shared_users FROM Files WHERE filename = ? && username = ?");
+        $fetchInfo->execute([$filename, $username]);
+        
         $return_arr = array();
 
-        while($row = mysqli_fetch_array($result)){
+        while($row = $fetchInfo->fetch()){
             $type = $row['filetype'];
             $fileType = getFileType($type);
             $return_arr['filename'] = $row['filename'];
@@ -311,11 +327,12 @@ if(isset($_POST['action'])){
 
     if($action == "showFileInfoShareBox"){
         $fileID = $_POST['file'];
-        $fetchInfo = "SELECT * FROM Files WHERE id = '$fileID'";
-        $result = mysqli_query($con, $fetchInfo);
+        $fetchInfo = $con->prepare("SELECT filename, filetype, filesize, createtime, username FROM Files WHERE id = ?");
+        $fetchInfo->execute([$fileID]);
+
         $return_arr = array();
 
-        while($row = mysqli_fetch_array($result)){
+        while($row = $fetchInfo->fetch()){
             $type = $row['filetype'];
             $fileType = getFileType($type);
             $return_arr['filename'] = $row['filename'];
@@ -333,14 +350,15 @@ if(isset($_POST['action'])){
         $status = "";
         
         //delete filepath from database
-        $query = "DELETE FROM Files WHERE filename = '".$filename."' && username = '".$username."'";
-        $result = mysqli_query($con, $query);
+        $query = $con->prepare("DELETE FROM Files WHERE filename = ? && username = ?");
+        $query->execute([$filename, $username]);
+
         //delete the file in server
         $defaultDir = "./file_dir/";
         $userFolder = $defaultDir.$username.'/';
         unlink($userFolder.$filename);
 
-        if(($result) && (!(file_exists($userFolder.$filename)))){
+        if(($query) && (!(file_exists($userFolder.$filename)))){
             $status = "success";
         }else{
             $status = "fail";
@@ -352,38 +370,35 @@ if(isset($_POST['action'])){
         $filename = $_POST['filename'];
         $isUserExist = "yes";
         $checkUser = $_POST['checkUser'];
-        $query = "SELECT username FROM Users WHERE username = '".$checkUser."'";
-        $result = mysqli_query($con, $query);
+        $query = $con->prepare("SELECT username FROM Users WHERE username = ?");
+        $query->execute([$checkUser]);
+ 
 
         //If user does not exists return back
-        if(mysqli_num_rows($result) == 0){
+        if($query->fetch() == 0){
             $isUserExist = "no";
         }else{
 
             //If user exists
             //select shareuser col for ori value
-            $query1 = "SELECT shared_users FROM Files WHERE filename = '".$filename."' && username = '".$username."'";
-            $result1 = mysqli_query($con, $query1);
-            $row = mysqli_fetch_array($result1);
+            $query1 = $con->prepare("SELECT shared_users FROM Files WHERE filename = ? && username = ?");
+            $query1->execute([$filename, $username]);
+           
+            $row = $query1->fetch();
 
             //CHECK THE USER IS ALREADY SHARED OR NOT [UNSOLVED]
 
             //If shared_users is empty
             if(($row['shared_users'] == '0') || ($row['shared_users'] == NULL) ){
                 $new = $checkUser.',';
-                $query2 = "UPDATE Files SET shared_users = '".$new."' WHERE filename = '".$filename."' && username = '".$username."'";
-                mysqli_query($con, $query2);
-              
             }else{
                 //store original value
                 $original = $row['shared_users'];
                 //add new share user with original value
                 $new = $original.$checkUser.',';
-                //update shareuser col in db for selected file
-                $query2 = "UPDATE Files SET shared_users = '".$new."' WHERE filename = '".$filename."' && username = '".$username."'";
-                mysqli_query($con, $query2);
-                
             }
+                $query2 = $con->prepare("UPDATE Files SET shared_users = ? WHERE filename = ? && username = ?");
+                $query2->execute([$new, $filename, $username]);
         }
         echo json_encode($isUserExist);
     }
@@ -407,9 +422,10 @@ if(isset($_POST['action'])){
   if($action == "previewShareFile"){
       $return_arr = array();
       $fileID = $_POST['file'];
-      $fetchInfo = "SELECT filepath FROM Files WHERE id = '$fileID'";
-      $result = mysqli_query($con, $fetchInfo);
-      while($row = mysqli_fetch_array($result)){
+      $fetchInfo = $con->prepare("SELECT filepath FROM Files WHERE id = ?");
+      $fetchInfo->execute([$fileID]);
+  
+      while($row = $fetchInfo->fetch()){
           $file = $row['filepath'];
           $info = pathinfo($file);
           $path = substr($row['filepath'], 11);

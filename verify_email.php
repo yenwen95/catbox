@@ -5,14 +5,15 @@ require 'config/db.php';
 
 if(isset($_GET['token'])){
     $token = $_GET['token'];
-    $sql = "SELECT * FROM Users WHERE token = '$token' LIMIT 1";
-    $result = mysqli_query($con, $sql);
+    $sql = $con->prepare("SELECT * FROM Users WHERE token = ? LIMIT 1");
+    $sql->execute([$token]);
+   
 
-    if(mysqli_num_rows($result) > 0){
-        $user = mysqli_fetch_assoc($result);
-        $query = "UPDATE Users SET verified=1 WHERE token = '$token'";
-
-        if(mysqli_query($con, $query)){
+    if($sql->fetch() > 0){
+        $user = $sql->fetch();
+        try{
+            $query = $con->prepare("UPDATE Users SET verified=1 WHERE token = ?");
+            $query->execute([$token]);
             
             $_SESSION['id'] = $user['id'];
             $_SESSION['username'] = $user['username'];
@@ -25,10 +26,15 @@ if(isset($_GET['token'])){
             
             
             exit(0);
+
+        }catch(PDOException $e){
+            echo "Unable to verify!";
         }
+        
     }else{
-        echo "User not found!";
-    }
+        echo "User not found";
+    }   
+    
 }else{
     echo "No token provided!";
 }
