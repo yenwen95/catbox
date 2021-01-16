@@ -3,7 +3,9 @@ body {
   height: 100%;
   padding: 0;
   width: 100%;
-  font-size: 1em; /*normal size*/
+  font-size: 0.96em; /*normal size*/
+  font-family: "IBM Plex Sans", sans-serif;
+  font-family: "Noto Sans", sans-serif;
   padding-top: 20px;
 }
 
@@ -16,7 +18,10 @@ body {
 }
 
 .body-color {
-  background-color: #b8c5ce;
+  background: #b2c9da;
+  background: linear-gradient(to top, #b2c9da, #b8c5ce);
+  background-size: cover;
+  background-attachment: fixed;
 }
 
 /*any device smaller than laptop*/

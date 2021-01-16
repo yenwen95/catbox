@@ -28,9 +28,6 @@ if(isset($_POST['register-btn'])){
     if(empty($_POST["username"])){
         $errors['username'] = 'Username required';
     }
-    if(empty($_POST["name"])){
-        $errors['name'] = 'Name required';
-    }
     if(empty($_POST["email"])){
         $errors['email'] = 'Email required';
     }
@@ -43,7 +40,6 @@ if(isset($_POST['register-btn'])){
 
 
 $username = $_POST["username"];
-$name = $_POST["name"];
 $email = $_POST["email"];
 $token = bin2hex(random_bytes(50));
 $password1 = $_POST["password1"];
@@ -68,10 +64,9 @@ $row1 = $check_email->fetch(PDO::FETCH_ASSOC);
     if(count($errors) === 0){
         
        try{
-            $query = $con->prepare("INSERT INTO Users (username, name, email, password, token, verified, role)
-            VALUES(:username,:name, :email, :password, :token,:verified,:role)");
-            $query->bindParam(':username',$username);
-            $query->bindParam(':name',$name); 
+            $query = $con->prepare("INSERT INTO Users (username, email, password, token, verified, role)
+            VALUES(:username, :email, :password, :token,:verified,:role)");
+            $query->bindParam(':username',$username); 
             $query->bindParam(':email',$email);          
             $query->bindParam(':password',$password1);
             $query->bindParam(':token',$token);
@@ -83,7 +78,6 @@ $row1 = $check_email->fetch(PDO::FETCH_ASSOC);
             $user_id = $con->lastInsertId();
             $_SESSION['id'] = $user_id;
             $_SESSION['username'] = $username;
-            $_SESSION['name'] = $name;
             $_SESSION['email'] = $email;
             $_SESSION['verified'] = false;
             $_SESSION['action'] = $action;
@@ -129,14 +123,13 @@ if(isset($_POST['login-btn'])){
             if( "$password" == "$row[0]"){
                 $_SESSION['id'] = $user[0];
                 $_SESSION['username'] = $user[1];
-                $_SESSION['name'] = $user[2];
-                $_SESSION['email'] = $user[3];
-                $_SESSION['verified'] = $user[6];
+                $_SESSION['email'] = $user[2];
+                $_SESSION['verified'] = $user[5];
                 $_SESSION['action'] = $action;
                 if($_SESSION['verified']){
                     header('location: home.php');
                 }else{
-                    sendVerificationEmail($user[3], $user[5]);
+                    sendVerificationEmail($user[2], $user[4]);
                     header('location: verify.php');
                     
                 }

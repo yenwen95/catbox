@@ -14,7 +14,12 @@
 	<!--  custom css  -->
     <link rel="stylesheet" href="./css/style.css">
     <link rel="stylesheet" href="./css/indexStyle.css">
-	
+
+
+<!--Google font-->
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300&family=Noto+Sans&display=swap" rel="stylesheet">
+
     <title>catBox</title>
 </head>
 <body class="body-color">
@@ -116,7 +121,7 @@
             <div class="row">  
                 <div class="container mt-n3">    
                 <div class="row mt-0 mb-1">
-                    <p class="mx-auto  index-banner">Secure and store your files in catBox</p>
+                    <p class="mx-auto  index-banner"><b>Secure and store your files in catBox</b></p>
                 </div> 
                 <div class="row m-0 mb-2 d-flex justify-content-center">
                     

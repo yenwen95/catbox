@@ -1,20 +1,3 @@
-.register-container {
-  position: absolute;
-  background-color: #f6f7fc;
-  width: 70%;
-  display: block;
-  left: 15%;
-  padding: 0;
-  z-index: 5;
-}
-
-.register-header {
-  background-color: #918b8d;
-  color: #f6f7fc;
-  padding: 10px 20px;
-  font-size: 1.6em;
-}
-
 .img-holder {
   position: relative;
   display: block;
@@ -66,28 +49,6 @@
   z-index: 3;
   left: 150px;
   top: -60px;
-}
-
-.bg-img5 {
-  position: relative;
-  opacity: 0.2;
-  transform: rotate(20deg);
-  z-index: 1;
-  left: -40%;
-  width: 30%;
-  height: 35%;
-  top: 80px;
-}
-
-.bg-img6 {
-  position: relative;
-  opacity: 0.2;
-  transform: rotate(20deg);
-  z-index: 1;
-  left: 85%;
-  top: 200px;
-  width: 30%;
-  height: 35%;
 }
 
 /* For screen larger than 576px (sm) */
@@ -198,22 +159,5 @@
     position: absolute;
     left: 325px;
     top: 130px;
-  }
-
-  .bg-img5 {
-    position: relative;
-    opacity: 0.2;
-    transform: rotate(20deg);
-    z-index: 1;
-    left: -40%;
-  }
-
-  .bg-img6 {
-    position: relative;
-    opacity: 0.2;
-    transform: rotate(20deg);
-    z-index: 1;
-    left: 80%;
-    top: 200px;
   }
 }

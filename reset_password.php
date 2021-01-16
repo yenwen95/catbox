@@ -11,7 +11,10 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	    <!--  custom css  -->
         <link rel="stylesheet" href="./css/style.css">
-        
+        <!--Google font-->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300&family=Noto+Sans&display=swap" rel="stylesheet">
+
         <title>Reset Password</title>
     </head>
     <body class="body-color">

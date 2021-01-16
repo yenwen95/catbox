@@ -69,6 +69,11 @@ foreach($files as $file){
 	<link rel="stylesheet" href="./css/style.css">
 	<link rel="stylesheet" href="./css/homeStyle.css">
 	
+<!--Google font-->
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300&family=Noto+Sans&display=swap" rel="stylesheet">
+
+
 	<script src="https://kit.fontawesome.com/b48b20acd1.js"></script>
     <title>myBox</title>
 </head>
@@ -222,7 +227,7 @@ foreach($files as $file){
 					<!-- made this two more wider, take more space -->
 					<div class="card col-12 ml-2">
 						<div class="card-header col-12">
-							File Information
+							<b>File Information</b>
 						</div>
 						<div class="card-body col-12">
 							<div class="container info-text" id="showFileInfo">

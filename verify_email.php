@@ -17,7 +17,6 @@ if(isset($_GET['token'])){
             
             $_SESSION['id'] = $user['id'];
             $_SESSION['username'] = $user['username'];
-            $_SESSION['name'] = $user['name'];
             $_SESSION['email'] = $user['email'];
             $_SESSION['verified'] = true;
             $_SESSION['message'] = "Your email address has been verified successfully!";

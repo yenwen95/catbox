@@ -11,111 +11,122 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<!--  custom css  -->
     <link rel="stylesheet" href="./css/style.css">
-    <link rel="stylesheet" href="./css/indexStyle.css">
-	
+    <link rel="stylesheet" href="./css/registerStyle.css" type="text/css" media="all">
+
+<!--Google font-->
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300&family=Noto+Sans&display=swap" rel="stylesheet">
+
+
     <title>Registration</title>
 </head>
 <body class="body-color">
+
+    <!-- NAV BAR-->
     <nav class="navbar navbar-expand-lg  fixed-top">
         <!-- SYSTEM NAME -->
         <a href="./index.php"><img width="50px" height="40px" src="img/logo.png" alt="logo" /></a>
         <p class="mr-auto mb-0">catBox</p>
-        
-
 
         <!-- LOGIN BUTTON -->
         <a id="loginButton" class="btn btn-box" >Login</a>
     </nav>
 
-        <!-- LOGIN MODAL -->
-        <div id="loginModal" class="modal fade" role="dialog">
-            <div class="modal-dialog modal-md" role="content">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Login</h4>
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    </div>
-                    <div class="modal-body">
-                        
-                        <form method="post" action="index.php">
-                        
-                            <div class="form-row">
-                                <label>Username or Email address</label>
-                                <input type="text" name="username" class="form-control" id="exampleInputEmail" value="<?php echo $username; ?>">
-                            </div>  
-                            <div class="form-row">
-                                <label>Password</label>
-                                <input type="password" name="password" class="form-control" id="exampleUsername">
-                            </div>
-                            <div class="form-row">
-                                <a href="register.php" >Not Yet Register?</a>
-                                <a href="enter_email.php" class="ml-auto">Forgot Password?</a>
-                            </div>
-                            <div class="form-row">
-                                <button type="button" class="btn btn-secondary btn-sm ml-auto" data-dismiss="modal">Cancel</button>
-                                <button type="submit" class="btn btn-box btn-sm ml-1" name="login-btn">Sign In</button>
-                            </div>
-                        </form>
-                    </div>
+
+
+
+    <!-- LOGIN MODAL -->
+    <div id="loginModal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-md" role="content">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Login</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    
+                    <form method="post" action="index.php">
+                    
+                        <div class="form-row">
+                            <label>Username or Email address</label>
+                            <input type="text" name="username" class="form-control" id="exampleInputEmail" value="<?php echo $username; ?>">
+                        </div>  
+                        <div class="form-row">
+                            <label>Password</label>
+                            <input type="password" name="password" class="form-control" id="exampleUsername">
+                        </div>
+                        <div class="form-row">
+                            <a href="register.php" >Not Yet Register?</a>
+                            <a href="enter_email.php" class="ml-auto">Forgot Password?</a>
+                        </div>
+                        <div class="form-row">
+                            <button type="button" class="btn btn-secondary btn-sm ml-auto" data-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-box btn-sm ml-1" name="login-btn">Sign In</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- background image -->
        
            
 
     <!-- REGISTER FORM -->
     
-    <div class="container">
-        <div class="img-div">
-            <img class="bg-img5" src="./img/paws.png" alt="paws" />
-            
-            <img class="bg-img6" src="./img/paws.png" alt="paws" />
-        </div>   
-
-
-        <div class="register-container mt-2">
-            <div class="register-header p-3">
-                <p class="mb-0">Please Provide Your Information: </p>
-                <?php if (count($errors) > 0): ?>
-                <div class="alert alert-danger">
-                    <?php foreach ($errors as $error): ?>
-                    <li>
-                    <?php echo $error; ?>
-                    </li>
-                    <?php endforeach;?>
-                </div>
-                <?php endif;?>
-            </div>  
-            <div >    
+    <div class="main-container wrapper">
+        <h1 class="text-center">Create Your catBox Account </h1>
+        <?php if (count($errors) > 0): ?>
+            <div class="alert alert-danger">
+                <?php foreach ($errors as $error): ?>
+                <li>
+                <?php echo $error; ?>
+                </li>
+                <?php endforeach;?>
+            </div>
+        <?php endif;?>
+        
+        <div class="register-outer">
+            <div class="register-inner">        
                 <form method="POST" action="register.php">
                     <div class="form-row"> 
                         <label for="username">Username</label>
-                        <input type="text" class="form-control" name="username" value="<?php echo $username; ?>" placeholder="Enter your username">
-                    </div>
-                    <div class="form-row">
-                        <label for="Name">Name</label>
-                        <input type="text" class="form-control" name="name" value="<?php echo $name; ?>" placeholder="Enter your name">
+                        <input type="text" class="text col-12 p-2" name="username" value="<?php echo $username; ?>" placeholder="Enter your username" required>
                     </div>
                     <div class="form-row">
                         <label for="exampleInputEmail">Email address</label>
-                        <input type="email" class="form-control" name="email" value="<?php echo $email; ?>" placeholder="Enter your email">
+                        <input type="email" class="text col-12 p-2" name="email" value="<?php echo $email; ?>" placeholder="Enter your email" required>
                     </div>        
                     <div class="form-row">
                         <label for="examplePassword">Password</label>
-                        <input type="password" class="form-control" name="password1" placeholder="Enter your password">
+                        <input type="password" class="text col-12 p-2" name="password1" placeholder="Enter your password" required>
                     </div>
                     <div class="form-row">
                         <label for="exampleConfirmPassword">Confirm Your Password</label>
-                        <input type="password" class="form-control" name="password2" placeholder="Enter your password">
+                        <input type="password" class="text col-12 p-2" name="password2" placeholder="Enter your password" required>
                     </div>
                     <div class="form-row">
-                        <button type="submit" class="btn btn-box btn-sm ml-1" name="register-btn">Submit</button>
+                        <button type="submit" class="btn btn-reg" name="register-btn">SIGNUP</button>
                     </div>
                 </form>
-            </div> 
+                
+            </div>
+
         </div>
+
+        <ul class="bubbles list-unstyled">
+           <li></li>
+           <li></li>  
+           <li></li>  
+           <li></li>  
+           <li></li>  
+           <li></li>  
+           <li></li>  
+           <li></li>  
+           <li></li>  
+           <li></li>       
+           <li></li>      
+        </ul>
 
     </div>
  

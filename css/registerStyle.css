@@ -1,0 +1,224 @@
+body {
+  background: #b2c9da;
+  background: -webkit-linear-gradient(to top, #b2c9da, #b8c5ce);
+  background: -moz-linear-gradient(to top, #b2c9da, #b8c5ce);
+  background: -o-linear-gradient(to top, #b2c9da, #b8c5ce);
+  background: linear-gradient(to top, #b2c9da, #b8c5ce);
+  background-size: cover;
+  background-attachment: fixed;
+  color: rgba(12, 12, 12, 0.911);
+}
+label {
+  color: #fff;
+}
+.alert {
+  width: 50%;
+  margin: 0.5em auto;
+  opacity: 0.8;
+}
+.wrapper {
+  position: relative;
+  overflow: hidden;
+}
+.main-container {
+  padding: 3em 0 1em;
+}
+
+.register-outer {
+  width: 45%;
+  margin: 1.5em auto;
+  background: rgba(0, 0, 0, 0.3);
+  background-size: cover;
+}
+
+.register-inner {
+  padding: 2em;
+}
+
+.text,
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  color: #fff;
+  width: 95%;
+  display: block;
+  border: none;
+  border: solid 1px rgba(255, 255, 255, 0.37);
+  transition: all 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 96%, #fff 4%);
+  background-position: -800px 0;
+  background-size: 100%;
+  background-repeat: no-repeat;
+}
+
+.text:focus {
+  box-shadow: none;
+  outline: none;
+  background-position: 0 0;
+}
+
+input[type="text"]:valid,
+input[type="email"]:valid,
+input[type="password"]:valid {
+  box-shadow: none;
+  outline: none;
+  background-position: 0 0;
+}
+
+input::placeholder {
+  color: #fff;
+}
+
+.btn-reg {
+  border: solid;
+  border-color: #074b78;
+  background-color: #074b78;
+  padding: 0.9em;
+  cursor: pointer;
+  color: #e7e8ec;
+  width: 100%;
+  margin: 1.5em 0;
+  letter-spacing: 4px;
+}
+.btn-reg:hover {
+  background-color: #0969aa;
+  border-color: #0969aa;
+  color: #e7e8ec;
+}
+
+.bubbles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+.bubbles li {
+  position: absolute;
+  display: block;
+  width: 50px;
+  height: 50px;
+  bottom: -180px;
+  background-color: rgba(255, 255, 255, 0.253);
+  border-radius: 50%;
+  animation: square 15s infinite;
+  transition-timing-function: linear;
+}
+
+.bubbles li:nth-child(1) {
+  left: 10%;
+  background-color: rgba(255, 255, 255, 0.425);
+}
+
+.bubbles li:nth-child(2) {
+  left: 20%;
+  width: 80px;
+  height: 80px;
+  -webkit-animation-delay: 2s;
+  -moz-animation-delay: 2s;
+  -o-animation-delay: 2s;
+  -ms-animation-delay: 2s;
+  animation-delay: 2s;
+  -webkit-animation-duration: 17s;
+  -moz-animation-duration: 17s;
+  -o-animation-duration: 17s;
+  animation-duration: 17s;
+}
+
+.bubbles li:nth-child(3) {
+  left: 25%;
+  -webkit-animation-delay: 4s;
+  -moz-animation-delay: 4s;
+  -o-animation-delay: 4s;
+  -ms-animation-delay: 4s;
+  animation-delay: 4s;
+}
+
+.bubbles li:nth-child(4) {
+  left: 40%;
+  width: 60px;
+  height: 60px;
+  -webkit-animation-duration: 22s;
+  -moz-animation-duration: 22s;
+  -o-animation-duration: 22s;
+  -ms-animation-duration: 22s;
+  animation-duration: 22s;
+  background-color: rgba(255, 255, 255, 0.37);
+}
+
+.bubbles li:nth-child(5) {
+  left: 70%;
+}
+
+.bubbles li:nth-child(6) {
+  left: 80%;
+  width: 120px;
+  height: 120px;
+  -webkit-animation-delay: 3s;
+  -moz-animation-delay: 3s;
+  -o-animation-delay: 3s;
+  -ms-animation-delay: 3s;
+  animation-delay: 3s;
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.bubbles li:nth-child(7) {
+  left: 32%;
+  width: 160px;
+  height: 160px;
+  -webkit-animation-delay: 7s;
+  -moz-animation-delay: 7s;
+  -o-animation-delay: 7s;
+  -ms-animation-delay: 7s;
+  animation-delay: 7s;
+}
+
+.bubbles li:nth-child(8) {
+  left: 55%;
+  width: 20px;
+  height: 20px;
+  -webkit-animation-delay: 15s;
+  -moz-animation-delay: 15s;
+  animation-delay: 15s;
+  -webkit-animation-duration: 40s;
+  -moz-animation-duration: 40s;
+  animation-duration: 40s;
+  background-color: rgba(255, 255, 255, 0.425);
+}
+
+.bubbles li:nth-child(9) {
+  left: 25%;
+  width: 10px;
+  height: 10px;
+  -webkit-animation-delay: 2s;
+  animation-delay: 2s;
+  -webkit-animation-duration: 40s;
+  animation-duration: 40s;
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.bubbles li:nth-child(10) {
+  left: 90%;
+  width: 160px;
+  height: 160px;
+  -webkit-animation-delay: 11s;
+  animation-delay: 11s;
+}
+
+.bubbles li:nth-child(11) {
+  left: 4%;
+  width: 8px;
+  height: 8px;
+  animation-delay: 6s;
+}
+
+@keyframes square {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-700px) rotate(600deg);
+  }
+}
