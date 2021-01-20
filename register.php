@@ -77,7 +77,7 @@
     <div class="main-container wrapper">
         <h1 class="text-center">Create Your catBox Account </h1>
         <?php if (count($errors) > 0): ?>
-            <div class="alert alert-danger">
+            <div class="alert alert-danger  col-sm-6 mx-auto ">
                 <?php foreach ($errors as $error): ?>
                 <li>
                 <?php echo $error; ?>

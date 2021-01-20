@@ -11,41 +11,59 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	    <!--  custom css  -->
         <link rel="stylesheet" href="./css/style.css">
+        <link rel="stylesheet" href="./css/registerStyle.css" type="text/css" media="all">
         <!--Google font-->
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300&family=Noto+Sans&display=swap" rel="stylesheet">
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300&family=Noto+Sans&display=swap" rel="stylesheet">
 
         <title>Reset Password</title>
     </head>
     <body class="body-color">
-        <div class="container register-container">
-            <div class="register-header">
-                <h4>New Password</h4>
-                    <?php if (count($errors) > 0): ?>
-                        <div class="alert alert-danger">
-                            <?php foreach ($errors as $error): ?>
-                                <li>
-                                    <?php echo $error; ?>
-                                </li>
-                            <?php endforeach;?>
+        <div class="main-container wrapper pt-0 pb-0">
+            <h1 class="text-center">Set Your New Password</h1>
+            <?php if (count($errors) > 0): ?>
+                <div class="alert alert-danger">
+                    <?php foreach ($errors as $error): ?>
+                        <li>
+                            <?php echo $error; ?>
+                        </li>
+                    <?php endforeach;?>
+                </div>
+            <?php endif;?>
+           
+            <div class="register-outer">
+                <div class="register-inner p-1">
+                    <form method="post" action="reset_password.php">
+                        <div class="form-row">
+                            <label>Please enter your new password</label>
+                            <input type="password" name="new_pass1" class="text col-sm-12 p-2" required>
                         </div>
-                    <?php endif;?>
+                        <div class="form-row">
+                            <label>Confirm your password</label>
+                            <input type="password" name="new_pass2" class="text col-sm-12 p-2" required>
+                        </div>
+                        <div class="form-row">
+                            <button type="submit" name="new-password-btn" class="btn btn-reg">Submit</button>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div>
-                <form method="post" action="reset_password.php">
-                    <div class="form-row">
-                        <label>Please enter your new password</label>
-                        <input type="password" name="new_pass1" class="form-control">
-                    </div>
-                    <div class="form-row">
-                        <label>Confirm your password</label>
-                        <input type="password" name="new_pass2" class="form-control">
-                    </div>
-                    <div class="form-row">
-                        <button type="submit" name="new-password-btn" class="btn btn-box btn-sm">Submit</button>
-                    </div>
-                </form>
-            </div>
+
+
+            <ul class="bubbles list-unstyled">
+                <li></li>
+                <li></li>  
+                <li></li>  
+                <li></li>  
+                <li></li>  
+                <li></li>  
+                <li></li>  
+                <li></li>  
+                <li></li>  
+                <li></li>       
+                <li></li>      
+            </ul>
+
         </div>
 
 

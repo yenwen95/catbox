@@ -4,38 +4,9 @@ body {
 }
 */
 
-@media only screen and (max-width: 768px) {
-  #main > .wrapper {
-    display: block;
-    width: 100%;
-    height: 100vh;
-  }
-  #addButton {
-    border-radius: 4px;
-  }
-  #myBoxMiddle.scrollable {
-    position: relative;
-    height: 80vh;
-    overflow-y: auto;
-  }
-  #myBoxMiddle.scrollable::-webkit-scrollbar {
-    width: 15px;
-  }
-}
-
-.wrapper {
-  display: grid;
-  grid-template-columns: 12fr 5fr;
-  column-gap: 15px;
-  height: 100%;
-}
-
 .middle {
   background-color: #e7e8ec;
-  height: 100%;
-}
-.middle > .container {
-  height: 100%;
+  height: 100vh;
 }
 
 .right {
@@ -43,8 +14,8 @@ body {
   border-left-color: rgb(57, 41, 67);
   border-left-color: rgba(57, 41, 67, 0.5);
   border-left-width: thin;
-  width: 90%;
-  height: 100%;
+  width: 100%;
+  height: 100vh;
 }
 
 #openSidebar {
@@ -103,8 +74,6 @@ body {
   color: #e7e8ec;
 }
 
-/*Problem: if filename too long, last button will cannot see*/
-
 #fileInfoMobile {
   background-color: #f1f1f1;
   width: 100vw;
@@ -141,7 +110,7 @@ body {
 #main {
   transition: all 0.3s; /* If you want a transition effect */
   width: 100%;
-  height: 100%;
+  height: 100vh;
   display: block;
   position: absolute;
   padding: 60 0 0 0;
@@ -180,6 +149,9 @@ body {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+.small {
+  font-size: 0.7em;
+}
 .on-select {
   background-color: rgb(141, 140, 140);
   background-color: rgba(141, 140, 140, 0.322);
@@ -197,7 +169,109 @@ body {
 }
 
 .fa-arrow-up,
-.fa-arrow-down {
+.fa-arrow-down,
+.fa-file,
+.fa-file-alt,
+.fa-file-archive {
   color: rgb(57, 41, 67);
   color: rgba(57, 41, 67, 0.5);
+}
+.fa-file-image,
+.fa-file-video,
+.fa-file-audio {
+  color: rgba(178, 70, 221, 0.726);
+}
+
+.fa-file-excel {
+  color: rgba(78, 207, 72, 0.726);
+}
+
+.fa-file-pdf,
+.fa-file-code,
+.fa-file-powerpoint {
+  color: rgba(214, 62, 62, 0.726);
+}
+
+#downloadButton,
+.button,
+.button:link,
+.button:visited {
+  padding: 0 0;
+  display: inline-block;
+  position: relative;
+  transition: all 0.2s;
+  width: 5vw;
+  height: 5vw;
+}
+
+.button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+.button:active {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+}
+
+.btn-function {
+  background-color: #074b78ea;
+}
+
+.rounded-circle::after {
+  content: "";
+  border-radius: 50%;
+  display: inline-block;
+  z-index: -1;
+  transition: all 0.4s;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  position: absolute;
+}
+
+.btn-function::after {
+  background-color: #074b78ea;
+}
+
+.button:hover::after {
+  transform: scaleX(1.4) scaleY(1.4);
+  opacity: 0;
+}
+.icon-function {
+  fill: #fff;
+  width: 80%;
+  height: auto;
+}
+
+@media only screen and (max-width: 768px) {
+  #myBoxMiddle.scrollable {
+    position: relative;
+    height: 80vh;
+    overflow-y: auto;
+  }
+  #myBoxMiddle.scrollable::-webkit-scrollbar {
+    width: 15px;
+  }
+  #downloadButton,
+  .button {
+    width: 8vw;
+    height: 8vw;
+  }
+}
+
+@media only screen and (max-width: 576px) {
+  #downloadButton,
+  .button {
+    width: 10vw;
+    height: 10vw;
+  }
+}
+
+@media only screen and (max-width: 390px) {
+  #downloadButton,
+  .button {
+    width: 12vw;
+    height: 12vw;
+  }
 }

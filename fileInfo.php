@@ -7,41 +7,65 @@
     //Problem: add codes to close databse
 
    function getFileType($type){
+       $return_arr = array();
         $shortType = "";
+        $icon = "";
         if($type == "txt"){
             $shortType = "Text";
+            $icon = "-alt";
         }elseif($type == "pdf"){
             $shortType = "PDF";
+            $icon = "-pdf";
         }elseif($type == "doc" || $type == "docx"){
             $shortType = "Word";
+            $icon = "-word";
         }elseif($type == "xls" || $type == "xlsx"){
             $shortType = "Excel";
+            $icon = "-excel";
         }elseif($type == "ppt" || $type == "pptx"){
             $shortType = "Powerpoint";
+            $icon = "-powerpoint";
         }elseif($type == "js"){
             $shortType = "Javascript";
+            $icon = "-code";
         }elseif($type == "php"){
             $shortType = "PHP";
+            $icon = "-code";
         }elseif($type == "css"){
             $shortType = "Style Sheet";
+            $icon = "-code";
         }elseif($type == "html"){
             $shortType = "HTML";
+            $icon = "-code";
         }elseif($type == "jpg" || $type == "png" || $type == "jpeg" || $type == "jpe" || $type == "jif" || $type == "jfif" || $type == "jfi" || $type == "gif"){
             $shortType = "Image";
-        }elseif($type == "exe"){
-            $shortType = "Application";
+            $icon = "-image";
         }elseif($type == "java"){
             $shortType = "Java";
+            $icon = "-code";
         }elseif($type == "class"){
             $shortType = "Class";
+            $icon = "";
         }elseif($type == "cpp" || $type == "o"){
             $shortType = "Binary File";
+            $icon = "";
+        }elseif($type == "mp4" || $type == "webm" || $type == "mp2" || $type == "mpeg" || $type == "mpe" || $type == "mpv" || $type == "ogg" || $type == "m4p" || $type == "m4v" || $type == "avi" || $type == "wmv" || $type == "mov" || $type == "qt" || $type == "swf" || $type == "avchd"){
+            $shortType = "Video";
+            $icon = "-video";
+        }elseif($type == "mp3" || $type == "ogg" || $type == "m4a" || $type == "flac" || $type == "wav" || $type == "wma"){
+            $shortType = "Audio";
+            $icon = "-audio";
+        }elseif($type == "zip" || $type == "7z" || $type == "rar" || $type == "rk" || $type == "tar.gz" || $type == "tgz" || $type == "tar.Z" || $type == "tar.bz2" || $type == "tar.xz" || $type == "txz" || $type == "zz" || $type == "zipx" || $type == "s7z" || $type == "apk" || $type == "wim"){
+            $shortType = "Compressed Archive";
+            $icon = "-archive";
         }
         else{
             $shortType = "Unknown Type";
+            $icon = "";
         }
-
-        return $shortType;
+        $return_arr['shortType'] = $shortType;
+        $return_arr['icon'] = $icon;
+        return $return_arr;
 
    }
 
@@ -100,12 +124,12 @@
 
             while($row = $fetchFile->fetch()){
                 $type = $row['filetype'];
-                $fileType = getFileType($type);
+                $returnArr = getFileType($type);
                 echo '<div class="row row-middle m-0 p-0 off-select" id="row_'.$num.'" onclick="getFileInfo('.$num.', '.$x.')">';
-                echo '<div class="col-12 col-sm-4 p-0 pb-2 pt-2 pt-sm-1 pb-sm-1 d-flex d-sm-block"><div class="long mr-1 col-7 col-sm-12 d-sm-block" id="file_'.$num.'">'.$row['filename'].'</div><p class="m-0 pt-1 mr-2 small d-sm-none">Created at: '.$row['createtime'].'</p></div>';
-                echo '<div class="d-none d-sm-block col-sm-3 pb-1 pt-1">'.$row['createtime'].'</div>';           
-                echo '<div class="d-none d-sm-block col-sm-3 pb-1 pt-1">'.$fileType.'</div>';
-                echo '<div class="d-none d-sm-block col-sm-2 pb-1 pt-1">'.$row['filesize'].'</div>';
+                echo '<div class="col-12 col-md-4 p-0 pb-2 pt-2 pt-md-1 pb-md-1 d-flex d-md-block"><div class="long mr-1 col-7 col-sm-9 col-md-12 d-md-block" id="file_'.$num.'"><i class="pr-2 fas fa-file'.$returnArr['icon'].'"></i>'.$row['filename'].'</div><p class="m-0 pt-1 mr-2 small d-md-none">Created at: '.$row['createtime'].'</p></div>';
+                echo '<div class="d-none d-md-block col-md-3  pb-1 pt-1">'.$row['createtime'].'</div>';           
+                echo '<div class="d-none d-md-block col-md-3  pt-1 ">'.$returnArr['shortType'].'</div>';
+                echo '<div class="d-none d-md-block col-md-2  pb-1 pt-1">'.$row['filesize'].'</div>';
                 echo '</div>';
                                 
                 $num++; 
@@ -213,13 +237,13 @@
                 //different sort method for sharefile, because it displays one by one
             
                 $type = $s['filetype'];
-                $fileType = getFileType($type);
+                $returnArr = getFileType($type);
 
                 echo	'<div class="row row-middle m-0 p-0 off-select" id="row_'.$num.'" onclick="getFileInfo('.$num.', '.$s['id'].')">';
-                echo	'<div class="col-12 col-sm-4 p-0 pb-2 pt-2 pt-sm-1 pb-sm-1 d-flex d-sm-block"><div class="long mr-1 col-7 col-sm-12 d-sm-block" id="file_'.$num.'">'.$s['filename'].'</div><p class="m-0 pt-1 mr-2 small d-sm-none">Created at: '.$s['createtime'].'</p></div>';
-                echo	'<div class="d-none d-sm-block col-sm-3 pb-1 pt-1">'.$s['createtime'].'</div>';
-                echo    '<div class="d-none d-sm-block col-sm-3 pb-1 pt-1">'.$fileType.'</div>';
-                echo    '<div class="d-none d-sm-block col-sm-2 pb-1 pt-1">'.$s['filesize'].'</div>';
+                echo	'<div class="col-12 col-md-4 p-0 pb-2 pt-2 pt-md-1 pb-md-1 d-flex d-md-block "><div class="long mr-1 col-xs-5 col-sm-8 col-md-9 col-lg-12 d-md-block" id="file_'.$num.'"><i class="pr-2 fas fa-file'.$returnArr['icon'].'"></i>'.$s['filename'].'</div><p class="m-0 pt-1 small d-md-none">Created at: '.$s['createtime'].'</p></div>';
+                echo	'<div class="d-none d-md-block col-md-3 pb-1 pt-1">'.$s['createtime'].'</div>';
+                echo    '<div class="d-none d-md-block col-md-3 pb-1 pt-1">'.$returnArr['shortType'].'</div>';
+                echo    '<div class="d-none d-md-block col-md-2 pb-1 pt-1">'.$s['filesize'].'</div>';
                 echo 	'</div>';
                 $num++;
                
@@ -314,9 +338,9 @@ if(isset($_POST['action'])){
 
         while($row = $fetchInfo->fetch()){
             $type = $row['filetype'];
-            $fileType = getFileType($type);
+            $returnArr = getFileType($type);
             $return_arr['filename'] = $row['filename'];
-            $return_arr['filetype'] = $fileType;
+            $return_arr['filetype'] = $returnArr['shortType'];
             $return_arr['filesize'] = $row['filesize'];
             $return_arr['createtime'] = $row['createtime'];
             $return_arr['shared_users'] = $row['shared_users'];
@@ -334,9 +358,9 @@ if(isset($_POST['action'])){
 
         while($row = $fetchInfo->fetch()){
             $type = $row['filetype'];
-            $fileType = getFileType($type);
+            $returnArr = getFileType($type);
             $return_arr['filename'] = $row['filename'];
-            $return_arr['filetype'] = $fileType;
+            $return_arr['filetype'] = $returnArr['shortType'];
             $return_arr['filesize'] = $row['filesize'];
             $return_arr['createtime'] = $row['createtime'];
             $return_arr['username'] = $row['username'];

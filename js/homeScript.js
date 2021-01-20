@@ -1,7 +1,13 @@
 var order;
 
 $(function(){
-    
+        $('[data-toggle="tooltip"]').tooltip({
+            delay: {
+                show: 800,
+                hide: 0
+            }
+        });
+
 
         $('#main').on('click', '#addButton', function(){
             $('#uploadModal').modal('show');

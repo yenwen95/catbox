@@ -8,12 +8,14 @@ body {
   background-attachment: fixed;
   color: rgba(12, 12, 12, 0.911);
 }
+h1 {
+  font-size: 3em;
+}
+
 label {
   color: #fff;
 }
 .alert {
-  width: 50%;
-  margin: 0.5em auto;
   opacity: 0.8;
 }
 .wrapper {
@@ -220,5 +222,104 @@ input::placeholder {
   }
   100% {
     transform: translateY(-700px) rotate(600deg);
+  }
+}
+
+@media (max-width: 1366px) {
+  h1 {
+    font-size: 2.6em;
+  }
+  .register-inner {
+    padding: 2.5em;
+  }
+  .register-outer {
+    margin: 2em auto;
+    width: 36%;
+  }
+}
+
+@media (max-width: 1280px) {
+  .register-outer {
+    width: 40%;
+  }
+}
+
+@media (max-width: 1080px) {
+  .register-outer {
+    width: 46%;
+  }
+}
+
+@media (max-width: 1024px) {
+  .register-outer {
+    width: 50%;
+  }
+}
+
+@media (max-width: 991px) {
+  h1 {
+    font-size: 2.4em;
+  }
+  .main-container {
+    padding: 2em 0 1em;
+  }
+}
+
+@media (max-width: 900px) {
+  .register-outer {
+    width: 58%;
+  }
+}
+
+@media (max-width: 800px) {
+  h1 {
+    font-size: 2.2em;
+  }
+}
+
+@media (max-width: 736px) {
+  .register-outer {
+    width: 62%;
+  }
+}
+
+@media (max-width: 667px) {
+  .register-outer {
+    width: 67%;
+  }
+}
+
+@media (max-width: 600px) {
+  .register-inner {
+    padding: 2.2em;
+  }
+  h1 {
+    font-size: 2em;
+  }
+}
+
+@media (max-width: 568px) {
+  .register-outer {
+    width: 75%;
+  }
+}
+
+@media (max-width: 414px) {
+  .register-outer {
+    width: 85%;
+    margin: 1.5em auto;
+  }
+}
+
+@media (max-width: 384px) {
+  .register-outer {
+    width: 88%;
+  }
+}
+
+@media (max-width: 320px) {
+  .register-outer {
+    width: 92%;
+    margin: 1em auto;
   }
 }
