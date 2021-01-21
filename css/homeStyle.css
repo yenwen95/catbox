@@ -113,7 +113,7 @@ body {
   height: 100vh;
   display: block;
   position: absolute;
-  padding: 60 0 0 0;
+  padding: 0 0;
   margin: 0;
 }
 
@@ -179,16 +179,19 @@ body {
 .fa-file-image,
 .fa-file-video,
 .fa-file-audio {
+  color: rgb(178, 70, 221);
   color: rgba(178, 70, 221, 0.726);
 }
 
 .fa-file-excel {
+  color: rgb(78, 207, 72);
   color: rgba(78, 207, 72, 0.726);
 }
 
 .fa-file-pdf,
 .fa-file-code,
 .fa-file-powerpoint {
+  color: rgb(214, 62, 62);
   color: rgba(214, 62, 62, 0.726);
 }
 

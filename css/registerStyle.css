@@ -6,6 +6,7 @@ body {
   background: linear-gradient(to top, #b2c9da, #b8c5ce);
   background-size: cover;
   background-attachment: fixed;
+  color: rgb(12, 12, 12);
   color: rgba(12, 12, 12, 0.911);
 }
 h1 {
@@ -29,6 +30,7 @@ label {
 .register-outer {
   width: 45%;
   margin: 1.5em auto;
+  background: rgb(0, 0, 0);
   background: rgba(0, 0, 0, 0.3);
   background-size: cover;
 }
@@ -45,6 +47,7 @@ input[type="password"] {
   width: 95%;
   display: block;
   border: none;
+  border: solid 1px rgb(255, 255, 255);
   border: solid 1px rgba(255, 255, 255, 0.37);
   transition: all 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
   background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 96%, #fff 4%);
@@ -103,6 +106,7 @@ input::placeholder {
   width: 50px;
   height: 50px;
   bottom: -180px;
+  background-color: rgb(255, 255, 255);
   background-color: rgba(255, 255, 255, 0.253);
   border-radius: 50%;
   animation: square 15s infinite;
@@ -111,6 +115,7 @@ input::placeholder {
 
 .bubbles li:nth-child(1) {
   left: 10%;
+  background-color: rgb(255, 255, 255);
   background-color: rgba(255, 255, 255, 0.425);
 }
 
@@ -147,6 +152,7 @@ input::placeholder {
   -o-animation-duration: 22s;
   -ms-animation-duration: 22s;
   animation-duration: 22s;
+  background-color: rgb(255, 255, 255);
   background-color: rgba(255, 255, 255, 0.37);
 }
 
@@ -163,6 +169,7 @@ input::placeholder {
   -o-animation-delay: 3s;
   -ms-animation-delay: 3s;
   animation-delay: 3s;
+  background-color: rgb(255, 255, 255);
   background-color: rgba(255, 255, 255, 0.2);
 }
 
@@ -187,6 +194,7 @@ input::placeholder {
   -webkit-animation-duration: 40s;
   -moz-animation-duration: 40s;
   animation-duration: 40s;
+  background-color: rgb(255, 255, 255);
   background-color: rgba(255, 255, 255, 0.425);
 }
 
@@ -195,9 +203,12 @@ input::placeholder {
   width: 10px;
   height: 10px;
   -webkit-animation-delay: 2s;
+  -moz-animation-delay: 2s;
   animation-delay: 2s;
   -webkit-animation-duration: 40s;
+  -moz-animation-duration: 40s;
   animation-duration: 40s;
+  background-color: rgb(255, 255, 255);
   background-color: rgba(255, 255, 255, 0.3);
 }
 
@@ -206,6 +217,7 @@ input::placeholder {
   width: 160px;
   height: 160px;
   -webkit-animation-delay: 11s;
+  -moz-animation-delay: 11s;
   animation-delay: 11s;
 }
 

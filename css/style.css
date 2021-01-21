@@ -69,7 +69,7 @@ a {
   text-decoration: none;
 }
 
-a.navbar-brand,
+.navbar-brand,
 a.btn-box,
 a.btn-box:hover {
   color: #e7e8ec;
@@ -133,7 +133,7 @@ button.close:hover {
   text-decoration: none;
   color: #ffffff;
 }
-button.close-homeModal {
+.close-homeModal {
   text-decoration: none;
   color: #074b78;
 }
@@ -146,9 +146,10 @@ button.close-homeModal {
   background-color: #e7e8ec;
 }
 .card-shadow {
-  -webkit-box-shadow: 0px 10px 13px -7px #000000,
+  -webkit-box-shadow: 0 10px 13px -7px #000000,
     1px 5px 18px 43px rgba(0, 0, 0, 0);
-  box-shadow: 0px 10px 13px -7px #000000, 1px 5px 18px 43px rgba(0, 0, 0, 0);
+  -moz-box-shadow: 0 10px 13px -7px #000000, 1px 5px 18px 43px rgba(0, 0, 0, 0);
+  box-shadow: 0 10px 13px -7px #000000, 1px 5px 18px 43px rgba(0, 0, 0, 0);
 }
 
 .form-row {

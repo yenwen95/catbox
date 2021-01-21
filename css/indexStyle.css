@@ -84,6 +84,7 @@
 svg {
   width: 8vw;
   height: auto;
+  fill: rgb(95, 95, 95);
   fill: rgba(95, 95, 95, 0.596);
 }
 

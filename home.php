@@ -100,6 +100,9 @@ foreach($files as $file){
 			</div>
 	</nav>
 	
+<!--Problem: create function to let user delete their account -->
+
+
 	<!-- SELECT FILE MODAL -->
 	<div id="uploadModal" class="modal fade" role="dialog">
 		<div class="modal-dialog modal-sm" role="content">
