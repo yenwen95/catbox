@@ -4,7 +4,19 @@
   "description": "Final Year Project",
   "main": "index.php",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "clean": "rimraf dist",
+    "imagemin": "imagemin img/* --out-dir='dist/img'",
+    "build": "npm run clean && npm run imagemin",
+    "csso1": "csso css/style.css --output dist/css/style.css --source-map cssMaps/style.min.map",
+    "csso2": "csso css/homeStyle.css --output dist/css/homeStyle.css --source-map cssMaps/homeStyle.min.map",
+    "csso3": "csso css/indexStyle.css --output dist/css/indexStyle.css --source-map cssMaps/indexStyle.min.map",
+    "csso4": "csso css/registerStyle.css --output dist/css/registerStyle.css --source-map cssMaps/registerStyle.min.map",
+    "csso": "npm run csso1 && npm run csso2 && npm run csso3 && npm run csso4",
+    "uglifyjs1": "uglifyjs js/script.js -o dist/js/script.js",
+    "uglifyjs2": "uglifyjs js/homeScript.js -o dist/js/homeScript.js",
+    "uglifyjs": "npm run uglifyjs1 && npm run uglifyjs2",
+    "minifyFile": "npm run csso && npm run uglifyjs"
   },
   "repository": {
     "type": "git",
@@ -16,5 +28,9 @@
     "bootstrap": "^4.5.2",
     "jquery": "^3.5.1",
     "popper.js": "^1.16.1"
+  },
+  "devDependencies": {
+    "imagemin-cli": "^6.0.0",
+    "rimraf": "^3.0.2"
   }
 }

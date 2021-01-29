@@ -1,4 +1,31 @@
-<?php include 'controllers/authController.php' ?>
+<?php 
+
+ob_start("minifier"); 
+function minifier($code) { 
+    $search = array( 
+          
+        // Remove whitespaces after tags 
+        '/\>[^\S ]+/s', 
+          
+        // Remove whitespaces before tags 
+        '/[^\S ]+\</s', 
+          
+        // Remove multiple whitespace sequences 
+        '/(\s)+/s', 
+          
+        // Removes comments 
+        '/<!--(.|\s)*?-->/'
+    ); 
+    $replace = array('>', '<', '\\1'); 
+    $code = preg_replace($search, $replace, $code); 
+    return $code; 
+} 
+
+
+include 'controllers/authController.php' 
+
+
+?>
 
 <!DOCTYPE html>
 <html>
@@ -8,12 +35,15 @@
     <meta charset = "utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="x-ua-compatible" content="ie-edge">
+
 	<!--  bootstrap, font awesome  -->
+   <!-- build:css css/main.js -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-	<!--  custom css  -->
     <link rel="stylesheet" href="./css/style.css">
     <link rel="stylesheet" href="./css/indexStyle.css">
+    <!-- endbuild -->
+
 
 
 <!--Google font-->
@@ -89,8 +119,9 @@
                                 <a href="enter_email.php" class="ml-auto">Forgot Password?</a>
                             </div>
                             <div class="form-row">
-                                <button type="button" class="btn btn-secondary btn-sm ml-auto" data-dismiss="modal">Cancel</button>
-                                <button type="submit" class="btn btn-box btn-sm ml-1" name="login-btn">Sign In</button>
+                                <button type="submit" class="btn btn-box btn-sm ml-auto" name="login-btn">Sign In</button>
+                                <button type="button" class="btn btn-secondary btn-sm ml-1" data-dismiss="modal">Cancel</button>
+                               
                             </div>
                         </form>
                     </div>
@@ -149,10 +180,10 @@
                 </div> 
                 <div class="row m-0 mb-2 d-flex justify-content-center">
                     
-                    <span class="col-12 mb-3 col-sm-4 ">
+                    <span class="col-12 mb-3 col-md-4 ">
                         <a href="home.php"  class="btn btn-lg btn-block btn-design1 index-btn">Open your box</a>
                     </span>
-                    <span class="col-12 col-sm-4">
+                    <span class="col-12 col-md-4">
                         <a href="register.php" class="btn btn-lg btn-block btn-design2 index-btn">Try it now!</a>
                     </span>
   
@@ -372,13 +403,17 @@
 
      
 	<!-- jquery, popper.js, bootstrap script -->
+  
 	<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
 	<script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
-    
-    <!-- custom javascript -->
     <script src="./js/script.js"></script>
+ 
 
 </body>
 
 </html>
+
+<?php 
+ob_end_flush(); 
+?>

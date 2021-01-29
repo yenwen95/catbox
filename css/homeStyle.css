@@ -83,6 +83,7 @@ body {
   height: 70vh;
   overflow: hidden;
   transition: 0.3s;
+  left: 0;
 }
 #fileInfoMobile.fileInfoMobileClose {
   bottom: -100vh;
@@ -121,6 +122,13 @@ body {
 #shareBoxRightMobile {
   display: none;
 }
+
+.message1,
+.message2,
+.message3 {
+  display: none;
+}
+
 .scrollable {
   position: relative;
   height: 67vh;
@@ -269,6 +277,16 @@ body {
     width: 10vw;
     height: 10vw;
   }
+  .modal {
+    position: absolute;
+    top: 30vh;
+    right: 50vw;
+    bottom: 0;
+    left: 0;
+    z-index: 10040;
+    overflow: auto;
+    overflow-y: auto;
+  }
 }
 
 @media only screen and (max-width: 390px) {
@@ -276,5 +294,16 @@ body {
   .button {
     width: 12vw;
     height: 12vw;
+  }
+
+  .modal {
+    position: absolute;
+    top: 20vh;
+    right: 50vw;
+    bottom: 0;
+    left: 0;
+    z-index: 10040;
+    overflow: auto;
+    overflow-y: auto;
   }
 }

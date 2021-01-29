@@ -1,4 +1,27 @@
 <?php
+
+ob_start("minifier"); 
+function minifier($code) { 
+    $search = array( 
+          
+        // Remove whitespaces after tags 
+        '/\>[^\S ]+/s', 
+          
+        // Remove whitespaces before tags 
+        '/[^\S ]+\</s', 
+          
+        // Remove multiple whitespace sequences 
+        '/(\s)+/s', 
+          
+        // Removes comments 
+        '/<!--(.|\s)*?-->/'
+    ); 
+    $replace = array('>', '<', '\\1'); 
+    $code = preg_replace($search, $replace, $code); 
+    return $code; 
+} 
+
+
 	 include 'controllers/authController.php';
 
 	if(empty($_SESSION['id'])){
@@ -61,14 +84,13 @@ foreach($files as $file){
     <meta http-equiv="x-ua-compatible" content="ie-edge">
 	
 	<!--  bootstrap, font awesome  -->
+
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-	
-	<!--  custom css  -->
 	<link rel="stylesheet" href="./css/style.css">
 	<link rel="stylesheet" href="./css/homeStyle.css">
 	
+
 	<!--Google font-->
 	<link rel="preconnect" href="https://fonts.gstatic.com">
 	<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300&family=Noto+Sans&display=swap" rel="stylesheet">
@@ -84,10 +106,8 @@ foreach($files as $file){
 				<!-- SYSTEM NAME -->
 				<button  type="button" id="openSidebar">&#9776;</button>
 				<img src="./img/logo.png" alt="logo" width="50px" height="40px" />
-				<!--
-				<p class="mr-auto mb-0">myBox@1171101541</p>
-				-->
-				<p class="mr-auto mb-0">myBox@<?php echo $_SESSION['username'] ?></p>
+				
+				<p class="mr-auto mb-0"><span id="boxName"></span><?php echo $_SESSION['username'] ?></p>
 
 				<!-- SEARCH BAR
 				<div class="search-container">
@@ -108,7 +128,10 @@ foreach($files as $file){
 		<div class="modal-dialog modal-sm" role="content">
 			<div class="modal-content">
 				<div class="modal-body">
-				<a type="button" class="close-homeModal" data-dismiss="modal">&times;</a>
+					<div class="row m-0 mb-2">
+						<a type="button" class="close-homeModal p-2 " data-dismiss="modal">&times;</a>
+						<div class="alert alert-danger message1 p-1 m-0"> File exists! </div>
+					</div>
 					<!--form id="uploadForm" action="fileUpload.php" method="post" enctype="multipart/form-data" class="sm-form"-->
 					<form id="uploadForm" method="post" action="" enctype="multipart/form-data" class="sm-form">
 						<div class="form-row">
@@ -120,7 +143,7 @@ foreach($files as $file){
 							</div>
 						</div>
 						<div class="form-row">
-							<button id="uploadButton" type="button" value="Upload" class="btn btn-box mt-2">Upload</button>
+							<button id="uploadButton" type="button" value="Upload" class="btn btn-box btn-block mt-2">Upload</button>
 						</div>
 					</form>
 				</div>
@@ -128,40 +151,12 @@ foreach($files as $file){
 		</div>
 	</div>
 
-	<!--  SHARE MODAL -->
-		<div id="shareModal" class="modal fade"  role="dialog">
-			<div class="modal-dialog modal-sm" role="content">
-				<div class="modal-content">
-					<div class="modal-body">
-						<a type="button" class="close-uploadModal" data-dismiss="modal">&times;</a>
-						<div class="container" id="shareDiv">
-							<div class="row">
-								<p class="mb-1">Shared with: </p>
-								<input type="text" id="checkUser" class="form-control" />
-							</div>
-							<div class="row">
-								<button class="btn btn-box btn-sm" id="share-btn">Share</button>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+	
 
-		<!-- PREVIEW MODAL -->
-	<div id="previewModal" class="modal fade" role="dialog">
-		<div class="modal-dialog modal-md" role="content">
-			<div class="modal-content">
-				<div class="modal-body">
-					<a type="button" class="close-uploadModal" data-dismiss="modal">&times;</a>
-					<div class="container" >
-					    <img id="previewImg" src="" width="100%" height="100%"/>
-						<iframe id="previewFrame" src="" width="100%" height="350px"></iframe>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+	
+
+	
+
 
 	<nav id="mySidebar" class="sidebar">
 		<!-- LEFT CONTENT (MENU TO SWITCH FROM OWN SPACE and SHARED FILE) -->
@@ -177,6 +172,9 @@ foreach($files as $file){
 			</li>
 			<li>
 				<a id="gotoShareBox" class="boxes">shareBox</a>
+			</li>
+			<li>
+				<a id="gotoRecycleBin" class="boxes">Recycle Bin</a>
 			</li>
 		</ul>
 		
@@ -197,9 +195,73 @@ foreach($files as $file){
 				<!-- MIDDLE CONTENT  -->
 				<div class="middle col-12 col-md-8 m-0 pr-0">
 					<div class="container-md" id="mainContainer">
+						<!-- PREVIEW MODAL -->
+						<div id="previewModal" class="modal fade" role="dialog">
+							<div class="modal-dialog modal-md" role="content">
+								<div class="modal-content">
+									<div class="modal-body">
+										<a type="button" class="close-uploadModal" data-dismiss="modal">&times;</a>
+										<div class="container" >
+											<img id="previewImg" src="" width="100%" height="100%"/>
+											<iframe id="previewFrame" src="" width="100%" height="350px"></iframe>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<!--  SHARE MODAL -->
+						<div id="shareModal" class="modal fade"  role="dialog">
+							<div class="modal-dialog modal-sm" role="content">
+								<div class="modal-content">
+									<div class="modal-body">
+										<div class="row m-0 mb-2">
+											<a type="button" class="close-homeModal p-2 " data-dismiss="modal">&times;</a>
+											<div class="alert alert-danger message2 p-1 m-0"> User does not exist! </div>
+										</div>
+										<div class="container" id="shareDiv">
+											<div class="d-block d-md-none row">
+												Filename: <p id="tobeShared" class="name"></p>
+											</div>
+											<div class="row">
+												<p class="mb-1">Shared with: </p>
+												<input type="text" id="checkUser" class="form-control" />
+											</div>
+											<div class="row">
+												<button class="btn btn-box btn-block" id="share-btn">Share</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- DELETE CONFIRMATION MODAL -->
+						<div id="deleteModal" class="modal fade" role="dialog">
+							<div class="modal-dialog modal-sm" role="content">
+								<div class="modal-content">
+									<div class="modal-body">
+										<a type="button" class="close-uploadModal" data-dismiss="modal">&times;</a>
+										<div class="container">
+												<div class="d-block row">
+													<p class="m-0">Are you sure you want to delete this file?<br><br>
+													Filename: </p><strong><p id="tobeDeleted" class="name"></p></strong>
+												</div>
+										
+											<div class="row">
+												<button class="btn btn-box btn-sm ml-auto" id="delete-btn">Yes</button>
+												<button class="btn btn-secondary btn-sm ml-1"  data-dismiss="modal" >No</button>
+												
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
 						<!-- FUNCTION BUTTONS -->
-						<div class="row">
-							<div class="container m-0 w-50 d-flex justify-content-between">
+						<div class="row" id="functionButtons">
+							<div  class="container m-0 w-50 d-flex justify-content-between">
 								<a class="btn button btn-function rounded-circle d-flex justify-content-center p-1 pl-2 pt-2" id="addButton" data-toggle="tooltip" data-placement="bottom" title="Add File">
 									<svg class="icon-function" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="-45 0 530 530">
 										<g id="surface1">
@@ -231,7 +293,7 @@ foreach($files as $file){
 										</g>
 									</svg>
 								</a>
-								<a class="btn button btn-function rounded-circle d-none d-sm-flex justify-content-center p-1 pl-2 pt-2" id="delButton" data-toggle="tooltip" data-placement="bottom" title="Delete File">
+								<a class="btn button btn-function rounded-circle d-none d-md-flex justify-content-center p-1 pl-2 pt-2" id="delButton" data-toggle="tooltip" data-placement="bottom" title="Delete File">
 									<svg class="icon-function" viewBox="-45 0 530 530" xmlns="http://www.w3.org/2000/svg">
 										<path d="m232.398438 154.703125c-5.523438 0-10 4.476563-10 10v189c0 5.519531 4.476562 10 10 10 5.523437 0 
 												10-4.480469 10-10v-189c0-5.523437-4.476563-10-10-10zm0 0"/>
@@ -251,7 +313,7 @@ foreach($files as $file){
 												10-4.480469 10-10v-189c0-5.523437-4.476563-10-10-10zm0 0"/>
 									</svg>
 								</a>
-								<a class="btn button btn-function rounded-circle d-none d-sm-flex justify-content-center p-1 pl-2 pt-2" id="shareButton" data-toggle="tooltip" data-placement="bottom" title="Share File">
+								<a class="btn button btn-function rounded-circle d-none d-md-flex justify-content-center p-1 pl-2 pt-2" id="shareButton" data-toggle="tooltip" data-placement="bottom" title="Share File">
 									<svg class="icon-function" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="-45 0 530 530">
 										<g id="surface1">
 											<path d="M 348.945312 221.640625 L 348.945312 124.746094 C 348.945312 121.972656 347.664062 119.410156 
@@ -292,7 +354,7 @@ foreach($files as $file){
 										</g>
 									</svg>
 								</a>
-								<a class="btn button btn-function rounded-circle d-none d-sm-flex justify-content-center p-1 pl-2 pt-2" id="downloadButton" href="" data-toggle="tooltip" data-placement="bottom" title="Download File">
+								<a class="btn button btn-function rounded-circle d-none d-md-flex justify-content-center p-1 pl-2 pt-2" id="downloadButton" href="" data-toggle="tooltip" data-placement="bottom" title="Download File">
 									<svg class="icon-function" xmlns="http://www.w3.org/2000/svg"  version="1.1" viewBox="-45 0 530 530">
 										<g>
 											<path d="M 348.945312 221.640625 L 348.945312 124.746094 C 348.945312 121.972656 347.664062 119.410156 345.851562 
@@ -327,7 +389,7 @@ foreach($files as $file){
 										</g>
 									</svg>
 								</a>
-								<a class="btn button btn-function rounded-circle d-none d-sm-flex justify-content-center p-1 pt-2 " id="previewButton" data-toggle="tooltip" data-placement="bottom" title="Preview  File">
+								<a class="btn button btn-function rounded-circle d-none d-md-flex justify-content-center p-1 pt-2 " id="previewButton" data-toggle="tooltip" data-placement="bottom" title="Preview  File">
 								
 									<svg class="icon-function" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="-45 0 550 550" xml:space="preserve">
 									<g>
@@ -349,7 +411,9 @@ foreach($files as $file){
 									</svg>
 
 								</a>
+								
 							</div>
+							<div class="alert alert-danger m-0 ml-3 mt-1 message3">No file is selected!</div>
 						</div>
 						
 
@@ -360,6 +424,77 @@ foreach($files as $file){
 							<div id="sortByTime" class="d-none d-md-block col-md-3  pb-1 pt-1 sortClass">Created <i id="timeArrow"></i></div>
 							<div id="sortByType" class="d-none d-md-block col-md-3  pb-1 pt-1 sortClass">Type <i id="typeArrow" ></i></div>
 							<div id="sortBySize" class="d-none d-md-block col-md-2  pb-1 pt-1 sortClass">Size <i id="sizeArrow"></i></div>
+						</div>
+
+						<!-- RIGHT FILE INFORMATION --mobile view -->
+						<div class="d-block d-md-none fileInfoMobileClose" id="fileInfoMobile">
+							<!-- FILE INFORMATION -->
+							<div class="container m-3">
+								<div class='row m-0 mb-3 border-bottom'>
+									<span class="h4">File Information</span>
+								</div>
+								<div class='row m-0'>
+									<div class='col-3 p-0'>
+										<p>Name</p>
+									</div>
+									<div class='col-8'>
+										<span class="name"></span>
+									</div>
+								</div>
+								<div class='row m-0'>
+									<div class='col-3 p-0'>
+										<p>Type</p>
+									</div>
+									<div class='col-8'>
+										<span class="type"></span>
+									</div>
+								</div>
+
+								<div class='row m-0'>
+									<div class='col-3 p-0'>
+										<p>Size</p>
+									</div>
+									<div class='col-8'>
+										<span class="size"></span>
+									</div>
+								</div>
+
+								<div class='row m-0'>
+									<div class='col-3 p-0'>
+										<p>Created At</p>
+									</div>
+									<div class='col-8'>
+										<span class="timecreate"></span>
+									</div>
+								</div>
+
+								<div class='row m-0' id="myBoxRightMobile">
+									<div class='col-3 p-0'>
+										<p>Shared With</p>
+									</div>
+									<div class='col-8'>
+										<span class="sharewith"></span>
+									</div>
+								</div>
+
+								<div class='row m-0' id="shareBoxRightMobile">
+									<div class='col-3 p-0'>
+										<p>Shared By</p>
+									</div>
+									<div class='col-8'>
+										<span class="shareby"></span>
+									</div>
+								</div>
+
+								<div class='d-grid gap-3 mt-3 mr-4'>
+									<a class="btn btn-box btn-block" id="delButtonMobile">Delete</a>
+									<a class="btn btn-box btn-block" id="shareButtonMobile">Share</a>
+									<a class="btn btn-box btn-block" id="downloadButtonMobile"  href="">Download</a>
+									<a class="btn btn-box btn-block" id="previewButtonMobile">Preview</a>
+								</div>
+
+
+							</div>
 						</div>
 
 					</div>
@@ -406,7 +541,7 @@ foreach($files as $file){
 
 									<div class='row m-0'>
 										<div class='col-5 p-0'>
-											<p>Created</p>
+											<p>Created At</p>
 										</div>
 										<div class='col-7'>
 											<span class="timecreate"></span>
@@ -436,76 +571,7 @@ foreach($files as $file){
 					</div>
 				</div>
 
-				<!-- RIGHT FILE INFORMATION --mobile view -->
-				<div class="d-block d-md-none fileInfoMobileClose" id="fileInfoMobile">
-					<!-- FILE INFORMATION -->
-					<div class="container m-3 mr-4">
-						<div class='row m-0 mb-3 border-bottom'>
-							<span class="h4">File Information</span>
-						</div>
-						<div class='row m-0'>
-							<div class='col-3 p-0'>
-								<p>Name</p>
-							</div>
-							<div class='col-9'>
-								<span class="name"></span>
-							</div>
-						</div>
-						<div class='row m-0'>
-							<div class='col-3 p-0'>
-								<p>Type</p>
-							</div>
-							<div class='col-7'>
-								<span class="type"></span>
-							</div>
-						</div>
-
-						<div class='row m-0'>
-							<div class='col-3 p-0'>
-								<p>Size</p>
-							</div>
-							<div class='col-7'>
-								<span class="size"></span>
-							</div>
-						</div>
-
-						<div class='row m-0'>
-							<div class='col-3 p-0'>
-								<p>Created</p>
-							</div>
-							<div class='col-7'>
-								<span class="timecreate"></span>
-							</div>
-						</div>
-
-						<div class='row m-0' id="myBoxRightMobile">
-							<div class='col-3 p-0'>
-								<p>Shared With</p>
-							</div>
-							<div class='col-7'>
-								<span class="sharewith"></span>
-							</div>
-						</div>
-
-						<div class='row m-0' id="shareBoxRightMobile">
-							<div class='col-3 p-0'>
-								<p>Shared By</p>
-							</div>
-							<div class='col-7'>
-								<span class="shareby"></span>
-							</div>
-						</div>
-						<div class='d-grid gap-3 mt-3 mr-4'>
-							<a class="btn btn-box btn-block" id="delButtonMobile">Delete</a>
-							<a class="btn btn-box btn-block" id="shareButtonMobile">Share</a>
-							<a class="btn btn-box btn-block" id="downloadButtonMobile"  href="">Download</a>
-							<a class="btn btn-box btn-block" id="previewButtonMobile">Preview</a>
-						</div>
-
-
-					</div>
-				</div>
-
+			
 		
 	
 			</div>
@@ -517,15 +583,17 @@ foreach($files as $file){
 	<!-- FOOTER -->
 	
 	<!--  jquery, popper.js, bootstrap script  -->
+	
 	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
-	
-
-	 <!-- custom javascript -->
 	 <script src="./js/homeScript.js"></script>
 	
 </body>
 
 </html>
+
+<?php 
+ob_end_flush(); 
+?>

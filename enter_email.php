@@ -1,4 +1,29 @@
-<?php include 'controllers/authController.php' ?>
+<?php 
+ob_start("minifier"); 
+function minifier($code) { 
+    $search = array( 
+          
+        // Remove whitespaces after tags 
+        '/\>[^\S ]+/s', 
+          
+        // Remove whitespaces before tags 
+        '/[^\S ]+\</s', 
+          
+        // Remove multiple whitespace sequences 
+        '/(\s)+/s', 
+          
+        // Removes comments 
+        '/<!--(.|\s)*?-->/'
+    ); 
+    $replace = array('>', '<', '\\1'); 
+    $code = preg_replace($search, $replace, $code); 
+    return $code; 
+} 
+
+include 'controllers/authController.php' 
+
+
+?>
 
 <!DOCTYPE html>
 
@@ -7,12 +32,16 @@
         <meta charset = "utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta http-equiv="x-ua-compatible" content="ie-edge">
+
+
 	    <!--  bootstrap, font awesome  -->
+       
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-	    <!--  custom css  -->
         <link rel="stylesheet" href="./css/style.css">
         <link rel="stylesheet" href="./css/registerStyle.css" type="text/css" media="all">
+  
+
         <!--Google font-->
         <link rel="preconnect" href="https://fonts.gstatic.com">
         <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300&family=Noto+Sans&display=swap" rel="stylesheet">
@@ -74,3 +103,6 @@
 
 </html>
 
+<?php 
+ob_end_flush(); 
+?> 

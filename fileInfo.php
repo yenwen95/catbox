@@ -7,6 +7,7 @@
     //Problem: add codes to close databse
 
    function getFileType($type){
+     
        $return_arr = array();
         $shortType = "";
         $icon = "";
@@ -125,7 +126,7 @@
             while($row = $fetchFile->fetch()){
                 $type = $row['filetype'];
                 $returnArr = getFileType($type);
-                echo '<div class="row row-middle m-0 p-0 off-select" id="row_'.$num.'" onclick="getFileInfo('.$num.', '.$x.')">';
+                echo '<div class="row-file row row-middle m-0 p-0 off-select" id="row_'.$num.'" value="'.$x.'">';
                 echo '<div class="col-12 col-md-4 p-0 pb-2 pt-2 pt-md-1 pb-md-1 d-flex d-md-block"><div class="long mr-1 col-7 col-sm-9 col-md-12 d-md-block" id="file_'.$num.'"><i class="pr-2 fas fa-file'.$returnArr['icon'].'"></i>'.$row['filename'].'</div><p class="m-0 pt-1 mr-2 small d-md-none">Created at: '.$row['createtime'].'</p></div>';
                 echo '<div class="d-none d-md-block col-md-3  pb-1 pt-1">'.$row['createtime'].'</div>';           
                 echo '<div class="d-none d-md-block col-md-3  pt-1 ">'.$returnArr['shortType'].'</div>';
@@ -239,8 +240,8 @@
                 $type = $s['filetype'];
                 $returnArr = getFileType($type);
 
-                echo	'<div class="row row-middle m-0 p-0 off-select" id="row_'.$num.'" onclick="getFileInfo('.$num.', '.$s['id'].')">';
-                echo	'<div class="col-12 col-md-4 p-0 pb-2 pt-2 pt-md-1 pb-md-1 d-flex d-md-block "><div class="long mr-1 col-xs-5 col-sm-8 col-md-9 col-lg-12 d-md-block" id="file_'.$num.'"><i class="pr-2 fas fa-file'.$returnArr['icon'].'"></i>'.$s['filename'].'</div><p class="m-0 pt-1 small d-md-none">Created at: '.$s['createtime'].'</p></div>';
+                echo	'<div class="row-file row row-middle m-0 p-0 off-select" id="row_'.$num.'" value="'.$s['id'].'">';
+                echo	'<div class="col-12 col-md-4 p-0 pb-2 pt-2 pt-md-1 pb-md-1 d-flex d-md-block "><div class="long mr-1 col-7 col-sm-9 col-md-12 d-md-block" id="file_'.$num.'"><i class="pr-2 fas fa-file'.$returnArr['icon'].'"></i>'.$s['filename'].'</div><p class="m-0 pt-1 small d-md-none">Created at: '.$s['createtime'].'</p></div>';
                 echo	'<div class="d-none d-md-block col-md-3 pb-1 pt-1">'.$s['createtime'].'</div>';
                 echo    '<div class="d-none d-md-block col-md-3 pb-1 pt-1">'.$returnArr['shortType'].'</div>';
                 echo    '<div class="d-none d-md-block col-md-2 pb-1 pt-1">'.$s['filesize'].'</div>';
@@ -370,7 +371,7 @@ if(isset($_POST['action'])){
     }
 
     if($action == "deleteFile"){
-        $filename = $_POST['filename'];
+        $filename = $_POST['file'];
         $status = "";
         
         //delete filepath from database

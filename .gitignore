@@ -3,3 +3,5 @@ vendor
 img
 file_dir
 config
+dist
+cssMaps
