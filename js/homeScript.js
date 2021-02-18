@@ -1,6 +1,8 @@
 (function(){
     
+    //Problem: create function let user delete their account
     //Problem: if it can store other language file or not
+
         var order, FILEID, NUM, FILENAME, em = "";
     $(function(){
         

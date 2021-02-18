@@ -22,7 +22,7 @@ function minifier($code) {
 } 
 
 
-	 include 'controllers/authController.php';
+	include 'controllers/authController.php';
 
 	if(empty($_SESSION['id'])){
 		header('location: index.php');
@@ -30,48 +30,55 @@ function minifier($code) {
 	ini_set('display_errors', 1);
 	error_reporting(E_ALL);
 
-//Check user folder exist or not
-$defaultDir = "./file_dir/";
-$username = $_SESSION['username'];
-$userFolder = $defaultDir.$username.'/';
+	//Check user folder exist or not
+	$defaultDir = "./file_dir/";
+	$username = $_SESSION['username'];
+	$userFolder = $defaultDir.$username.'/';
+	$userRecoveryFolder = $userFolder.'recyclebin/';
 
-if(!file_exists($userFolder)){ 
-    mkdir($userFolder, 0777, true);
-}
-
-//CHECKING FILES CONSISTENCY IN BOTH DATABASE AND SERVER
-//  CONDITION 1: record in database but not in server, delete record in db
-$query = $con->prepare("SELECT filepath FROM Files WHERE username = ?");
-$query->execute([$username]);
-
-
-while($row = $query->fetch()){
-    if(!file_exists($row['filepath'])){
-		$path = $row['filepath'];
-		$deleteRow = $con->prepare("DELETE FROM Files where filepath = ?");
-		$deleteRow->execute($path);
-
+	if(!file_exists($userFolder)){ 
+		mkdir($userFolder, 0777, true);
 		
-    }
-}
-
-//  CONDITION 2: record in server but not in database, remove file from server
-$files = array();
-$folder = $defaultDir.$username;
-foreach(scandir($folder) as $file){
-	if($file !== '.' && $file !== '..'){
-		$files[] = $file;
 	}
-}
-	
-foreach($files as $file){
-	$query1 = $con->prepare("SELECT filename FROM Files WHERE username = ? && filename = ?");
-	$query1->execute([$username, $file]);
 
-	if($query1->fetch() === 0){
-		unlink($userFolder.$file);
+	if(!file_exists($userRecoveryFolder)){ 
+		mkdir($userRecoveryFolder, 0777, true);
+		
 	}
-}
+
+	//CHECKING FILES CONSISTENCY IN BOTH DATABASE AND SERVER
+	//  CONDITION 1: record in database but not in server, delete record in db
+	$query = $con->prepare("SELECT filepath FROM Files WHERE username = ?");
+	$query->execute([$username]);
+
+
+	while($row = $query->fetch()){
+		if(!file_exists($row['filepath'])){
+			$path = $row['filepath'];
+			$deleteRow = $con->prepare("DELETE FROM Files where filepath = ?");
+			$deleteRow->execute($path);
+
+			
+		}
+	}
+
+	//  CONDITION 2: record in server but not in database, remove file from server
+	$files = array();
+	$folder = $defaultDir.$username;
+	foreach(scandir($folder) as $file){
+		if($file !== '.' && $file !== '..'){
+			$files[] = $file;
+		}
+	}
+		
+	foreach($files as $file){
+		$query1 = $con->prepare("SELECT filename FROM Files WHERE username = ? && filename = ?");
+		$query1->execute([$username, $file]);
+
+		if($query1->fetch() === 0){
+			unlink($userFolder.$file);
+		}
+	}
 
 
 ?>
@@ -120,7 +127,7 @@ foreach($files as $file){
 			</div>
 	</nav>
 	
-<!--Problem: create function to let user delete their account -->
+
 
 
 	<!-- SELECT FILE MODAL -->
@@ -151,12 +158,6 @@ foreach($files as $file){
 		</div>
 	</div>
 
-	
-
-	
-
-	
-
 
 	<nav id="mySidebar" class="sidebar">
 		<!-- LEFT CONTENT (MENU TO SWITCH FROM OWN SPACE and SHARED FILE) -->
@@ -180,15 +181,11 @@ foreach($files as $file){
 		
 	</nav>	
 
-	
-
 
 	<!--  MAIN CONTAINER -->
-	
 	<div id="main">
 	
 	<!-- Scrollable DIV -->
-
 		<div class=" container-fluid m-0 mr-1 mt-n3 p-0 w-100" id="myBox">
 			
 			<div class="row mb-0">

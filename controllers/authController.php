@@ -42,6 +42,7 @@ $username = $_POST["username"];
 $email = $_POST["email"];
 $token = bin2hex(random_bytes(50));
 $password1 = $_POST["password1"];
+$hash = password_hash($password1, PASSWORD_ARGON2I);
 $verified="0";
 $action = "register";
 
@@ -67,7 +68,7 @@ $row1 = $check_email->fetch(PDO::FETCH_ASSOC);
             VALUES(:username, :email, :password, :token,:verified,:role)");
             $query->bindParam(':username',$username); 
             $query->bindParam(':email',$email);          
-            $query->bindParam(':password',$password1);
+            $query->bindParam(':password',$hash);
             $query->bindParam(':token',$token);
             $query->bindParam(':verified',$verified);
             $query->bindParam(':role',$role);
@@ -118,8 +119,9 @@ if(isset($_POST['login-btn'])){
         $query1 = $con->prepare("SELECT password FROM Users WHERE username=? or email=? ");
         $query1->execute([$username,$password]);
         $row = $query1->fetch();
+        $hash = $row[0];
         
-            if( "$password" == "$row[0]"){
+            if(password_verify($password, $hash)){
                 $_SESSION['id'] = $user[0];
                 $_SESSION['username'] = $user[1];
                 $_SESSION['email'] = $user[2];
@@ -188,14 +190,15 @@ if(isset($_POST['new-password-btn'])){
         array_push($errors, "Passwords do not match!");
     }
     if(count($errors) == 0){
-      
+        $hash = password_hash($new_pass1, PASSWORD_ARGON2I);
+
         $query = $con->prepare("SELECT email FROM Users WHERE token = ? LIMIT 1");
         $query->execute([$token]);
         $result = $query->fetch();
         $email = $result['email'];
 
         $sql = $con->prepare("UPDATE Users SET password= ? WHERE email = ?");
-        $sql->execute([$new_pass1, $email]);
+        $sql->execute([$hash, $email]);
         $result1 = $sql->fetch();
 
         $username = $_SESSION['username'];
