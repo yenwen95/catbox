@@ -37,14 +37,12 @@ include 'controllers/authController.php'
     <meta http-equiv="x-ua-compatible" content="ie-edge">
 
 	<!--  bootstrap, font awesome  -->
-   <!-- build:css css/main.js -->
+  
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="./css/style.css">
     <link rel="stylesheet" href="./css/indexStyle.css">
-    <!-- endbuild -->
-
-
+  
 
 <!--Google font-->
 <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -100,13 +98,13 @@ include 'controllers/authController.php'
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 class="modal-title">Login</h4>
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <button  type="button" class="close" data-dismiss="modal"><i class="far fa-times-circle"></i></button>
                     </div>
                     <div class="modal-body">
                         
                         <form method="post" action="index.php">
                         
-                            <div class="form-row">
+                            <div class="form-row mt-1">
                                 <label>Username or Email address</label>
                                 <input type="text" name="username" class="form-control" id="exampleInputEmail" value="<?php echo $username; ?>">
                             </div>  
@@ -118,9 +116,9 @@ include 'controllers/authController.php'
                                 <a href="register.php" >Not Yet Register?</a>
                                 <a href="enter_email.php" class="ml-auto">Forgot Password?</a>
                             </div>
-                            <div class="form-row">
-                                <button type="submit" class="btn btn-box btn-sm ml-auto" name="login-btn">Sign In</button>
-                                <button type="button" class="btn btn-secondary btn-sm ml-1" data-dismiss="modal">Cancel</button>
+                            <div class="form-row mb-0">
+                                <button type="submit" class="btn btn-box btn-sm ml-auto" name="login-btn">LOG IN</button>
+                                <button type="button" class="btn btn-secondary btn-sm ml-1" data-dismiss="modal">CANCEL</button>
                                
                             </div>
                         </form>
@@ -184,7 +182,7 @@ include 'controllers/authController.php'
                         <a href="home.php"  class="btn btn-lg btn-block btn-design1 index-btn">Open your box</a>
                     </span>
                     <span class="col-12 col-md-4">
-                        <a href="register.php" class="btn btn-lg btn-block btn-design2 index-btn">Try it now!</a>
+                        <a href="register.php" class="btn btn-lg btn-block btn-design2 index-btn">Register now!</a>
                     </span>
   
                 </div>

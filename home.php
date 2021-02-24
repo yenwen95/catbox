@@ -35,6 +35,7 @@ function minifier($code) {
 	$username = $_SESSION['username'];
 	$userFolder = $defaultDir.$username.'/';
 	$userRecoveryFolder = $userFolder.'recyclebin/';
+	$userVaultFolder = $userFolder.'vault/';
 
 	if(!file_exists($userFolder)){ 
 		mkdir($userFolder, 0777, true);
@@ -43,6 +44,10 @@ function minifier($code) {
 
 	if(!file_exists($userRecoveryFolder)){ 
 		mkdir($userRecoveryFolder, 0777, true);
+		
+	}
+	if(!file_exists($userVaultFolder)){ 
+		mkdir($userVaultFolder, 0777, true);
 		
 	}
 
@@ -136,23 +141,64 @@ function minifier($code) {
 			<div class="modal-content">
 				<div class="modal-body">
 					<div class="row m-0 mb-2">
-						<a type="button" class="close-homeModal p-2 " data-dismiss="modal">&times;</a>
-						<div class="alert alert-danger message1 p-1 m-0"> File exists! </div>
+						<div class="alert message1 m-0 p-1 "> </div>
+						<a type="button" class="close-homeModal p-2 ml-auto" data-dismiss="modal"><i class="far fa-times-circle"></i></a>
 					</div>
-					<!--form id="uploadForm" action="fileUpload.php" method="post" enctype="multipart/form-data" class="sm-form"-->
-					<form id="uploadForm" method="post" action="" enctype="multipart/form-data" class="sm-form">
-						<div class="form-row">
-							<p class="mb-1">Select a file:</p>
-							<div class="custom-file">
-								<input type="file" name="getFile" class="custom-file-input col-12" id="getFile"
-									aria-describedby="inputGroupFileAddon01">
-								<label class="custom-file-label long col-12" for="getFile" id="getFileName">Choose file</label>
+					<div class="modal-inner">
+						<!--form id="uploadForm" action="fileUpload.php" method="post" enctype="multipart/form-data" class="sm-form"-->
+						<form id="uploadForm" method="post" action="" enctype="multipart/form-data" class="sm-form">
+							<div class="form-row">
+								<p class="mb-1 ">Select a file:</p>
+								<div class="custom-file">
+									<input type="file" name="getFile" class="custom-file-input col-12" id="getFile"
+										aria-describedby="inputGroupFileAddon01">
+									<label class="custom-file-label long col-12" for="getFile" id="getFileName">Choose file</label>
+								</div>
 							</div>
+							<div class="form-row mb-0">
+								<button id="uploadButton" type="button" value="Upload" class="btn btn-box btn-block mt-2">UPLOAD</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	
+	<!-- vault MODAL -->
+	<div id="vaultModal" class="modal fade" role="dialog">
+		<div class="modal-dialog modal-sm" role="content">
+			<div class="modal-content">
+				<div class="modal-body">
+					<div class="row m-0 mb-2">
+						<div class="alert  message4 p-1 m-0"> </div>
+						<a type="button" class="close-homeModal p-2 ml-auto" data-dismiss="modal"><i class="far fa-times-circle"></i></a>
+						
+					</div>
+					<div class="container modal-inner">
+						<p class="mb-1">You need to get a one time password from your email to open the vault!</p>
+						<div class="row">
+							<input type="text" id="otpPass" class="form-control" placeholder="Enter OTP here" />
 						</div>
-						<div class="form-row">
-							<button id="uploadButton" type="button" value="Upload" class="btn btn-box btn-block mt-2">Upload</button>
+						<div class="row mb-2">
+							<button id="getOTP-btn" class="btn btn-design1 shadow-none btn-block">GET NEW OTP</button>
 						</div>
-					</form>
+						<div class="row mt-0 mb-0">
+							<button id="submitOTP-btn" class="btn btn-design2 shadow-none btn-block">SUBMIT</button>
+						</div>		
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- message modal -->
+	<div id="messageModal" class="modal fade" role="dialog">
+		<div class="modal-dialog modal-sm" role="content">
+			<div class="modal-content">
+				<div class="modal-body">
+					<div class="alert alert-danger p-1 m-0">Vault will be closed if there is no activity for 20 minutes. Get a new OTP to open the vault.</div>
 				</div>
 			</div>
 		</div>
@@ -166,13 +212,16 @@ function minifier($code) {
 		</div>
 		<ul class="list-unstyled components">
 			<li>
-				<a href="./index.php" class="">Home</a>
+				<a href="./index.php" class="">Main Page</a>
 			</li>
 			<li>
 				<a id="gotoMyBox" class="boxes">myBox</a>
 			</li>
 			<li>
 				<a id="gotoShareBox" class="boxes">shareBox</a>
+			</li>
+			<li>
+				<a id="gotoVault" class="boxes">Vault</a>
 			</li>
 			<li>
 				<a id="gotoRecycleBin" class="boxes">Recycle Bin</a>
@@ -192,16 +241,20 @@ function minifier($code) {
 				<!-- MIDDLE CONTENT  -->
 				<div class="middle col-12 col-md-8 m-0 pr-0">
 					<div class="container-md" id="mainContainer">
+
+
 						<!-- PREVIEW MODAL -->
 						<div id="previewModal" class="modal fade" role="dialog">
 							<div class="modal-dialog modal-md" role="content">
 								<div class="modal-content">
 									<div class="modal-body">
-										<a type="button" class="close-uploadModal" data-dismiss="modal">&times;</a>
+										<a type="button" class="close-homeModal float-right" data-dismiss="modal"><i class="far fa-times-circle"></i></a>
+									
 										<div class="container" >
 											<img id="previewImg" src="" width="100%" height="100%"/>
 											<iframe id="previewFrame" src="" width="100%" height="350px"></iframe>
 										</div>
+									
 									</div>
 								</div>
 							</div>
@@ -213,19 +266,19 @@ function minifier($code) {
 								<div class="modal-content">
 									<div class="modal-body">
 										<div class="row m-0 mb-2">
-											<a type="button" class="close-homeModal p-2 " data-dismiss="modal">&times;</a>
 											<div class="alert alert-danger message2 p-1 m-0"> User does not exist! </div>
+											<a type="button" class="close-homeModal p-2 ml-auto" data-dismiss="modal"><i class="far fa-times-circle"></i></a>
 										</div>
-										<div class="container" id="shareDiv">
-											<div class="d-block d-md-none row">
-												Filename: <p id="tobeShared" class="name"></p>
+										<div class="container modal-inner" id="shareDiv">
+											<div class="row mt-0 mb-0">
+												Filename: <strong><p id="tobeShared" class="name"></p></strong>
 											</div>
-											<div class="row">
+											<div class="row mt-0">
 												<p class="mb-1">Shared with: </p>
 												<input type="text" id="checkUser" class="form-control" />
 											</div>
-											<div class="row">
-												<button class="btn btn-box btn-block" id="share-btn">Share</button>
+											<div class="row mt-0 mb-0">
+												<button class="btn btn-box btn-block" id="share-btn">SHARE</button>
 											</div>
 										</div>
 									</div>
@@ -238,16 +291,69 @@ function minifier($code) {
 							<div class="modal-dialog modal-sm" role="content">
 								<div class="modal-content">
 									<div class="modal-body">
-										<a type="button" class="close-uploadModal" data-dismiss="modal">&times;</a>
-										<div class="container">
-												<div class="d-block row">
-													<p class="m-0">Are you sure you want to delete this file?<br><br>
-													Filename: </p><strong><p id="tobeDeleted" class="name"></p></strong>
+										<div class="row m-0">
+											<a type="button" class="close-homeModal ml-auto" data-dismiss="modal"><i class="far fa-times-circle"></i></a>
+										</div>
+										<div class="container modal-inner">
+												<div class="d-block row mt-0 mb-0">
+													Filename: <strong><p id="tobeDeleted" class="name"></p></strong>
+													<p class="m-0">Are you sure you want to delete this?<br><br></p>
 												</div>
 										
-											<div class="row">
-												<button class="btn btn-box btn-sm ml-auto" id="delete-btn">Yes</button>
-												<button class="btn btn-secondary btn-sm ml-1"  data-dismiss="modal" >No</button>
+											<div class="row mt-0 mb-0">
+												<button class="btn btn-box btn-block" id="delete-btn">YES</button>
+												<button class="btn btn-secondary btn-block"  data-dismiss="modal" >NO</button>
+												
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- ADD TO VAULT CONFIRMATION MODAL-->
+						<div id="addtovaultModal" class="modal fade" role="dialog">
+							<div class="modal-dialog modal-sm" role="content">
+								<div class="modal-content">
+									<div class="modal-body">
+										<div class="row m-0 mb-2">
+											<div class="alert alert-success message5 p-1 m-0">Successfully added!</div>
+											<a type="button" class="close-homeModal p-2 ml-auto" data-dismiss="modal"><i class="far fa-times-circle"></i></a>
+										</div>
+										<div class="container modal-inner">
+												<div class="d-block row mt-0 mb-0">
+													Filename: <strong><p id="tobeAddedToVault" class="name"></p></strong>
+													<p class="m-0">Add this file into vault?<br><br></p>
+												</div>
+										
+											<div class="row mt-0 mb-0">
+												<button class="btn btn-box btn-block" id="addtovault-btn">YES</button>
+												<button class="btn btn-secondary btn-block"  data-dismiss="modal" >NO</button>
+												
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+							<!-- REMOVE FROM VAULT CONFIRMATION MODAL -->
+							<div id="removefromvaultModal" class="modal fade" role="dialog">
+							<div class="modal-dialog modal-sm" role="content">
+								<div class="modal-content">
+									<div class="modal-body">
+										<div class="row m-0">
+											<a type="button" class="close-homeModal ml-auto" data-dismiss="modal"><i class="far fa-times-circle"></i></a>
+										</div>
+										<div class="container modal-inner">
+												<div class="d-block row mt-0 mb-0">
+													Filename: <strong><p id="tobeRemoved" class="name"></p></strong>
+													<p class="m-0">Remove this file from vault?<br><br></p>
+												</div>
+										
+											<div class="row mt-0 mb-0">
+												<button class="btn btn-box btn-block" id="removefromvault-btn">YES</button>
+												<button class="btn btn-secondary btn-block"  data-dismiss="modal" >NO</button>
 												
 											</div>
 										</div>
@@ -258,7 +364,7 @@ function minifier($code) {
 
 						<!-- FUNCTION BUTTONS -->
 						<div class="row" id="functionButtons">
-							<div  class="container m-0 w-50 d-flex justify-content-between">
+							<div  id="buttonrow" class="container m-0 w-50 d-flex justify-content-between">
 								<a class="btn button btn-function rounded-circle d-flex justify-content-center p-1 pl-2 pt-2" id="addButton" data-toggle="tooltip" data-placement="bottom" title="Add File">
 									<svg class="icon-function" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="-45 0 530 530">
 										<g id="surface1">
@@ -351,7 +457,7 @@ function minifier($code) {
 										</g>
 									</svg>
 								</a>
-								<a class="btn button btn-function rounded-circle d-none d-md-flex justify-content-center p-1 pl-2 pt-2" id="downloadButton" href="" data-toggle="tooltip" data-placement="bottom" title="Download File">
+								<a class="btn button btn-function rounded-circle d-none d-md-flex justify-content-center p-1 pl-2 pt-2" id="downloadButton" data-toggle="tooltip" data-placement="bottom" title="Download File">
 									<svg class="icon-function" xmlns="http://www.w3.org/2000/svg"  version="1.1" viewBox="-45 0 530 530">
 										<g>
 											<path d="M 348.945312 221.640625 L 348.945312 124.746094 C 348.945312 121.972656 347.664062 119.410156 345.851562 
@@ -386,19 +492,19 @@ function minifier($code) {
 										</g>
 									</svg>
 								</a>
-								<a class="btn button btn-function rounded-circle d-none d-md-flex justify-content-center p-1 pt-2 " id="previewButton" data-toggle="tooltip" data-placement="bottom" title="Preview  File">
+								<a class="btn button btn-function rounded-circle d-none d-md-flex justify-content-center p-1 pt-2 pr-2 " id="previewButton" data-toggle="tooltip" data-placement="bottom" title="Preview  File">
 								
 									<svg class="icon-function" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="-45 0 550 550" xml:space="preserve">
-									<g>
 										<g>
-											<path d="M510.096,249.937c-4.032-5.867-100.928-143.275-254.101-143.275C124.56,106.662,7.44,243.281,2.512,249.105
-												c-3.349,3.968-3.349,9.792,0,13.781C7.44,268.71,124.56,405.329,255.995,405.329S504.549,268.71,509.477,262.886
-												C512.571,259.217,512.848,253.905,510.096,249.937z M255.995,383.996c-105.365,0-205.547-100.48-230.997-128
-												c25.408-27.541,125.483-128,230.997-128c123.285,0,210.304,100.331,231.552,127.424
-												C463.013,282.065,362.256,383.996,255.995,383.996z"/>
+											<g>
+												<path d="M510.096,249.937c-4.032-5.867-100.928-143.275-254.101-143.275C124.56,106.662,7.44,243.281,2.512,249.105
+													c-3.349,3.968-3.349,9.792,0,13.781C7.44,268.71,124.56,405.329,255.995,405.329S504.549,268.71,509.477,262.886
+													C512.571,259.217,512.848,253.905,510.096,249.937z M255.995,383.996c-105.365,0-205.547-100.48-230.997-128
+													c25.408-27.541,125.483-128,230.997-128c123.285,0,210.304,100.331,231.552,127.424
+													C463.013,282.065,362.256,383.996,255.995,383.996z"/>
+											</g>
 										</g>
-									</g>
-									<g>
+										<g>
 										<g>
 											<path d="M255.995,170.662c-47.061,0-85.333,38.272-85.333,85.333s38.272,85.333,85.333,85.333s85.333-38.272,85.333-85.333
 												S303.056,170.662,255.995,170.662z M255.995,319.996c-35.285,0-64-28.715-64-64s28.715-64,64-64s64,28.715,64,64
@@ -408,10 +514,85 @@ function minifier($code) {
 									</svg>
 
 								</a>
+								<a class="btn button btn-function rounded-circle d-none d-md-flex justify-content-center p-1 pr-2" id="addToVaultButton"  data-toggle="tooltip" data-placement="bottom" title="Save to Vault">
+									<svg  class="icon-function" version="1.1"  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="-45 0 550 550" xml:space="preserve">
+										<g>
+											<g>
+												<path d="M548.904,35.373v54.474h-27.03v-1.572c0-10.013-8.146-18.158-18.158-18.158H164.771c-10.01,0-18.158,8.146-18.158,18.158
+													v11.945c-2.069,0.94-4.079,2.021-5.914,3.402c-11.904,8.987-16.385,24.956-10.9,38.804l15.082,38.192h-27.73V35.373H548.904z
+													M521.874,378.031v21.953c0,10.013-8.146,18.158-18.158,18.158H164.771c-10.01,0-18.158-8.146-18.158-18.158v-11.869
+													c-2.01-0.939-3.945-2.021-5.769-3.369c-12.055-9.078-16.547-25.073-11.015-38.969l15.061-38.143h-27.733V513.53h112.978
+													l8.473-46.399h188.834l8.464,46.399h112.979V371.293h-15.971C530.231,374.733,526.354,377.216,521.874,378.031z M534.789,275.87
+													c2.068,0,5.071-4.185,7.441-12.114l-7.459-24.84l-7.442,24.787C529.7,271.667,532.702,275.87,534.789,275.87z M545.877,234.504
+													c0-9.963-0.981-18.152-2.395-24.568l-7.134,23.72l7.317,24.364C544.96,251.76,545.877,243.97,545.877,234.504z M523.688,234.504
+													c0,9.437,0.904,17.203,2.205,23.454l7.294-24.302l-7.105-23.658C524.664,216.408,523.688,224.57,523.688,234.504z
+													M541.982,204.374c-2.329-7.382-5.201-11.228-7.193-11.228c-2.01,0-4.889,3.869-7.223,11.284l7.193,23.98L541.982,204.374z
+													M503.491,97.714c-0.083-10.021-8.233-18.158-18.275-18.158h-307.31c-9.859,0-17.859,7.87-18.217,17.656
+													c4.079-0.119,8.183,0.396,12.031,1.685v-1.029c0-3.422,2.778-6.206,6.18-6.206h307.303c3.369,0,6.077,2.707,6.171,6.053h-33.266
+													v16.645h-18.453v242.104h18.453v10.593h33.29v26.604c0,3.422-2.761,6.206-6.183,6.206h-307.31c-3.408,0-6.18-2.784-6.18-6.206
+													v-4.191c-3.523,1.229-7.232,1.886-10.973,1.886c-0.387,0-0.757-0.077-1.138-0.089v2.395c0,10.107,8.201,18.312,18.285,18.312
+													h307.303c10.084,0,18.288-8.204,18.288-18.312v-26.604h1.005v4.237l44.39-16.951v-92.081c-2.802,11.476-7.53,19.662-14.114,19.662
+													c-11.267,0-17.153-23.85-17.153-47.413c0-23.563,5.887-47.416,17.153-47.416c6.584,0,11.312,8.183,14.114,19.659v-92.084
+													l-44.378-16.955H503.491z M407.683,167.514H263.907l15.75,12.105h128.026V167.514z M407.683,251.344h-66.266
+													c-0.98,4.362-2.872,8.467-5.438,12.105h71.703V251.344z M227.036,349.099h180.647v-12.105H242.785L227.036,349.099z
+													M150.893,354.176c-1.005,2.53-0.186,5.414,1.986,7.046c1.09,0.815,2.355,1.218,3.632,1.218c1.3,0,2.601-0.414,3.686-1.254
+													L308.4,247.25c1.502-1.149,2.364-2.923,2.364-4.799s-0.862-3.656-2.364-4.799L160.197,123.73c-2.148-1.664-5.157-1.679-7.317-0.05
+													c-2.172,1.641-2.991,4.528-1.986,7.058l29.802,75.433H6.041C2.695,206.17,0,208.89,0,212.223v60.456
+													c0,3.345,2.695,6.052,6.041,6.052h174.654L150.893,354.176z"/>
+											</g>
+										</g>
+									</svg>
+								</a>
+								<a class="btn button btn-function rounded-circle d-none d-md-flex justify-content-center p-1 pr-2" id="removeFromVaultButton"  data-toggle="tooltip" data-placement="bottom" title="Remove From Vault">
+									<svg version="1.1" class="icon-function" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="-45 0 550 550" xml:space="preserve">
+										<g>
+											<g>
+												<path d="M467,46H341.154l-46.437-27.862c-2.191-1.315-4.874-2.121-7.645-2.134c-0.025,0-0.048-0.004-0.073-0.004h-60
+													c-8.284,0-15,6.716-15,15v15H45C20.187,46,0,66.187,0,91v300c0,19.555,12.541,36.228,30,42.42V481c0,8.284,6.716,15,15,15h60
+													c8.284,0,15-6.716,15-15v-45h92v15c0,8.284,6.716,15,15,15h60h0.001c2.782,0,5.494-0.807,7.716-2.138L341.154,436H392v45
+													c0,8.284,6.716,15,15,15h60c8.284,0,15-6.716,15-15v-47.58c17.459-6.192,30-22.865,30-42.42V91C512,66.187,491.813,46,467,46z
+													M90,466H60v-30h30V466z M212,346H90V136h122V346z M212,106H75c-8.284,0-15,6.716-15,15v240c0,8.284,6.716,15,15,15h137v30
+													c-19.158,0-150.148,0-167,0c-8.271,0-15-6.729-15-15V91c0-8.271,6.729-15,15-15h167V106z M272,436h-30c0-3.888,0-385.912,0-390h30
+													V436z M302,424.508V57.493l120,72v223.015L302,424.508z M452,466h-30v-30h30V466z M482,391c0,8.271-6.729,15-15,15
+													c-7.553,0-68.176,0-75.845,0l53.563-32.138C449.235,371.151,452,366.269,452,361V121c0-5.269-2.765-10.151-7.283-12.862
+													L391.155,76H467c8.271,0,15,6.729,15,15V391z"/>
+											</g>
+										</g>
+										<g>
+											<g>
+												<path d="M347,166c-8.284,0-15,6.716-15,15s6.716,15,15,15c8.271,0,15,6.729,15,15v60c0,8.271-6.729,15-15,15
+													c-8.284,0-15,6.716-15,15s6.716,15,15,15c24.813,0,45-20.187,45-45v-60C392,186.187,371.813,166,347,166z"/>
+											</g>
+										</g>
+
+									</svg>
+								</a>
+								<a class="btn button btn-function rounded-circle d-flex justify-content-center p-2 " id="closeVaultButton"  data-toggle="tooltip" data-placement="bottom" title="Close Vault">
+									<svg class="icon-function" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" xml:space="preserve">
+										<g>
+											<path d="M42,26A12,12,0,1,0,30,38,12.013,12.013,0,0,0,42,26Zm-6.166,8.1-1.468-2.543-1.732,1,1.47,2.547a9.9,9.9,0,0,1-3.1.84V33H29v2.949a9.9,9.9,0,0,1-3.1-.84l1.47-2.547-1.732-1L24.166,
+													34.1A10.07,10.07,0,0,1,21.9,31.834l2.542-1.468-1-1.732L20.891,30.1a9.9,9.9,0,0,1-.84-3.1H23V25H20.051a9.9,9.9,0,0,1,.84-3.1l2.546,1.47,1-1.732L21.9,20.166A10.07,10.07,0,0,1,24.166,
+													17.9l1.468,2.543,1.732-1L25.9,16.891a9.9,9.9,0,0,1,3.1-.84V19h2V16.051a9.9,9.9,0,0,1,3.1.84l-1.47,2.547,1.732,1L35.834,17.9A10.07,10.07,0,0,1,38.1,20.166l-2.543,1.468,1,1.732,2.547-1.47a9.9,
+													9.9,0,0,1,.84,3.1H37v2h2.949a9.9,9.9,0,0,1-.84,3.1l-2.547-1.47-1,1.732L38.1,31.834A10.07,10.07,0,0,1,35.834,34.1Z"/>
+											<path d="M30,23a3,3,0,1,0,3,3A3,3,0,0,0,30,23Zm0,4a1,1,0,1,1,1-1A1,1,0,0,1,30,27Z"/>
+											<path d="M34,42V40H20a1,1,0,0,0-1,1v4a1,1,0,0,0,1,1H34V44H21V42Z"/>
+											<path d="M59,40H58V17H56V31.356A8.993,8.993,0,0,0,40,37v3H39a3,3,0,0,0-3,3v5H13a1,1,0,0,1-1-1V44h3a1,1,0,0,0,1-1V39a1,1,0,0,0-1-1H12V22h3a1,1,0,0,0,1-1V17a1,1,0,0,0-1-1H12V13a1,1,0,0,1,1-1H37V10H13a3,
+													3,0,0,0-3,3v3H7a1,1,0,0,0-1,1v4a1,1,0,0,0,1,1h3V38H7a1,1,0,0,0-1,1v4a1,1,0,0,0,1,1h3v3a3,3,0,0,0,3,3H36v6H5a1,1,0,0,1-1-1V5A1,1,0,0,1,5,4H55a1,1,0,0,1,1,1V6h2V5a3,3,0,0,0-3-3H5A3,3,0,0,0,2,5V55a3,
+													3,0,0,0,3,3H8v3a1,1,0,0,0,1,1h8a1,1,0,0,0,1-1V58H36v1a3,3,0,0,0,3,3H59a3,3,0,0,0,3-3V43A3,3,0,0,0,59,40ZM8,18h6v2H8ZM8,40h6v2H8Zm8,20H10V58h6ZM42,37a7,7,0,0,1,14,0v3H54V37a5,5,0,0,0-10,0v3H42Zm10,
+													3H46V37a3,3,0,0,1,6,0Zm8,19a1,1,0,0,1-1,1H39a1,1,0,0,1-1-1V43a1,1,0,0,1,1-1H59a1,1,0,0,1,1,1Z"/>
+											<path d="M49,44a5,5,0,0,0-1,9.9V58h2V53.9A5,5,0,0,0,49,44Zm0,8a3,3,0,1,1,3-3A3,3,0,0,1,49,52Z"/>
+											<path d="M59.606,10.392a15,15,0,0,0-21.212,0l1.412,1.417a13,13,0,0,1,18.388,0Z"/>
+											<path d="M56.777,13.223a10.994,10.994,0,0,0-15.554,0l1.414,1.414a9,9,0,0,1,12.726,0Z"/>
+											<path d="M53.95,16.056a6.987,6.987,0,0,0-9.9,0l1.42,1.408a4.988,4.988,0,0,1,7.06,0Z"/>
+											<path d="M46,21a3,3,0,1,0,3-3A3,3,0,0,0,46,21Zm4,0a1,1,0,1,1-1-1A1,1,0,0,1,50,21Z"/>
+										</g>
+									</svg>
+								</a>
 								
 							</div>
 							<div class="alert alert-danger m-0 ml-3 mt-1 message3">No file is selected!</div>
 						</div>
+
 						
 
 
@@ -577,7 +758,7 @@ function minifier($code) {
 
 	<div class="overlay"></div>
 	<div class="d-md-none overlayMobile"></div>
-	<!-- FOOTER -->
+	
 	
 	<!--  jquery, popper.js, bootstrap script  -->
 	

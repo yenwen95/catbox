@@ -2,8 +2,10 @@
     
     //Problem: create function let user delete their account
     //Problem: if it can store other language file or not
+    //Problem: hide useless function in sharebox or bin or protected
 
         var order, FILEID, NUM, FILENAME, em = "";
+        var idleTime = 0;
     $(function(){
         
         setFile(em, em, em);
@@ -65,6 +67,35 @@
                
             });
 
+            $('#main').on('click', '#removeFromVaultButton', function(){
+              
+                var filename = getFILENAME();
+                var num = getNUM();
+
+                if (num == ""){
+                    $("div.message3").fadeIn(300).delay(1500).fadeOut(400);
+                }else{
+                    $("#tobeRemoved").text(filename);
+                    $('#removefromvaultModal').modal('show');
+                }
+               
+            });
+
+            
+            
+            $('#main').on('click', '#addToVaultButton', function(){
+                $('#fileInfoMobile').addClass('fileInfoMobileClose');
+                $('.overlayMobile').removeClass('active');
+                var filename = getFILENAME();
+                var num = getNUM();
+                if (num == ""){
+                    $("div.message3").fadeIn(300).delay(1500).fadeOut(400);
+                }else{
+                    $("#tobeAddedToVault").text(filename);
+                    $('#addtovaultModal').modal('show');
+                }
+            });
+
             $('#closeSidebar, .overlay, .overlayMobile').on('click', function(){
                 $('#mySidebar').removeClass('active');
                 $('.overlay').removeClass('active');
@@ -77,8 +108,9 @@
                 $('.overlay').addClass('active');
             });
 
-        
-
+          
+       
+            
         
             //Automatic show the user's file when enter the user page
             var page = "mybox";
@@ -94,52 +126,92 @@
             //Problem: create function allow user to change file name before upload to the system
             
             $('#uploadModal').on('click', '#uploadButton', function(){
-                var action = "uploadFile";
-                var formData = new FormData();
-                var files = $('#getFile')[0].files;
+                var state = "mybox";
+                uploadFile(state);
+                });
 
-                if(files.length > 0){
-                    formData.append('getFile', files[0]);
-                    formData.append('action',action);
+                $('#uploadModal').on('click', '#uploadToVaultButton', function(){
+                    var state = "vault";
+                    uploadFile(state);
+                });
 
-                    $.ajax({
-                        url: 'fileInfo.php',
-                        type: 'POST',
-                        data: formData,
-                        dataType: 'JSON',
-                        contentType: false,
-                        processData: false,
-                        success: function(status){
-                      
-                        
-                            if(status == "exist"){
-                                $("div.message1").fadeIn(300).delay(1500).fadeOut(400);
-                            }else{
-                              
-                                $('#uploadModal').modal('hide');
-                                $("#main").load(location.href + " #main");
-                            
-                                var displayFile = "displayFileList";
-                                var page = "mybox";
-                                var sortType = "sortByDefault"
-                                displayFileList(displayFile, page, sortType);
-                                
-                            }
-                        }
-                    });
-                    }
-                
-                }
+
+            //Problem: did not detect mouse and keyboard movement in page or after ajax call
+            //CHECK IDLE TIME
+            let idleInterval = setInterval(timerIncrement, 1000);
+
+            $(this).on('mousemove',function(e){
+                idleTime = 0;
+            });
+            $(this).on('keypress',function(e){
+                idleTime = 0;
+            });
+
+
             
-            );
-
-        
     
         }
     );
 
+    function uploadFile(state){
+        var action = "uploadFile";
+        var formData = new FormData();
+        var files = $('#getFile')[0].files;
+      
+        if(files.length > 0){
+            formData.append('getFile', files[0]);
+            formData.append('action',action);
+            formData.append('state',state);
 
+            $.ajax({
+                url: 'fileInfo.php',
+                type: 'POST',
+                data: formData,
+                dataType: 'JSON',
+                contentType: false,
+                processData: false,
+                success: function(status){
+                    console.log(status);
+                    if(status == "success"){
+                        if($("div.message1").hasClass("alert-danger")){
+                            $("div.message1").removeClass("alert-danger");
+                         }
+                        $("div.message1").addClass('alert-success');
+                        $("div.message1").text("File uploaded successfully!");
+                        $("div.message1").fadeIn(300).delay(1500).fadeOut(400);
 
+                        setTimeout(function(){
+                            $('#uploadModal').modal('hide');
+                          }, 3000);
+
+                          $("#main").load(location.href + " #main");
+                       
+                      
+                        var sortType = "sortByDefault"
+                        if(state == "mybox"){
+                            var displayFile = "displayFileList";
+                            var page = "mybox";
+                            
+                            displayFileList(displayFile, page, sortType);
+                        }else{
+                            var displayFile = "displayVaultFileList";
+                            displayFileList(displayFile, state, sortType);
+                        }
+                    }else{
+                       
+                        if($("div.message1").hasClass("alert-success")){
+                            $("div.message1").removeClass("alert-success");
+                         }
+                        $("div.message1").addClass('alert-danger');
+                        $("div.message1").text("Fail to upload file!");
+                        $("div.message1").fadeIn(300).delay(1500).fadeOut(400);
+                    }
+                    
+                }
+            });
+            }
+
+    }
 
     //CHANGING Between mybox and sharebox at SideBar
     function displayBox(displayFile,page, sortType){
@@ -195,6 +267,56 @@
             data: {displayFile: displayFile, sortType: sortType},
             dataType: 'html',
             success: function(fileList){
+                
+                if(page == "sharebox"){
+                    var mybox = document.getElementById("myBoxRight");
+                    var myboxMobile = document.getElementById("myBoxRightMobile");
+                    var shareBox = document.getElementById("shareBoxRight");
+                    var shareBoxMobile = document.getElementById("shareBoxRightMobile");
+
+                    mybox.style.display = "none";
+                    myboxMobile.style.display = "none";
+                    shareBox.style.display = "flex";
+                    shareBoxMobile.style.display = "flex";
+                    
+                    $('#addButton').removeClass("d-flex");
+                    $('#addButton').addClass("d-none");
+                    $('#shareButton').removeClass("d-md-flex");
+                    $('#shareButton').addClass("d-none");
+                    $('#addToVaultButton').removeClass("d-md-flex");
+                    $('#addToVaultButton').addClass("d-none");
+                    $('#removeFromVaultButton').removeClass("d-md-flex");
+                    $('#removeFromVaultButton').addClass("d-none");
+                    $('#buttonrow').removeClass("w-50");
+                    $('#buttonrow').addClass("w-25");
+                    $('#closeVaultButton').removeClass("d-flex");
+                    $('#closeVaultButton').addClass("d-none");
+
+                
+                    $("#boxName").text("shareBox@");
+                }else if(page == "mybox"){
+                    $("#boxName").text("myBox@");
+                    $('#closeVaultButton').removeClass("d-flex");
+                    $('#closeVaultButton').addClass("d-none");
+                    $('#removeFromVaultButton').removeClass("d-md-flex");
+                    $('#removeFromVaultButton').addClass("d-none");
+                    $('#uploadToVaultButton').attr('id', 'uploadButton');
+                    
+                    
+
+                }else if (page == "vault"){
+                    $("#boxName").text("vault@");
+                    $('#shareButton').removeClass("d-md-flex");
+                    $('#shareButton').addClass("d-none");
+                    $('#addToVaultButton').removeClass("d-md-flex");
+                    $('#addToVaultButton').addClass("d-none");
+                    $('#uploadButton').attr('id', 'uploadToVaultButton');
+
+                }
+
+                //Refresh the file list
+                $('#mainContainer').append(fileList);
+
                 $('#getFile').val('');
                 $('#getFileName').text('');
 
@@ -231,11 +353,8 @@
                 
                 }
 
-                $('#mainContainer').append(fileList);
-                
-            
-            
-                $('#myBoxMiddle').on('click', '.off-select', function(){ 
+              
+                $('#myBoxMiddle, #vaultMiddle, #shareBoxMiddle').on('click', '.off-select', function(){ 
                     $(this).siblings(".off-select").removeClass("on-select");
                     $(this).toggleClass("on-select");
                     $('#fileInfoMobile').removeClass('fileInfoMobileClose');  //toggle file infomation
@@ -243,15 +362,7 @@
                 });
             
                 
-                $('#shareBoxMiddle').on('click', '.off-select', function(){ 
-                    $(this).siblings(".off-select").removeClass("on-select");
-                    $(this).toggleClass("on-select");
-                    $('#fileInfoMobile').removeClass('fileInfoMobileClose');  //togle file information
-                    hide = false;
-                });
-
-                
-                $("#myBoxMiddle, #shareBoxMiddle").on('click','.row-file', function(){
+                $("#myBoxMiddle, #shareBoxMiddle, #vaultMiddle").on('click','.row-file', function(){
                    
 
                     var rowID = $(this).prop("id");
@@ -290,9 +401,35 @@
                 $('#deleteModal').on('click', '#delete-btn', function(){
                     var filename = getFILENAME();
                     var num = getNUM();
-                    action = "deleteFile";
-                    delFile(filename, action, num);
+                    var fileID = getFILEID();
+                    if(fileID == "" || fileID == undefined){
+                        action = "deleteFile";
+                        delFile(filename, action, num);
+                    }else{
+                        action = "deleteSharedFile";
+                        delFile(fileID, action, num);
+                    }
+             
 
+                });
+
+                $("#removefromvaultModal").off('click', '#removefromvault-btn');
+                $('#removefromvaultModal').on('click', '#removefromvault-btn', function(){
+                    var filename = getFILENAME();
+                    var num = getNUM();
+                   
+                    action = "removeFromVault";
+                    removeFromVault(filename, action, num);
+           
+
+                });
+
+                $("#addtovaultModal").off('click', '#addtovault-btn');
+                $('#addtovaultModal').on('click', '#addtovault-btn', function(){
+                    var filename = getFILENAME();
+                    var num = getNUM();
+                    action = "addtovault";
+                    addToVault(filename, action, num);
                 });
         
                 $('#shareModal').off('click', '#share-btn');
@@ -372,6 +509,13 @@
                 }
                 );
 
+                $('#main').on('click', '#closeVaultButton', function(){
+                    action = "closeVault";
+                    var state = "manual";
+                    closeVault(action, state);
+                });
+
+
                     
                 //Click sidebar button to display the user's files (call function)
                 $('#mySidebar').off('click','#gotoMyBox');
@@ -391,6 +535,16 @@
                     sortType = "sortByDefault";
                     displayBox(displayFile,page, sortType);
                     
+                });
+
+                //Show vault model to get and submit otp
+                $('#mySidebar').off('click','#gotoVault');
+                $('#mySidebar').on('click', '#gotoVault', function(){
+                    //check vault is open or not
+                    action = "checkVault";
+                   
+                    checkVault(action);
+                 
                 });
 
 
@@ -425,31 +579,223 @@
                     sortType = changeOrder(type);
                     displayBox(displayFile, page, sortType);
                 });
-                
-                
-
-            if(page == "sharebox"){
-                var mybox = document.getElementById("myBoxRight");
-                var myboxMobile = document.getElementById("myBoxRightMobile");
-                var shareBox = document.getElementById("shareBoxRight");
-                var shareBoxMobile = document.getElementById("shareBoxRightMobile");
-                
-                mybox.style.display = "none";
-                myboxMobile.style.display = "none";
-                shareBox.style.display = "flex";
-                shareBoxMobile.style.display = "flex";
-            
-                $("#boxName").text("shareBox@");
-            }else if(page == "mybox"){
-                $("#boxName").text("myBox@");
-            }
-
-            
+              
+             
 
             }
 
         });
 
+    }
+   //REMOVE FROM VAULT
+   function removeFromVault(file, action, id){
+    $.ajax({
+        url: 'fileInfo.php',
+        type: 'post',
+        data: {file: file, action: action},
+        dataType: 'JSON',
+        success: function(status){
+            console.log(status);
+            if(status == "success"){
+              
+                $("#row_"+id).remove();
+                $("#removefromvaultModal").modal('hide');
+               
+            }else{
+                console.log("fail");
+            }
+        }
+    });
+   }
+
+    //check vault status
+    function checkVault(action){
+        $.ajax({
+            url: 'otpController.php',
+            type: 'post',
+            data: {action: action},
+            dataType: 'JSON',
+            success: function(status){
+                
+                //if open, show file
+                if(status == "1"){
+                    displayFile = "displayVaultFileList";
+                    page = "vault";
+                    sortType = "sortByDefault";
+                    displayBox(displayFile,page, sortType);
+
+                }else if(status == "0"){
+                    //if close, call modal to get OTP
+                    $('#vaultModal').modal('show');
+                    console.log(status);
+                    
+                    $('#vaultModal').on('click', '#getOTP-btn', function(){
+                        action = "sendOTP";
+                        sendOTP(action);
+                    });
+
+                    $('#vaultModal').on('click', '#submitOTP-btn', function(){
+                        action = "submitOTP";
+                        otpPass = document.querySelector("#otpPass").value;
+                        console.log(action);
+                        submitOTP(action, otpPass);
+                    });
+                    
+                }else{
+                    console.log(status);
+                }
+            }
+
+        });
+        
+    }
+
+    //VAULT FUNCTION
+    function addToVault(file, action, id){
+    $.ajax({
+        url: 'fileInfo.php',
+        type: 'post',
+        data: {file: file, action: action},
+        dataType: 'JSON',
+        success: function(status){
+            if(status == "success"){
+                $("#row_"+id).remove();
+                $("div.message5").fadeIn(300).delay(1500).fadeOut(400);
+              
+            }else{
+                console.log("fail");
+            }
+        }
+    });
+    }
+
+    //Increase timer
+    function timerIncrement(){
+        idleTime = idleTime + 1;
+    
+        if(idleTime > 900){
+            //close the vault
+            //Problem: check otp, need to change otp because time is still valid
+           $action = "checkVault";
+            $.ajax({
+                    url: 'otpController.php',
+                    type: 'post',
+                    data: {action: action},
+                    dataType: 'JSON',
+                    success: function(status){
+                        if(status == '1'){
+                            action = "closeVault";
+                            var state = "auto";
+                            closeVault(action, state);
+                        }
+                }
+            });
+
+           
+           
+        }
+    }
+
+    function closeVault(action, state){
+    
+        $.ajax({
+            url: 'fileInfo.php',
+            type: 'post',
+            data: {action: action},
+            dataType: 'JSON',
+            success: function(status){
+                if(status == "success"){
+                    if(state == "auto"){
+                    
+                        $('#messageModal').modal('show');
+    
+                        setTimeout(function(){
+                            $('#messageModal').modal('hide')
+                          }, 10000);
+    
+                          setTimeout(function(){
+                            window.location.reload();
+                          }, 10000);
+                          
+                    }else if(state == "manual"){
+                        window.location.reload();
+                    }
+                }else{
+                    console.log("fail");
+                }
+               
+                
+
+            }
+        });
+
+    }
+
+    //Send OTP
+    function sendOTP(action){
+        $.ajax({
+            url: 'otpController.php',
+            type: 'post',
+            data: {action: action},
+            dataType: 'JSON',
+            success:function(status){
+                console.log(status);
+                if($("div.message4").hasClass("alert-danger")){
+                   $("div.message4").removeClass("alert-danger");
+                }
+                $("div.message4").addClass('alert-success');
+                $("div.message4").text("OTP has sent! Check your email! Your OTP will be valid for 5 minutes!");
+                $("div.message4").fadeIn(300).delay(3000).fadeOut(400);
+            }
+        });
+    }
+
+    //submit OTP
+    function submitOTP(action, otpPass){
+        $.ajax({
+            url: 'otpController.php',
+            type: 'post',
+            data: {action: action, otpPass: otpPass},
+            dataType: 'JSON',
+            success: function(status){
+                console.log(status);
+                if(status == "1" || status == "2" || status == "3" || status == "4"){
+                    if($("div.message4").hasClass("alert-success")){
+                        $("div.message4").removeClass("alert-success");
+                     }
+                    $("div.message4").addClass("alert-danger");
+                    if(status == "1"){
+                        $("div.message4").text("OTP number is needed");
+                    }else if(status == "2"){
+                        $("div.message4").text("Wrong OTP Number!");
+                    }else if(status == "3"){
+                        $("div.message4").text("OTP has expired!");
+                    }else{
+                        $("div.message4").text("OTP has been used!");
+                    }
+                 
+                }else if(status == "5"){
+                    if($("div.message4").hasClass("alert-danger")){
+                        $("div.message4").removeClass("alert-danger");
+                     }
+                        $("div.message4").addClass('alert-success');
+                        $("div.message4").text("OTP is valid!");
+
+                        //hide modal after 3 seconds
+                        setTimeout(function(){
+                            $('#vaultModal').modal('hide')
+                          }, 2000);
+
+                        displayFile = "displayVaultFileList";
+                        page = "vault";
+                        sortType = "sortByDefault";
+                        displayBox(displayFile,page, sortType);
+
+                }
+                $("div.message4").fadeIn(300).delay(3000).fadeOut(400);
+              
+            }
+        });
     }
 
     function clearFileInfo(){
@@ -508,7 +854,7 @@
             dataType: 'JSON',
             success: function(return_arr){
                 var act = return_arr['action'];
-                if(act == "showFileInfoMyBox"){
+                if(act == "showFileInfoMyBox" ){
                     $(".name").text(return_arr.filename);
                     $(".type").text(return_arr.filetype);
                     $(".size").text(return_arr.filesize);
@@ -542,7 +888,9 @@
             data: {file: file, action: action},
             dataType: 'JSON',
             success: function(status){
+                console.log(status);
                 if(status == "success"){
+                  
                     $("#row_"+id).remove();
                     $("#deleteModal").modal('hide');
                     $('.overlayMobile').removeClass('active');
@@ -575,5 +923,8 @@
         }
     });
     }
+
+
+ 
 
 })();

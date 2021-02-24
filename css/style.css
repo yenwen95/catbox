@@ -25,6 +25,7 @@ input[type="email"],
 input::placeholder {
   font-size: 1em;
 }
+
 .body-color {
   background: #b2c9da;
   background: linear-gradient(to top, #b2c9da, #b8c5ce);
@@ -128,14 +129,24 @@ a.btn-box:hover {
   color: #e7e8ec;
 }
 
-button.close,
-button.close:hover {
+.close,
+.close:hover {
   text-decoration: none;
   color: #ffffff;
+  border: none;
+  outline: none;
 }
-.close-homeModal {
+.close-homeModal > i {
   text-decoration: none;
   color: #074b78;
+  border: none;
+  outline: none;
+}
+.close-homeModal:hover > i {
+  text-decoration: none;
+  color: #3f79a0;
+  border: none;
+  outline: none;
 }
 
 .card {
@@ -157,7 +168,7 @@ button.close:hover {
 }
 
 div.form-row > a {
-  color: #b3b3b3;
+  color: #999999;
 }
 
 .modal {

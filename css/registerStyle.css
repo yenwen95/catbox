@@ -13,7 +13,7 @@ h1 {
   font-size: 3em;
 }
 
-label {
+label.white {
   color: #fff;
 }
 .alert {
@@ -40,9 +40,9 @@ label {
 }
 
 .text,
-input[type="text"],
-input[type="email"],
-input[type="password"] {
+.white2 > input[type="text"],
+.white2 > input[type="email"],
+.white2 > input[type="password"] {
   color: #fff;
   width: 95%;
   display: block;
@@ -62,9 +62,9 @@ input[type="password"] {
   background-position: 0 0;
 }
 
-input[type="text"]:valid,
-input[type="email"]:valid,
-input[type="password"]:valid {
+.white2 > input[type="text"]:valid,
+.white2 > input[type="email"]:valid,
+.white2 > input[type="password"]:valid {
   box-shadow: none;
   outline: none;
   background-position: 0 0;

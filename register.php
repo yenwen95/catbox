@@ -29,7 +29,7 @@ include 'controllers/authController.php'
 <!-- Registration page, after registration will enter verification page which is verify.php -->
 <head>
     <meta charset = "utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="x-ua-compatible" content="ie-edge">
 
 	<!--  bootstrap, font awesome  -->
@@ -43,7 +43,7 @@ include 'controllers/authController.php'
 <!--Google font-->
 <link rel="preconnect" href="https://fonts.gstatic.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300&family=Noto+Sans&display=swap" rel="stylesheet">
-
+<script src="https://kit.fontawesome.com/b48b20acd1.js"></script>
 
     <title>Registration</title>
 </head>
@@ -64,37 +64,38 @@ include 'controllers/authController.php'
 
     <!-- LOGIN MODAL -->
     <div id="loginModal" class="modal fade" role="dialog">
-        <div class="modal-dialog modal-md" role="content">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Login</h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
-                <div class="modal-body">
-                    
-                    <form method="post" action="index.php">
-                    
-                        <div class="form-row">
-                            <label>Username or Email address</label>
-                            <input type="text" name="username" class="form-control" id="exampleInputEmail" value="<?php echo $username; ?>">
-                        </div>  
-                        <div class="form-row">
-                            <label>Password</label>
-                            <input type="password" name="password" class="form-control" id="exampleUsername">
-                        </div>
-                        <div class="form-row">
-                            <a href="register.php" >Not Yet Register?</a>
-                            <a href="enter_email.php" class="ml-auto">Forgot Password?</a>
-                        </div>
-                        <div class="form-row">
-                            <button type="button" class="btn btn-secondary btn-sm ml-auto" data-dismiss="modal">Cancel</button>
-                            <button type="submit" class="btn btn-box btn-sm ml-1" name="login-btn">Sign In</button>
-                        </div>
-                    </form>
+            <div class="modal-dialog modal-md" role="content">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Login</h4>
+                        <button  type="button" class="close" data-dismiss="modal"><i class="far fa-times-circle"></i></button>
+                    </div>
+                    <div class="modal-body">
+                        
+                        <form method="post" action="index.php">
+                        
+                            <div class="form-row mt-0">
+                                <label>Username or Email address</label>
+                                <input type="text" name="username" class="form-control" id="exampleInputEmail" value="<?php echo $username; ?>">
+                            </div>  
+                            <div class="form-row">
+                                <label>Password</label>
+                                <input type="password" name="password" class="form-control" id="exampleUsername">
+                            </div>
+                            <div class="form-row">
+                                <a href="register.php" >Not Yet Register?</a>
+                                <a href="enter_email.php" class="ml-auto">Forgot Password?</a>
+                            </div>
+                            <div class="form-row mb-0">
+                                <button type="submit" class="btn btn-box btn-sm ml-auto" name="login-btn">LOG IN</button>
+                                <button type="button" class="btn btn-secondary btn-sm ml-1" data-dismiss="modal">CANCEL</button>
+                               
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
        
            
@@ -115,22 +116,22 @@ include 'controllers/authController.php'
         
         <div class="register-outer">
             <div class="register-inner">        
-                <form method="POST" action="register.php">
-                    <div class="form-row"> 
-                        <label for="username">Username</label>
+                <form method="POST" action="register.php" >
+                    <div class="form-row white2"> 
+                        <label class="white" for="username">Username</label>
                         <input type="text" class="text col-12 p-2" name="username" value="<?php echo $username; ?>" placeholder="Enter your username" required>
                     </div>
-                    <div class="form-row">
-                        <label for="exampleInputEmail">Email address</label>
-                        <input type="email" class="text col-12 p-2" name="email" value="<?php echo $email; ?>" placeholder="Enter your email" required>
+                    <div class="form-row white2">
+                        <label class="white" for="exampleInputEmail">Email address</label>
+                        <input  type="email" class="text col-12 p-2" name="email" value="<?php echo $email; ?>" placeholder="Enter your email" required>
                     </div>        
-                    <div class="form-row">
-                        <label for="examplePassword">Password</label>
-                        <input type="password" class="text col-12 p-2" name="password1" placeholder="Enter your password" required>
+                    <div class="form-row white2">
+                        <label class="white" for="examplePassword">Password</label>
+                        <input  type="password" class="text col-12 p-2" name="password1" placeholder="Enter your password" required>
                     </div>
-                    <div class="form-row">
-                        <label for="exampleConfirmPassword">Confirm Your Password</label>
-                        <input type="password" class="text col-12 p-2" name="password2" placeholder="Enter your password" required>
+                    <div class="form-row white2">
+                        <label class="white" for="exampleConfirmPassword">Confirm Your Password</label>
+                        <input  type="password" class="text col-12 p-2" name="password2" placeholder="Enter your password" required>
                     </div>
                     <div class="form-row">
                         <button type="submit" class="btn btn-reg" name="register-btn">SIGNUP</button>

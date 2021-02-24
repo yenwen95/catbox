@@ -17,7 +17,7 @@ $email = "";
 $role = 'u';
 $errors = [];
 
-
+//Problem: should set expiry for token, changing password
 
 
 //REGISTER

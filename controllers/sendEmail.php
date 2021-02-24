@@ -74,7 +74,8 @@ use PHPMailer\PHPMailer\Exception;
             ';
             $mail->send();
 
-    }
+}
+
        
 function sendPasswordResetEmail($userEmail, $token){
     $mail = new PHPMailer(true);
@@ -186,6 +187,53 @@ function  sendPasswordResetSuccessEmail($userEmail, $username) {
     
     ';
     $mail->send();
+
+}
+
+function sendOTPNumberEmail($userEmail, $otp){
+    $mail = new PHPMailer(true);
+
+    $mail->isSMTP();
+            $mail->Host = 'smtp.gmail.com';
+            $mail->SMTPAuth = true;
+            $mail->Username = EMAIL;
+            $mail->Password = PASSWORD;
+            $mail->SMTPSecure = 'tls';
+            $mail->Port = 587;
+            $mail->SMTPOptions = array(
+                'ssl' => array(
+                    'verify_peer' => false,
+                    'verify_peer_name' => false,
+                    'allow_self_signed' => true
+                )
+                );
+            $mail->From = EMAIL;
+            $mail->FromName = "CATBOX";
+            $mail->addAddress($userEmail);
+
+            $mail->isHTML(true);
+            $mail->Subject= 'CATBOX Vault OTP';
+            $mail->Body = '<!DOCTYPE html>
+            <html lang="en">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>CATBOX Vault OTP</title>
+                    <style>
+                        .wrapper{
+                            padding: 20px;
+                            font-size: 1.3em;
+                        }  
+                    </style>
+                </head>
+                <body>
+                        <div class="wrapper">
+                            This is your OTP Number: <strong>' .$otp. '</strong>
+                        </div>
+                </body>
+            </html>
+            
+            ';
+            $mail->send();
 
 }
   
