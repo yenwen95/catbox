@@ -364,7 +364,7 @@ function minifier($code) {
 
 						<!-- FUNCTION BUTTONS -->
 						<div class="row" id="functionButtons">
-							<div  id="buttonrow" class="container m-0 w-50 d-flex justify-content-between">
+							<div  id="buttonrow" class="container m-0 w-50 d-flex justify-content-start justify-content-md-between">
 								<a class="btn button btn-function rounded-circle d-flex justify-content-center p-1 pl-2 pt-2" id="addButton" data-toggle="tooltip" data-placement="bottom" title="Add File">
 									<svg class="icon-function" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="-45 0 530 530">
 										<g id="surface1">
@@ -514,7 +514,7 @@ function minifier($code) {
 									</svg>
 
 								</a>
-								<a class="btn button btn-function rounded-circle d-none d-md-flex justify-content-center p-1 pr-2" id="addToVaultButton"  data-toggle="tooltip" data-placement="bottom" title="Save to Vault">
+								<a class="btn button btn-function rounded-circle d-none  d-md-flex justify-content-center p-1 pr-2" id="addToVaultButton"  data-toggle="tooltip" data-placement="bottom" title="Save To Vault">
 									<svg  class="icon-function" version="1.1"  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="-45 0 550 550" xml:space="preserve">
 										<g>
 											<g>
@@ -664,11 +664,14 @@ function minifier($code) {
 									</div>
 								</div>
 
+								<!-- Mobile Function button -->
 								<div class='d-grid gap-3 mt-3 mr-4'>
 									<a class="btn btn-box btn-block" id="delButtonMobile">Delete</a>
 									<a class="btn btn-box btn-block" id="shareButtonMobile">Share</a>
 									<a class="btn btn-box btn-block" id="downloadButtonMobile"  href="">Download</a>
 									<a class="btn btn-box btn-block" id="previewButtonMobile">Preview</a>
+									<a class="btn btn-box btn-block" id="addToVaultButtonMobile">Save To Vault</a>
+									<a class="btn btn-box btn-block" id="removeFromVaultButtonMobile">Remove From Vault</a>
 								</div>
 
 

@@ -418,7 +418,7 @@
             echo json_encode($return_arr);
         }
 
-        if($action == "deleteFile"){
+        if($action == "deleteFile"){   //move to recycle bin
             $fileName = $_POST['file'];
             $status = "";
             

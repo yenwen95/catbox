@@ -2,8 +2,8 @@
     
     //Problem: create function let user delete their account
     //Problem: if it can store other language file or not
-    //Problem: hide useless function in sharebox or bin or protected
-
+    //Problem: click "no" or "close" button should reset the selected file, so that it no need to click twice to reselect for mobile view
+    //Problem: create function allow user to change file name before upload to the system
         var order, FILEID, NUM, FILENAME, em = "";
         var idleTime = 0;
     $(function(){
@@ -67,8 +67,9 @@
                
             });
 
-            $('#main').on('click', '#removeFromVaultButton', function(){
-              
+            $('#main').on('click', '#removeFromVaultButton, #removeFromVaultButtonMobile', function(){
+                $('#fileInfoMobile').addClass('fileInfoMobileClose');
+                $('.overlayMobile').removeClass('active');
                 var filename = getFILENAME();
                 var num = getNUM();
 
@@ -83,7 +84,7 @@
 
             
             
-            $('#main').on('click', '#addToVaultButton', function(){
+            $('#main').on('click', '#addToVaultButton, #addToVaultButtonMobile', function(){
                 $('#fileInfoMobile').addClass('fileInfoMobileClose');
                 $('.overlayMobile').removeClass('active');
                 var filename = getFILENAME();
@@ -123,7 +124,7 @@
                 document.querySelector('#getFileName').textContent = this.files[0].name;
             }
         
-            //Problem: create function allow user to change file name before upload to the system
+   
             
             $('#uploadModal').on('click', '#uploadButton', function(){
                 var state = "mybox";
@@ -136,7 +137,7 @@
                 });
 
 
-            //Problem: did not detect mouse and keyboard movement in page or after ajax call
+       
             //CHECK IDLE TIME
             let idleInterval = setInterval(timerIncrement, 1000);
 
@@ -285,12 +286,15 @@
                     $('#shareButton').addClass("d-none");
                     $('#addToVaultButton').removeClass("d-md-flex");
                     $('#addToVaultButton').addClass("d-none");
+                    $('#addToVaultButtonMobile').addClass("d-none");
                     $('#removeFromVaultButton').removeClass("d-md-flex");
                     $('#removeFromVaultButton').addClass("d-none");
+                    $('#removeFromVaultButtonMobile').addClass("d-none");
                     $('#buttonrow').removeClass("w-50");
                     $('#buttonrow').addClass("w-25");
                     $('#closeVaultButton').removeClass("d-flex");
                     $('#closeVaultButton').addClass("d-none");
+                    $('#closeVaultButtonMobile').addClass("d-none");
 
                 
                     $("#boxName").text("shareBox@");
@@ -298,8 +302,10 @@
                     $("#boxName").text("myBox@");
                     $('#closeVaultButton').removeClass("d-flex");
                     $('#closeVaultButton').addClass("d-none");
+                    $('#closeVaultButtonMobile').addClass("d-none");
                     $('#removeFromVaultButton').removeClass("d-md-flex");
                     $('#removeFromVaultButton').addClass("d-none");
+                    $('#removeFromVaultButtonMobile').addClass("d-none");
                     $('#uploadToVaultButton').attr('id', 'uploadButton');
                     
                     
@@ -308,8 +314,10 @@
                     $("#boxName").text("vault@");
                     $('#shareButton').removeClass("d-md-flex");
                     $('#shareButton').addClass("d-none");
+                    $('#shareButtonMobile').addClass("d-none");
                     $('#addToVaultButton').removeClass("d-md-flex");
                     $('#addToVaultButton').addClass("d-none");
+                    $('#addToVaultButtonMobile').addClass("d-none");
                     $('#uploadButton').attr('id', 'uploadToVaultButton');
 
                 }
@@ -390,6 +398,7 @@
                     }else{
                         clearFileInfo();
                         setFile(em, em,em);
+                        $('#fileInfoMobile').removeClass('fileInfoMobileClose');
                     }
 
                     

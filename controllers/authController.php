@@ -42,7 +42,10 @@ $username = $_POST["username"];
 $email = $_POST["email"];
 $token = bin2hex(random_bytes(50));
 $password1 = $_POST["password1"];
+
+//Infinityfree does not suppport argon2, 000webhost is supported
 $hash = password_hash($password1, PASSWORD_ARGON2I);
+
 $verified="0";
 $action = "register";
 
@@ -74,16 +77,23 @@ $row1 = $check_email->fetch(PDO::FETCH_ASSOC);
             $query->bindParam(':role',$role);
             $query->execute();
 
-            sendVerificationEmail($email, $token);
-            $user_id = $con->lastInsertId();
-            $_SESSION['id'] = $user_id;
-            $_SESSION['username'] = $username;
-            $_SESSION['email'] = $email;
-            $_SESSION['verified'] = false;
-            $_SESSION['action'] = $action;
+            if($query){
+
+                sendVerificationEmail($email, $token);
+                $user_id = $con->lastInsertId();
+                $_SESSION['id'] = $user_id;
+                $_SESSION['username'] = $username;
+                $_SESSION['email'] = $email;
+                $_SESSION['verified'] = false;
+                $_SESSION['action'] = $action;
+               
+                header('location: verify.php');
+                exit();
+            }else{
+                echo "Error";
+            }
+
            
-            header('location: verify.php');
-            exit();
        }catch(PDOException $e){
            echo "Database error: Could not register user";
        }

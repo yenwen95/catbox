@@ -35,10 +35,19 @@
             $random = rand(100000, 999999);
             $otp = strval($random);
 
+            /*for infinity free that cannot use trigger in sql */
+            $valid = '1';  //here
             //update database
-            $setOTP = $con->prepare("UPDATE Users SET otp_pass = ? WHERE username = ?");
+            $setOTP = $con->prepare("UPDATE Users SET otp_pass = ?, otp_timestamp = NOW(), otp_valid = ? WHERE username = ?");//here
+            
+            $setOTP->execute([$otp,$valid, $username]); //here
+
+            /*  for 000webhost can use trigger in mysql
+              //update database
+              $setOTP = $con->prepare("UPDATE Users SET otp_pass = ? WHERE username = ?");
        
-            $setOTP->execute([$otp, $username]);
+              $setOTP->execute([$otp, $username]);
+            */
 
             //send email
             $status ="sent";
