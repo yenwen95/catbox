@@ -167,13 +167,14 @@
         if($displayFile == "displayFileList"){
             $set = '0';
             echo '<div id="myBoxMiddle" class="scrollable" >';
-			$fetchFile = $con->prepare("SELECT filename, filetype, filesize, createtime from Files where username = ?  && is_insidevault = ? && is_insiderecyclebin = ?".$sortQuery); //DEFAULT			
+			$fetchFile = $con->prepare("SELECT id,filename, filetype, filesize, createtime from Files where username = ?  && is_insidevault = ? && is_insiderecyclebin = ?".$sortQuery); //DEFAULT			
             $fetchFile->execute([$username, $set, $set]);
           
             $num=1;
-            $x = "";
+          
 
             while($row = $fetchFile->fetch()){
+                $x = $row['id'];
                 $type = $row['filetype'];
                 $returnArr = getFileType($type);
                 echo '<div class="row-file row row-middle m-0 p-0 off-select" id="row_'.$num.'" value="'.$x.'">';
@@ -196,7 +197,7 @@
 	
             $fetchInfo = $con->prepare("SELECT shared_users, id, username from Files");
             $fetchInfo->execute();
-
+            //Problem: if they are empty, just skip, create the code
             while($row = $fetchInfo->fetch()){
                 $listSharedUsers[] = array($row[0]);  
                 $listID[] = array($row[1]);
@@ -273,13 +274,14 @@
             $insideVault = '1';
             $set = '0';
             echo '<div id="vaultMiddle" class="scrollable" >';
-			$fetchFile = $con->prepare("SELECT filename, filetype, filesize, createtime from Files where username = ?  && is_insidevault = ? && is_insiderecyclebin = ?".$sortQuery); //DEFAULT			
+			$fetchFile = $con->prepare("SELECT id,filename, filetype, filesize, createtime from Files where username = ?  && is_insidevault = ? && is_insiderecyclebin = ?".$sortQuery); //DEFAULT			
             $fetchFile->execute([$username, $insideVault, $set]);
           
             $num=1;
-            $x = "";
+    
 
             while($row = $fetchFile->fetch()){
+                $x = $row['id'];
                 $type = $row['filetype'];
                 $returnArr = getFileType($type);
                 echo '<div class="row-file row row-middle m-0 p-0 off-select" id="row_'.$num.'" value="'.$x.'">';
@@ -664,23 +666,8 @@
         }
 
         //Problem: IF USER WANT TO UNSHARE THE FILE
-     
-        
-        if($action == "previewFile"){
-            $return_arr = array();
-            $fileName = $_POST['file'];
-            $path = $username.'/'.$fileName;
-
-            $file = './file_dir/'.$path;
-            $info = pathinfo($file);
-
-            $return_arr['path'] = $path;
-            $return_arr['filetype'] = $info["extension"];
-
-            echo json_encode($return_arr);
-        }
     
-        if($action == "previewShareFile"){
+        if($action == "previewFile"){
             $return_arr = array();
             $fileID = $_POST['file'];
             $fetchInfo = $con->prepare("SELECT filepath FROM Files WHERE id = ?");
@@ -689,7 +676,7 @@
             while($row = $fetchInfo->fetch()){
                 $file = $row['filepath'];
                 $info = pathinfo($file);
-                $path = substr($row['filepath'], 11);
+                $path = substr($row['filepath'], 2);
                 $return_arr['path'] = $path;
                 $return_arr['filetype'] = $info["extension"];
             }

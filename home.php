@@ -38,16 +38,16 @@ function minifier($code) {
 	$userVaultFolder = $userFolder.'vault/';
 
 	if(!file_exists($userFolder)){ 
-		mkdir($userFolder, 0777, true);
+		mkdir($userFolder, 0755, true);
 		
 	}
 
 	if(!file_exists($userRecoveryFolder)){ 
-		mkdir($userRecoveryFolder, 0777, true);
+		mkdir($userRecoveryFolder, 0755, true);
 		
 	}
 	if(!file_exists($userVaultFolder)){ 
-		mkdir($userVaultFolder, 0777, true);
+		mkdir($userVaultFolder, 0755, true);
 		
 	}
 

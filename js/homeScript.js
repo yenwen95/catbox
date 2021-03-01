@@ -135,12 +135,12 @@
             $('#uploadModal').on('click', '#uploadButton', function(){
                 var state = "mybox";
                 uploadFile(state);
-                });
+            });
 
-                $('#uploadModal').on('click', '#uploadToVaultButton', function(){
-                    var state = "vault";
-                    uploadFile(state);
-                });
+            $('#uploadModal').on('click', '#uploadToVaultButton', function(){
+                var state = "vault";
+                uploadFile(state);
+            });
 
 
        
@@ -470,19 +470,15 @@
                         $('#fileInfoMobile').addClass('fileInfoMobileClose');
                         $('.overlayMobile').removeClass('active');
                         var fileID = getFILEID();
-                        var filename = getFILENAME();
+                      
                         var num = getNUM();
                         if (num == "" || num == undefined){
                             $("div.message3").fadeIn(300).delay(1500).fadeOut(400);
                         }else{
                             $('#previewModal').modal('show');
-                            if(fileID == "" || fileID == undefined){
                                 action="previewFile";
-                                previewFile(filename, action);
-                            }else{
-                                action="previewShareFile";
                                 previewFile(fileID, action);
-                            }
+                            
                         }
                        
                     }
@@ -492,20 +488,17 @@
                 $('#main').off('click', '#downloadButton, #downloadButtonMobile');
                 $('#main').on('click', '#downloadButton', function(){
                     var fileID = getFILEID();
-                    var filename = getFILENAME();
+    
                     var num = getNUM();
                     if (num == ""){
                         $("div.message3").fadeIn(300).delay(1500).fadeOut(400);
                     }else{
 
-                        if(fileID == "" || fileID == undefined){
+                        
                             action = "downloadFile";
-                            document.getElementById("downloadButton").href = "downloadFile.php?action=" + action + "&path=" + filename;
-                        } else{
-                            action = "downloadShareFile";
                             document.getElementById("downloadButton").href = "downloadFile.php?action=" + action + "&path=" + fileID;
                             
-                        }
+                        
                     }
                     
         
@@ -645,17 +638,17 @@
 
     }
    //REMOVE FROM VAULT
-   function removeFromVault(file, action, id){
+   function removeFromVault(filename, action, num){
     $.ajax({
         url: 'fileInfo.php',
         type: 'post',
-        data: {file: file, action: action},
+        data: {filename: filename, action: action},
         dataType: 'JSON',
         success: function(status){
             console.log(status);
             if(status == "success"){
               
-                $("#row_"+id).remove();
+                $("#row_"+num).remove();
                 $("#removefromvaultModal").modal('hide');
                
             }else{
@@ -886,14 +879,14 @@
                     //use <img>
                     framebox.style.display = "none";
                     imgbox.style.display = "block";
-                    $('#previewImg').attr("src", src="./file_dir/" + path);
-                    //$('#previewImg').attr("src", src="https://catboxtest.000webhostapp.com/file_dir/" + path);
+                    $('#previewImg').attr("src", src="./" + path);
+                    //$('#previewImg').attr("src", src="https://catboxtest.000webhostapp.com/" + path);
                 }else{ 
                     //use <iframe>
                     imgbox.style.display = "none";
                     framebox.style.display = "block";
                     $("#previewFrame").attr("src", src="https://docs.google.com/viewer?url=https://calibre-ebook.com/downloads/demos/demo.docx&embedded=true");
-                //$("#previewFrame").attr("src", src="https://docs.google.com/viewer?url=https://catboxtest.000webhostapp.com/file_dir/" + path + "&embedded=true");
+                //$("#previewFrame").attr("src", src="https://docs.google.com/viewer?url=https://catboxtest.000webhostapp.com/" + path + "&embedded=true");
                 }
             }
         });
