@@ -165,10 +165,10 @@
         }
 
         if($displayFile == "displayFileList"){
-            $insideVault = '0';
+            $set = '0';
             echo '<div id="myBoxMiddle" class="scrollable" >';
-			$fetchFile = $con->prepare("SELECT * from Files where username = ?  && is_insidevault = ?".$sortQuery); //DEFAULT			
-            $fetchFile->execute([$username, $insideVault]);
+			$fetchFile = $con->prepare("SELECT filename, filetype, filesize, createtime from Files where username = ?  && is_insidevault = ? && is_insiderecyclebin = ?".$sortQuery); //DEFAULT			
+            $fetchFile->execute([$username, $set, $set]);
           
             $num=1;
             $x = "";
@@ -231,7 +231,7 @@
             while($i<count($foundFileID)){
                 $ID = $foundFileID[$i][0];
                 //different sort method for sharefile, because it displays one by one
-                $fetchFile = $con->prepare("SELECT * from Files where id = ?");
+                $fetchFile = $con->prepare("SELECT id,filename, filetype, filesize, createtime from Files where id = ?");
                 $fetchFile->execute([$ID]);
 
                 $row = $fetchFile->fetch();
@@ -271,9 +271,10 @@
      
         if($displayFile == "displayVaultFileList"){
             $insideVault = '1';
+            $set = '0';
             echo '<div id="vaultMiddle" class="scrollable" >';
-			$fetchFile = $con->prepare("SELECT * from Files where username = ?  && is_insidevault = ?".$sortQuery); //DEFAULT			
-            $fetchFile->execute([$username, $insideVault]);
+			$fetchFile = $con->prepare("SELECT filename, filetype, filesize, createtime from Files where username = ?  && is_insidevault = ? && is_insiderecyclebin = ?".$sortQuery); //DEFAULT			
+            $fetchFile->execute([$username, $insideVault, $set]);
           
             $num=1;
             $x = "";
@@ -284,6 +285,33 @@
                 echo '<div class="row-file row row-middle m-0 p-0 off-select" id="row_'.$num.'" value="'.$x.'">';
                 echo '<div class="col-12 col-md-4 p-0 pb-2 pt-2 pt-md-1 pb-md-1 d-flex d-md-block"><div class="long mr-1 col-7 col-sm-9 col-md-12 d-md-block" id="file_'.$num.'"><i class="pr-2 fas fa-file'.$returnArr['icon'].'"></i>'.$row['filename'].'</div><p class="m-0 pt-1 mr-2 small d-md-none">Created at: '.$row['createtime'].'</p></div>';
                 echo '<div class="d-none d-md-block col-md-3  pb-1 pt-1">'.$row['createtime'].'</div>';           
+                echo '<div class="d-none d-md-block col-md-3  pt-1 ">'.$returnArr['shortType'].'</div>';
+                echo '<div class="d-none d-md-block col-md-2  pb-1 pt-1">'.$row['filesize'].'</div>';
+                echo '</div>';
+                                
+                $num++; 
+            }
+                    
+                            
+            echo '</div>';
+        }
+
+        if($displayFile == "displayRecycleBin"){
+            $set = '1';
+            echo '<div id="binMiddle" class="scrollable" >';
+            //need to change the name "created by" for sorting and showing
+            $fetchFile = $con->prepare("SELECT id,filename, filetype, filesize, deletetime from Files where username = ?  && is_insiderecyclebin = ?".$sortQuery); //DEFAULT			
+            $fetchFile->execute([$username, $set]);
+            $num=1;
+   
+
+            while($row = $fetchFile->fetch()){
+                $type = $row['filetype'];
+                $x = $row['id'];
+                $returnArr = getFileType($type);
+                echo '<div class="row-file row row-middle m-0 p-0 off-select" id="row_'.$num.'" value="'.$x.'">';
+                echo '<div class="col-12 col-md-4 p-0 pb-2 pt-2 pt-md-1 pb-md-1 d-flex d-md-block"><div class="long mr-1 col-7 col-sm-9 col-md-12 d-md-block" id="file_'.$num.'"><i class="pr-2 fas fa-file'.$returnArr['icon'].'"></i>'.$row['filename'].'</div><p class="m-0 pt-1 mr-2 small d-md-none">Deleted at: '.$row['deletetime'].'</p></div>';
+                echo '<div class="d-none d-md-block col-md-3  pb-1 pt-1">'.$row['deletetime'].'</div>';           
                 echo '<div class="d-none d-md-block col-md-3  pt-1 ">'.$returnArr['shortType'].'</div>';
                 echo '<div class="d-none d-md-block col-md-2  pb-1 pt-1">'.$row['filesize'].'</div>';
                 echo '</div>';
@@ -314,10 +342,12 @@
                 $insideVault = "";
 
                 //Check the file is existing in the database or not
-                if($state == "mybox"){
-                    $insideVault = "0";
-                }else{
+                if($state == "vault"){
                     $insideVault = "1";
+                    $path = $userFolder.'vault/';
+                }else{
+                    $insideVault = "0";
+                    $path = $userFolder;
                     
                 }
                     $query = $con->prepare("SELECT filename FROM Files WHERE filename = ? && username = ? && is_insidevault = ?");
@@ -335,7 +365,7 @@
                     $updatedFileName = $fileName;
                 }
 
-                    $filePath = $userFolder.$updatedFileName;
+                    $filePath = $path.$updatedFileName;
                     $fileTempName = $_FILES['getFile']['tmp_name'];
                     $actualSize = $_FILES['getFile']['size'];
                     $fileSize = formatSize($actualSize);
@@ -374,8 +404,6 @@
             echo json_encode($status);
 
         }
-
-    
 
         //SHOW FILE INFO
         if($action == "showFileInfoMyBox"){
@@ -418,20 +446,113 @@
             echo json_encode($return_arr);
         }
 
-        if($action == "deleteFile"){   //move to recycle bin
-            $fileName = $_POST['file'];
+        if($action == "deletePermanentlyFile"){   //move to recycle bin
+            $fileID = $_POST['fileID'];
             $status = "";
+            $set = "1";
             
             //delete filepath from database
-            $query = $con->prepare("DELETE FROM Files WHERE filename = ? && username = ?");
-            $query->execute([$fileName, $username]);
+            $query = $con->prepare("DELETE FROM Files WHERE id = ? && username = ? && is_insiderecyclebin = ?");
+            $query->execute([$fileID, $username, $set]);
 
             //delete the file in server
-            $defaultDir = "./file_dir/";
-            $userFolder = $defaultDir.$username.'/';
-            unlink($userFolder.$fileName);
+           
+            $path = $userFolder.'recyclebin/'.$fileName;
+            unlink($path);
 
-            if(($query) && (!(file_exists($userFolder.$fileName)))){
+            if(($query) && (!(file_exists($path)))){
+                $status = "success";
+            }else{
+                $status = "fail";
+            }
+            echo json_encode($status);
+        }
+
+        if($action == "restorefile"){
+            $fileID = $_POST['fileID'];
+
+            $query = $con->prepare("SELECT filename, originalpath, filepath FROM Files WHERE id = ? && username =?");
+            $query->execute([$fileID, $username]);
+
+            $row = $query->fetch();
+            $original = $row['filepath'];
+            $path = $row['originalpath'];
+            $fileName = $row['filename'];
+
+            if(strpos($original, 'vault')!== false){
+                $insideVault = '1';
+                $updatedFilePath = $userFolder.'vault/'.$fileName;
+            }else{
+                $insideVault='0';
+                $updatedFilePath = $userFolder.$fileName;
+            }
+
+            $insideBin = '0';
+            $null = NULL;
+            $query2 = $con->prepare("UPDATE Files SET filepath=?, originalpath=?, is_insiderecyclebin = ?, is_insidevault = ?, exptime =?, deletetime = ? WHERE id = ?");
+            $query2->execute([$updatedFilePath, $null, $insideBin, $insideVault, $null, $null, $fileID]);
+            
+            if(($query) && ($query2)){
+                rename($original, $updatedFilePath);
+                $status = "success";
+            }else{
+                $status = "fail";
+            }
+
+            echo json_encode($status);
+
+        }
+
+        if($action == "movetoBin"){
+            $fileName = $_POST['file'];
+            $page = $_POST['page'];
+            $set = "1";
+            $set2 = "0";
+
+            $updatedFilePath = $userFolder.'recyclebin/'.$fileName;
+
+            if($page == 'mybox'){
+                $inside = '0';
+                $original = $userFolder.$fileName;
+            }else{
+                $original = $userFolder.'vault/'.$fileName;
+                $inside = '1';
+            }
+            //move file in server
+            rename($original, $updatedFilePath);
+
+            date_default_timezone_set("Asia/Kuala_Lumpur");
+            $deletedTime = date_create();
+            $dateFormat = date_format($deletedTime,'Y-m-d');
+            $addDate = $deletedTime->add(new DateInterval('P30D'));
+            $expdate = date_format($addDate,'Y-m-d');
+
+            //change filepath in db, create deletetime, set exptime, set insidebin, set ori path  
+            
+            $query = $con->prepare("UPDATE Files SET filepath = ?, is_insidevault = ?, is_insiderecyclebin = ?, deletetime = ?, exptime = ?,  originalpath = ? WHERE filename = ? && username = ? && is_insidevault = ?");
+            $query->execute([$updatedFilePath, $set2, $set, $dateFormat, $expdate, $original, $fileName, $username, $inside ]);
+
+            if($query){
+                $status = "success";
+            }else{
+                $status = "fail";
+            }
+            echo json_encode($status);
+        }
+
+        if($action == "emptybin"){
+            $set = "1";
+            $query = $con->prepare("DELETE FROM Files WHERE username = ? && is_insiderecyclebin = ?");
+            $query->execute([$username, $set]);
+
+            $files = glob($userFolder.'recyclebin/*');
+            foreach($files as $file){
+                if(is_file($file)){
+                    unlink($file);
+                }
+            }
+            
+            if($query){
                 $status = "success";
             }else{
                 $status = "fail";

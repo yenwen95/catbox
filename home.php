@@ -51,7 +51,7 @@ function minifier($code) {
 		
 	}
 
-	//CHECKING FILES CONSISTENCY IN BOTH DATABASE AND SERVER
+	/*CHECKING FILES CONSISTENCY IN BOTH DATABASE AND SERVER
 	//  CONDITION 1: record in database but not in server, delete record in db
 	$query = $con->prepare("SELECT filepath FROM Files WHERE username = ?");
 	$query->execute([$username]);
@@ -61,7 +61,7 @@ function minifier($code) {
 		if(!file_exists($row['filepath'])){
 			$path = $row['filepath'];
 			$deleteRow = $con->prepare("DELETE FROM Files where filepath = ?");
-			$deleteRow->execute($path);
+			$deleteRow->execute([$path]);
 
 			
 		}
@@ -84,6 +84,7 @@ function minifier($code) {
 			unlink($userFolder.$file);
 		}
 	}
+	*/
 
 
 ?>
@@ -286,7 +287,32 @@ function minifier($code) {
 							</div>
 						</div>
 
-						<!-- DELETE CONFIRMATION MODAL -->
+						<!-- MOVE TO RECYCLE BIN MODAL -->
+						<div id="recyclebinModal" class="modal fade" role="dialog">
+							<div class="modal-dialog modal-sm" role="content">
+								<div class="modal-content">
+									<div class="modal-body">
+										<div class="row m-0">
+											<a type="button" class="close-homeModal ml-auto" data-dismiss="modal"><i class="far fa-times-circle"></i></a>
+										</div>
+										<div class="container modal-inner">
+												<div class="d-block row mt-0 mb-0">
+													Filename: <strong><p id="tobeMoved" class="name"></p></strong>
+													<p class="m-0">Are you sure you want to delete this?<br><br></p>
+												</div>
+										
+											<div class="row mt-0 mb-0">
+												<button class="btn btn-box btn-block" id="movetobin-btn">YES</button>
+												<button class="btn btn-secondary btn-block"  data-dismiss="modal" >NO</button>
+												
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- DELETE PERMANENTLY CONFIRMATION MODAL -->
 						<div id="deleteModal" class="modal fade" role="dialog">
 							<div class="modal-dialog modal-sm" role="content">
 								<div class="modal-content">
@@ -297,11 +323,35 @@ function minifier($code) {
 										<div class="container modal-inner">
 												<div class="d-block row mt-0 mb-0">
 													Filename: <strong><p id="tobeDeleted" class="name"></p></strong>
-													<p class="m-0">Are you sure you want to delete this?<br><br></p>
+													<p class="m-0">Are you sure you want to <strong>permanently</strong> delete this?<br><br></p>
 												</div>
 										
 											<div class="row mt-0 mb-0">
 												<button class="btn btn-box btn-block" id="delete-btn">YES</button>
+												<button class="btn btn-secondary btn-block"  data-dismiss="modal" >NO</button>
+												
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- EMPTY BIN CONFIRMATION MODAL -->
+						<div id="emptybinModal" class="modal fade" role="dialog">
+							<div class="modal-dialog modal-sm" role="content">
+								<div class="modal-content">
+									<div class="modal-body">
+										<div class="row m-0">
+											<a type="button" class="close-homeModal ml-auto" data-dismiss="modal"><i class="far fa-times-circle"></i></a>
+										</div>
+										<div class="container modal-inner">
+												<div class="d-block row mt-0 mb-0">
+													<p class="m-0">All items in the bin will be <strong>deleted forever</strong> and you won't be able to restore back. Continue to delete them?<br><br></p>
+												</div>
+										
+											<div class="row mt-0 mb-0">
+												<button class="btn btn-box btn-block" id="emptybin-btn">YES</button>
 												<button class="btn btn-secondary btn-block"  data-dismiss="modal" >NO</button>
 												
 											</div>
@@ -365,7 +415,7 @@ function minifier($code) {
 						<!-- FUNCTION BUTTONS -->
 						<div class="row" id="functionButtons">
 							<div  id="buttonrow" class="container m-0 w-50 d-flex justify-content-start justify-content-md-between">
-								<a class="btn button btn-function rounded-circle d-flex justify-content-center p-1 pl-2 pt-2" id="addButton" data-toggle="tooltip" data-placement="bottom" title="Add File">
+								<a class="btn button btn-function rounded-circle d-flex justify-content-center p-1 pl-2 pt-2  " id="addButton" data-toggle="tooltip" data-placement="bottom" title="Add File">
 									<svg class="icon-function" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="-45 0 530 530">
 										<g id="surface1">
 										<path d="M 348.945312 221.640625 L 348.945312 124.746094 C 348.945312 121.972656 347.664062 119.410156 345.851562 117.382812 L 237.21875 3.308594 
@@ -396,7 +446,7 @@ function minifier($code) {
 										</g>
 									</svg>
 								</a>
-								<a class="btn button btn-function rounded-circle d-none d-md-flex justify-content-center p-1 pl-2 pt-2" id="delButton" data-toggle="tooltip" data-placement="bottom" title="Delete File">
+								<a class="btn button btn-function rounded-circle d-none d-md-flex justify-content-center p-1 pl-2 pt-2" id="removeButton" data-toggle="tooltip" data-placement="bottom" title="Remove File">
 									<svg class="icon-function" viewBox="-45 0 530 530" xmlns="http://www.w3.org/2000/svg">
 										<path d="m232.398438 154.703125c-5.523438 0-10 4.476563-10 10v189c0 5.519531 4.476562 10 10 10 5.523437 0 
 												10-4.480469 10-10v-189c0-5.523437-4.476563-10-10-10zm0 0"/>
@@ -416,7 +466,7 @@ function minifier($code) {
 												10-4.480469 10-10v-189c0-5.523437-4.476563-10-10-10zm0 0"/>
 									</svg>
 								</a>
-								<a class="btn button btn-function rounded-circle d-none d-md-flex justify-content-center p-1 pl-2 pt-2" id="shareButton" data-toggle="tooltip" data-placement="bottom" title="Share File">
+								<a class="btn button btn-function rounded-circle d-none d-md-flex justify-content-center p-1 pl-2 pt-2 " id="shareButton" data-toggle="tooltip" data-placement="bottom" title="Share File">
 									<svg class="icon-function" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="-45 0 530 530">
 										<g id="surface1">
 											<path d="M 348.945312 221.640625 L 348.945312 124.746094 C 348.945312 121.972656 347.664062 119.410156 
@@ -492,7 +542,7 @@ function minifier($code) {
 										</g>
 									</svg>
 								</a>
-								<a class="btn button btn-function rounded-circle d-none d-md-flex justify-content-center p-1 pt-2 pr-2 " id="previewButton" data-toggle="tooltip" data-placement="bottom" title="Preview  File">
+								<a class="btn button btn-function rounded-circle d-none d-md-flex justify-content-center p-1 pt-2 pr-2" id="previewButton" data-toggle="tooltip" data-placement="bottom" title="Preview  File">
 								
 									<svg class="icon-function" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="-45 0 550 550" xml:space="preserve">
 										<g>
@@ -514,7 +564,7 @@ function minifier($code) {
 									</svg>
 
 								</a>
-								<a class="btn button btn-function rounded-circle d-none  d-md-flex justify-content-center p-1 pr-2" id="addToVaultButton"  data-toggle="tooltip" data-placement="bottom" title="Save To Vault">
+								<a class="btn button btn-function rounded-circle d-none  d-md-flex justify-content-center p-1 pr-2  " id="addToVaultButton"  data-toggle="tooltip" data-placement="bottom" title="Save To Vault">
 									<svg  class="icon-function" version="1.1"  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="-45 0 550 550" xml:space="preserve">
 										<g>
 											<g>
@@ -543,7 +593,7 @@ function minifier($code) {
 										</g>
 									</svg>
 								</a>
-								<a class="btn button btn-function rounded-circle d-none d-md-flex justify-content-center p-1 pr-2" id="removeFromVaultButton"  data-toggle="tooltip" data-placement="bottom" title="Remove From Vault">
+								<a class="btn button btn-function rounded-circle d-none d-md-flex justify-content-center p-1 pr-2 " id="removeFromVaultButton"  data-toggle="tooltip" data-placement="bottom" title="Remove From Vault">
 									<svg version="1.1" class="icon-function" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="-45 0 550 550" xml:space="preserve">
 										<g>
 											<g>
@@ -588,6 +638,58 @@ function minifier($code) {
 										</g>
 									</svg>
 								</a>
+								<a class="btn button btn-function rounded-circle d-none d-md-flex justify-content-center p-1 pr-2 pt-2" id="emptybinButton" data-toggle="tooltip" data-placement="bottom" title="Empty Bin">
+									<svg class="icon-function" viewBox="-45 0 530 530"  xmlns="http://www.w3.org/2000/svg">
+										<g>
+											<path d="m415.157 86.566-93.9 26.865c-.104.034-.208.068-.312.104-10.041 3.493-16.788 12.982-16.788 23.614v27.223h-92.79l106.051-106.05c5.858-5.858 5.858-15.355
+													0-21.213l-26.872-26.873c-13.647-13.648-35.853-13.648-49.5 0l-27.631 27.631-14.144-14.144c-15.596-15.597-40.974-15.597-56.572 0l-55.159 55.159c-15.596 
+													15.597-15.596 40.975 0 56.572l14.144 14.144-27.631 27.631c-13.647 13.647-13.647 35.853 0 49.5l26.872 26.872c5.857 5.858 15.356 5.859 21.214 0l38.022-38.022v231.417c0
+													35.843 29.161 65.004 65.004 65.004h158.012c35.843 0 65.004-29.161 65.004-65.004 0-10.566 0-331.798 0-336.751.001-17.08-16.816-29.171-33.024-23.679zm-306.403 13.529 
+													55.158-55.158c3.899-3.899 10.244-3.9 14.145 0l14.143 14.144-69.302 69.302-14.144-14.143c-3.899-3.9-3.899-10.245 0-14.145zm2.779 121.685-16.266-16.265c-1.95-1.95-1.95-5.123
+													0-7.073 10.495-10.495 161.616-161.615 166.993-166.992 1.951-1.95 5.122-1.95 7.073 0l16.265 16.266zm306.648 225.216c0 19.301-15.703 35.003-35.003 35.003h-158.012c-19.301 
+													0-35.003-15.703-35.003-35.003v-252.622h228.018zm0-281.816-84.022-.807v-23.583l84.022-23.67z"/>
+											<path d="m237.431 442.995c8.284 0 15-6.716 15-15v-179.617c0-8.284-6.716-15-15-15s-15 6.716-15 15v179.616c-.001 8.285 6.715 15.001 15 15.001z"/>
+											<path d="m304.172 442.995c8.284 0 15-6.716 15-15v-179.617c0-8.284-6.716-15-15-15s-15 6.716-15 15v179.616c-.001 8.285 6.715 15.001 15 15.001z"/>
+											<path d="m370.912 442.995c8.284 0 15-6.716 15-15v-179.617c0-8.284-6.716-15-15-15s-15 6.716-15 15v179.616c0 8.285 6.716 15.001 15 15.001z"/>
+										</g>
+									</svg>
+								</a>
+								<a class="btn button btn-function rounded-circle d-none d-md-flex justify-content-center p-1 pl-2 pt-2" id="delButton" data-toggle="tooltip" data-placement="bottom" title="Delete File">
+									<svg class="icon-function" viewBox="-45 0 530 530" xmlns="http://www.w3.org/2000/svg">
+										<path d="m232.398438 154.703125c-5.523438 0-10 4.476563-10 10v189c0 5.519531 4.476562 10 10 10 5.523437 0 
+												10-4.480469 10-10v-189c0-5.523437-4.476563-10-10-10zm0 0"/>
+										<path d="m114.398438 154.703125c-5.523438 0-10 4.476563-10 10v189c0 5.519531 4.476562 10 10 10 5.523437 0 
+												10-4.480469 10-10v-189c0-5.523437-4.476563-10-10-10zm0 0"/>
+										<path d="m28.398438 127.121094v246.378906c0 14.5625 5.339843 28.238281 14.667968 38.050781 9.285156 9.839844 
+												22.207032 15.425781 35.730469 15.449219h189.203125c13.527344-.023438 26.449219-5.609375 35.730469-15.449219 
+												9.328125-9.8125 14.667969-23.488281 14.667969-38.050781v-246.378906c18.542968-4.921875 30.558593-22.835938 
+												28.078124-41.863282-2.484374-19.023437-18.691406-33.253906-37.878906-33.257812h-51.199218v-12.5c.058593-10.511719-4.097657-20.605469-11.539063-28.03125-7.441406-7.421875-17.550781-11.5546875-28.0625-11.46875h-88.796875c-10.511719-.0859375-20.621094 
+												4.046875-28.0625 11.46875-7.441406 7.425781-11.597656 17.519531-11.539062 28.03125v12.5h-51.199219c-19.1875.003906-35.394531 
+												14.234375-37.878907 33.257812-2.480468 19.027344 9.535157 36.941407 28.078126 41.863282zm239.601562 279.878906h-189.203125c-17.097656 
+												0-30.398437-14.6875-30.398437-33.5v-245.5h250v245.5c0 18.8125-13.300782 33.5-30.398438 33.5zm-158.601562-367.5c-.066407-5.207031 
+												1.980468-10.21875 5.675781-13.894531 3.691406-3.675781 8.714843-5.695313 13.925781-5.605469h88.796875c5.210937-.089844 
+												10.234375 1.929688 13.925781 5.605469 3.695313 3.671875 5.742188 8.6875 5.675782 13.894531v12.5h-128zm-71.199219 32.5h270.398437c9.941406 
+												0 18 8.058594 18 18s-8.058594 18-18 18h-270.398437c-9.941407 0-18-8.058594-18-18s8.058593-18 18-18zm0 0"/>
+										<path d="m173.398438 154.703125c-5.523438 0-10 4.476563-10 10v189c0 5.519531 4.476562 10 10 10 5.523437 0 
+												10-4.480469 10-10v-189c0-5.523437-4.476563-10-10-10zm0 0"/>
+									</svg>
+								</a>
+								<a class="btn button btn-function rounded-circle d-none d-md-flex justify-content-center p-1 pt-2" id="restoreButton" data-toggle="tooltip" data-placement="bottom" title="Restore File">
+								
+									<svg class="icon-function" version="1.1"  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"	viewBox="-45 0 530 530" xml:space="preserve">
+										<g>
+											<g>
+												<g>
+													<path d="M256,32C149.973,32,64,117.973,64,224H0l85.333,85.333L170.667,224h-64c0-82.453,66.88-149.333,149.333-149.333
+														S405.333,141.547,405.333,224S338.453,373.333,256,373.333c-32.32,0-62.08-10.347-86.613-27.84L139.2,376.107
+														C171.627,401.067,212.053,416,256,416c106.027,0,192-85.973,192-192S362.027,32,256,32z"/>
+													<path d="M298.667,224c0-23.573-19.093-42.667-42.667-42.667S213.333,200.427,213.333,224s19.093,42.667,42.667,42.667
+														S298.667,247.573,298.667,224z"/>
+												</g>
+											</g>
+										</g>
+									</svg>
+								</a>
 								
 							</div>
 							<div class="alert alert-danger m-0 ml-3 mt-1 message3">No file is selected!</div>
@@ -599,7 +701,7 @@ function minifier($code) {
 						<!-- FILE TITLE -->
 						<div id="sortFile" class="row row-middle m-0 p-0">
 							<div id="sortByName" class="col-12 col-md-4 pb-1 pt-1 sortClass" >Name <i id="nameArrow" ></i></div>
-							<div id="sortByTime" class="d-none d-md-block col-md-3  pb-1 pt-1 sortClass">Created <i id="timeArrow"></i></div>
+							<div id="sortByTime" class="d-none d-md-block col-md-3  pb-1 pt-1 sortClass"><span class="m-0" id="labelSort">Created At </span><i id="timeArrow"></i></div>
 							<div id="sortByType" class="d-none d-md-block col-md-3  pb-1 pt-1 sortClass">Type <i id="typeArrow" ></i></div>
 							<div id="sortBySize" class="d-none d-md-block col-md-2  pb-1 pt-1 sortClass">Size <i id="sizeArrow"></i></div>
 						</div>
@@ -659,14 +761,14 @@ function minifier($code) {
 									<div class='col-3 p-0'>
 										<p>Shared By</p>
 									</div>
-									<div class='col-8'>
+									<div class='col-9'>
 										<span class="shareby"></span>
 									</div>
 								</div>
 
 								<!-- Mobile Function button -->
 								<div class='d-grid gap-3 mt-3 mr-4'>
-									<a class="btn btn-box btn-block" id="delButtonMobile">Delete</a>
+									<a class="btn btn-box btn-block" id="removeButtonMobile">Delete</a>
 									<a class="btn btn-box btn-block" id="shareButtonMobile">Share</a>
 									<a class="btn btn-box btn-block" id="downloadButtonMobile"  href="">Download</a>
 									<a class="btn btn-box btn-block" id="previewButtonMobile">Preview</a>

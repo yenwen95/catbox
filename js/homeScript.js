@@ -4,6 +4,8 @@
     //Problem: if it can store other language file or not
     //Problem: click "no" or "close" button should reset the selected file, so that it no need to click twice to reselect for mobile view
     //Problem: create function allow user to change file name before upload to the system
+    //Problem: limit the file size when uploading
+
         var order, FILEID, NUM, FILENAME, em = "";
         var idleTime = 0;
     $(function(){
@@ -95,6 +97,10 @@
                     $("#tobeAddedToVault").text(filename);
                     $('#addtovaultModal').modal('show');
                 }
+            });
+
+            $('#main').on('click', '#emptybinButton', function(){
+                $('#emptybinModal').modal('show');
             });
 
             $('#closeSidebar, .overlay, .overlayMobile').on('click', function(){
@@ -270,56 +276,64 @@
             success: function(fileList){
                 
                 if(page == "sharebox"){
-                    var mybox = document.getElementById("myBoxRight");
-                    var myboxMobile = document.getElementById("myBoxRightMobile");
-                    var shareBox = document.getElementById("shareBoxRight");
-                    var shareBoxMobile = document.getElementById("shareBoxRightMobile");
 
-                    mybox.style.display = "none";
-                    myboxMobile.style.display = "none";
-                    shareBox.style.display = "flex";
-                    shareBoxMobile.style.display = "flex";
-                    
-                    $('#addButton').removeClass("d-flex");
-                    $('#addButton').addClass("d-none");
-                    $('#shareButton').removeClass("d-md-flex");
-                    $('#shareButton').addClass("d-none");
-                    $('#addToVaultButton').removeClass("d-md-flex");
-                    $('#addToVaultButton').addClass("d-none");
-                    $('#addToVaultButtonMobile').addClass("d-none");
-                    $('#removeFromVaultButton').removeClass("d-md-flex");
-                    $('#removeFromVaultButton').addClass("d-none");
-                    $('#removeFromVaultButtonMobile').addClass("d-none");
+                    $('#shareBoxRight').show();
+                    $('#shareBoxRightMobile').show();
+                    $('#myBoxRightMobile').hide();
+                    $('#myBoxRight').hide();
+
+                    $('#addButton, #closeVaultButton').removeClass("d-flex");
+                    $('#shareButton, #addToVaultButton,#removeFromVaultButton, #delButton, #delButtonMobile, #emptybinButton, #restoreButton').removeClass("d-md-flex");
+                    $('#shareButton, #delButton,#delButtonMobile, #shareButtonMobile, #addToVaultButton,#removeFromVaultButton, #closeVaultButton, #addButton, #addToVaultButtonMobile, #removeFromVaultButtonMobile, #closeVaultButtonMobile, #emptybinButton, #restoreButton ').addClass("d-none");
+               
+
                     $('#buttonrow').removeClass("w-50");
                     $('#buttonrow').addClass("w-25");
-                    $('#closeVaultButton').removeClass("d-flex");
-                    $('#closeVaultButton').addClass("d-none");
-                    $('#closeVaultButtonMobile').addClass("d-none");
 
-                
-                    $("#boxName").text("shareBox@");
+                   
+                    $('#sortByDeletedTime').attr('id', 'sortByTime');
+                    $('#labelSort').text('Created At ');
+                    $("#boxName").text("SHAREBOX@");
                 }else if(page == "mybox"){
-                    $("#boxName").text("myBox@");
-                    $('#closeVaultButton').removeClass("d-flex");
-                    $('#closeVaultButton').addClass("d-none");
-                    $('#closeVaultButtonMobile').addClass("d-none");
-                    $('#removeFromVaultButton').removeClass("d-md-flex");
-                    $('#removeFromVaultButton').addClass("d-none");
-                    $('#removeFromVaultButtonMobile').addClass("d-none");
+                    $('#shareBoxRight').hide();
+                    $('#shareBoxRightMobile').hide();
+                    $('#myBoxRightMobile').show();
+                    $('#myBoxRight').show();
+
+                    $("#boxName").text("MYBOX@");
+                    $('#labelSort').text('Created At ');
                     $('#uploadToVaultButton').attr('id', 'uploadButton');
-                    
-                    
+                    $('#sortByDeletedTime').attr('id', 'sortByTime');
+
+                    $('#closeVaultButton').removeClass("d-flex");
+                    $('#removeFromVaultButton, #delButton, #delButtonMobile, #emptybinButton, #restoreButton').removeClass("d-md-flex");
+                    $('#closeVaultButton, #delButton, #delButtonMobile, #closeVaultButtonMobile, #removeFromVaultButton, #removeFromVaultButtonMobile, #emptybinButton, #restoreButton').addClass("d-none");
+                  
+                 
+                 
 
                 }else if (page == "vault"){
-                    $("#boxName").text("vault@");
-                    $('#shareButton').removeClass("d-md-flex");
-                    $('#shareButton').addClass("d-none");
-                    $('#shareButtonMobile').addClass("d-none");
-                    $('#addToVaultButton').removeClass("d-md-flex");
-                    $('#addToVaultButton').addClass("d-none");
-                    $('#addToVaultButtonMobile').addClass("d-none");
+                    $("#boxName").text("VAULT@");
+                    $('#sortByDeletedTime').attr('id', 'sortByTime');
+                    $('#labelSort').text('Created At ');
                     $('#uploadButton').attr('id', 'uploadToVaultButton');
 
+                    $('#shareButton, #addToVaultButton,#delButton, #delButtonMobile, #emptybinButton, #restoreButton').removeClass("d-md-flex");
+                    $('#shareButton, #shareButtonMobile, #delButton, #delButtonMobile,#addToVaultButton, #addToVaultButtonMobile, #emptybinButton, #restoreButton').addClass("d-none");
+                  
+                   
+                }else if(page == "bin"){
+                    $("#boxName").text("BIN@");
+
+                    $('#removeButton, #shareButton, #downloadButton, #previewButton, #addToVaultButton, #removeFromVaultButton').removeClass("d-md-flex");
+                    $('#addButton, #removeButton, #shareButton, #downloadButton, #previewButton, #addToVaultButton, #removeFromVaultButton, #closeVaultButton').addClass("d-none");
+                    $('#addButton, #closeVaultButton').removeClass('d-flex');
+                    
+
+                    $('#sortByTime').attr('id', 'sortByDeletedTime');
+                    $('#labelSort').text('Deleted At');
+                    $('#buttonrow').removeClass("w-50");
+                    $('#buttonrow').addClass("w-25");
                 }
 
                 //Refresh the file list
@@ -362,7 +376,7 @@
                 }
 
               
-                $('#myBoxMiddle, #vaultMiddle, #shareBoxMiddle').on('click', '.off-select', function(){ 
+                $('#myBoxMiddle, #vaultMiddle, #shareBoxMiddle, #binMiddle').on('click', '.off-select', function(){ 
                     $(this).siblings(".off-select").removeClass("on-select");
                     $(this).toggleClass("on-select");
                     $('#fileInfoMobile').removeClass('fileInfoMobileClose');  //toggle file infomation
@@ -370,7 +384,7 @@
                 });
             
                 
-                $("#myBoxMiddle, #shareBoxMiddle, #vaultMiddle").on('click','.row-file', function(){
+                $("#myBoxMiddle, #shareBoxMiddle, #vaultMiddle, #binMiddle").on('click','.row-file', function(){
                    
 
                     var rowID = $(this).prop("id");
@@ -408,12 +422,12 @@
 
                 $("#deleteModal").off('click', '#delete-btn');
                 $('#deleteModal').on('click', '#delete-btn', function(){
-                    var filename = getFILENAME();
+                 
                     var num = getNUM();
                     var fileID = getFILEID();
-                    if(fileID == "" || fileID == undefined){
-                        action = "deleteFile";
-                        delFile(filename, action, num);
+                    if(page == "bin"){
+                        action = "deletePermanentlyFile";
+                        delFile(fileID, action, num);
                     }else{
                         action = "deleteSharedFile";
                         delFile(fileID, action, num);
@@ -524,6 +538,33 @@
                     closeVault(action, state);
                 });
 
+                $('#main').on('click', '#removeButton, #removeButtonMobile', function(){
+                    action = "movetoBin";
+                    $('#fileInfoMobile').addClass('fileInfoMobileClose');
+                    $('.overlayMobile').removeClass('active');
+                  
+                    var filename = getFILENAME();
+                    var num = getNUM();
+                    if (num == "" || num == undefined){
+                        $("div.message3").fadeIn(300).delay(1500).fadeOut(400);
+                    }else{
+                   
+                        moveToBin(filename, action, page, num);
+                    }
+                });
+
+                $('#emptybinModal').on('click', '#emptybin-btn', function(){
+                    action = "emptybin";
+                    emptyBin(action);
+                });
+
+                $('#main').on('click', '#restoreButton', function(){
+                    action = "restorefile";
+                    var fileID = getFILEID();
+                    var num = getNUM();
+                    restoreFile(fileID, action, num);
+                });
+         
 
                     
                 //Click sidebar button to display the user's files (call function)
@@ -556,6 +597,13 @@
                  
                 });
 
+                $('#mySidebar').off('click', '#gotoRecycleBin');
+                $('#mySidebar').on('click', '#gotoRecycleBin', function(){
+                    displayFile = "displayRecycleBin";
+                    page = "bin";
+                    sortType = "sortByDefault";
+                    displayBox(displayFile, page, sortType);
+                });
 
                 $('#sortFile').off('click', '#sortByName');
                 $('#sortFile').on('click', '#sortByName', function(e){
@@ -851,6 +899,27 @@
         });
     }
 
+    //SHARE FUNCTION
+    function shareFile(filename, action, checkUser){
+
+    // check user exits or not
+    $.ajax({
+        url: 'fileInfo.php',
+        type: 'post',
+        data: {filename: filename, action: action, checkUser: checkUser},
+        dataType: 'JSON',
+        success: function(isUserExist){
+            
+            if(isUserExist == "no"){
+                $("div.message2").fadeIn(300).delay(1500).fadeOut(400);
+            }
+            else{
+                    $('#checkUser').val('');
+                    $('#shareModal').modal('hide');
+            }
+        }
+    });
+    }
 
     //Automatic showing the file info
     function showFileInfo(file, action){
@@ -890,11 +959,11 @@
 
 
     //DELETE FUNCTION
-    function delFile(file, action, id){
+    function delFile(fileID, action, id){
         $.ajax({
             url: 'fileInfo.php',
             type: 'post',
-            data: {file: file, action: action},
+            data: {fileID: fileID, action: action},
             dataType: 'JSON',
             success: function(status){
                 console.log(status);
@@ -911,27 +980,58 @@
         });
     }
 
-    //SHARE FUNCTION
-    function shareFile(filename, action, checkUser){
-    
-    // check user exits or not
-    $.ajax({
-        url: 'fileInfo.php',
-        type: 'post',
-        data: {filename: filename, action: action, checkUser: checkUser},
-        dataType: 'JSON',
-        success: function(isUserExist){
-            
-            if(isUserExist == "no"){
-                $("div.message2").fadeIn(300).delay(1500).fadeOut(400);
+    //MOVE TO BIN FUNCTION
+    function moveToBin(file, action, page, num){
+        console.log("here");
+        $.ajax({
+            url: 'fileInfo.php',
+            type: 'post',
+            data: {file: file, action: action, page:page},
+            dataType: 'JSON',
+            success: function(status){
+                if(status == "success"){
+                    $("#row_"+num).remove();
+                }else{
+                    console.log('fail');
+                }
             }
-            else{
-                    $('#checkUser').val('');
-                    $('#shareModal').modal('hide');
-            }
-        }
-    });
+        });
     }
+
+    function emptyBin(action){
+        $.ajax({
+            url: 'fileInfo.php',
+            data: {action: action},
+            type: 'post',
+            dataType: 'json',
+            success: function(status){
+               if(status == "success"){
+                $("#emptybinModal").modal('hide');
+               }else{
+                console.log("fail");
+               }
+            }
+
+        });
+    }
+
+    function restoreFile(fileID, action, num){
+        $.ajax({
+            url: 'fileInfo.php',
+            data: {fileID: fileID, action: action},
+            type: 'post',
+            dataType: 'json',
+            success: function(status){
+                console.log(status);
+                if(status == "success"){
+                    $("#row_"+num).remove();
+                }else{
+                    console.log('fail');
+                }
+            }
+        });
+    }
+
 
 
  
