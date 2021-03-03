@@ -149,7 +149,7 @@ function minifier($code) {
 						<!--form id="uploadForm" action="fileUpload.php" method="post" enctype="multipart/form-data" class="sm-form"-->
 						<form id="uploadForm" method="post" action="" enctype="multipart/form-data" class="sm-form">
 							<div class="form-row">
-								<p class="mb-1 ">Select a file:</p>
+								<p class="mb-1 ">Select a file:<span style="font-size: 0.7em;">(Maximum up to 10MB)</span></p>
 								<div class="custom-file">
 									<input type="file" name="getFile" class="custom-file-input col-12" id="getFile"
 										aria-describedby="inputGroupFileAddon01">
@@ -253,6 +253,12 @@ function minifier($code) {
 									
 										<div class="container" >
 											<img id="previewImg" src="" width="100%" height="100%"/>
+											<video id="previewVideo" width="100%" height="100%" controls>
+												Your browser does not support the video tag.
+											</video>
+											<audio id="previewAudio" width="100%" height="100%" controls>
+												Your browser does not support the video tag.
+											</audio>
 											<iframe id="previewFrame" src="" width="100%" height="350px"></iframe>
 										</div>
 									
@@ -267,7 +273,7 @@ function minifier($code) {
 								<div class="modal-content">
 									<div class="modal-body">
 										<div class="row m-0 mb-2">
-											<div class="alert alert-danger message2 p-1 m-0"> User does not exist! </div>
+											<div class="alert message2 p-1 m-0"></div>
 											<a type="button" class="close-homeModal p-2 ml-auto" data-dismiss="modal"><i class="far fa-times-circle"></i></a>
 										</div>
 										<div class="container modal-inner" id="shareDiv">
@@ -387,8 +393,8 @@ function minifier($code) {
 							</div>
 						</div>
 
-							<!-- REMOVE FROM VAULT CONFIRMATION MODAL -->
-							<div id="removefromvaultModal" class="modal fade" role="dialog">
+						<!-- REMOVE FROM VAULT CONFIRMATION MODAL -->
+						<div id="removefromvaultModal" class="modal fade" role="dialog">
 							<div class="modal-dialog modal-sm" role="content">
 								<div class="modal-content">
 									<div class="modal-body">

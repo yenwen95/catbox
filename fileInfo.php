@@ -367,13 +367,14 @@
                     $updatedFileName = $fileName;
                 }
 
-                    $filePath = $path.$updatedFileName;
+                $filePath = $path.$updatedFileName;
+             
+                $actualSize = $_FILES['getFile']['size'];
+
+                if($actualSize < 10485760){
                     $fileTempName = $_FILES['getFile']['tmp_name'];
-                    $actualSize = $_FILES['getFile']['size'];
                     $fileSize = formatSize($actualSize);
                     $fileType = pathinfo($updatedFileName, PATHINFO_EXTENSION);
-
-                 
                     $result = move_uploaded_file($fileTempName, $filePath);
 
                     if($result){
@@ -394,43 +395,35 @@
                         $query->bindParam(':is_insidevault', $insideVault);
                         $query->execute();
 
+                        if($query){
+                            $status = "success";
+                        }else{
+                            $status = "fail";
+                        }
     
                     }
                     else{
-                        $status = $state;
+                        $status = "fail";
                     }
-                    $con = null;
-            
+
+                }else{
+                    $status = "size";
+                }
+                 
+                    
+                $con = null;
+
                 
             }
             echo json_encode($status);
 
         }
 
-        //SHOW FILE INFO
-        if($action == "showFileInfoMyBox"){
-            $fileName = $_POST['file'];
-            $fetchInfo = $con->prepare("SELECT filename, filetype, filesize, createtime, shared_users FROM Files WHERE filename = ? && username = ?");
-            $fetchInfo->execute([$fileName, $username]);
-            
-            $return_arr = array();
+        
 
-            while($row = $fetchInfo->fetch()){
-                $type = $row['filetype'];
-                $returnArr = getFileType($type);
-                $return_arr['filename'] = $row['filename'];
-                $return_arr['filetype'] = $returnArr['shortType'];
-                $return_arr['filesize'] = $row['filesize'];
-                $return_arr['createtime'] = $row['createtime'];
-                $return_arr['shared_users'] = $row['shared_users'];
-                $return_arr['action'] = $action;
-            }
-            echo json_encode($return_arr);
-        }
-
-        if($action == "showFileInfoShareBox"){
+        if($action == "showFileInfo"){
             $fileID = $_POST['file'];
-            $fetchInfo = $con->prepare("SELECT filename, filetype, filesize, createtime, username FROM Files WHERE id = ?");
+            $fetchInfo = $con->prepare("SELECT filename, filetype, filesize, createtime, username, shared_users FROM Files WHERE id = ?");
             $fetchInfo->execute([$fileID]);
 
             $return_arr = array();
@@ -442,8 +435,9 @@
                 $return_arr['filetype'] = $returnArr['shortType'];
                 $return_arr['filesize'] = $row['filesize'];
                 $return_arr['createtime'] = $row['createtime'];
+                $return_arr['shared_users']= $row['shared_users'];
                 $return_arr['username'] = $row['username'];
-                $return_arr['action'] = $action;
+               
             }
             echo json_encode($return_arr);
         }
@@ -630,39 +624,62 @@
 
         if($action == "shareFile"){
             $fileName = $_POST['filename'];
-            $isUserExist = "yes";
+            $status='';
             $checkUser = $_POST['checkUser'];
             $query = $con->prepare("SELECT username FROM Users WHERE username = ?");
             $query->execute([$checkUser]);
-    
+            $set = '0';
+            $found = 0;
 
             //If user does not exists return back
             if($query->fetch() == 0){
-                $isUserExist = "no";
+                $status = "no exists";
             }else{
-
                 //If user exists
                 //select shareuser col for ori value
-                $query1 = $con->prepare("SELECT shared_users FROM Files WHERE filename = ? && username = ?");
-                $query1->execute([$fileName, $username]);
-            
+                $query1 = $con->prepare("SELECT shared_users FROM Files WHERE filename = ? && username = ? && is_insidevault = ?");
+                $query1->execute([$fileName, $username, $set]);
+                $new;
                 $row = $query1->fetch();
-
+                $original = $row['shared_users'];
                 //Problem: CHECK THE USER IS ALREADY SHARED OR NOT
 
                 //If shared_users is empty
-                if(($row['shared_users'] == '0') || ($row['shared_users'] == NULL) ){
+                if(($original == '0') || ($original == NULL)){
                     $new = $checkUser.',';
                 }else{
-                    //store original value
-                    $original = $row['shared_users'];
-                    //add new share user with original value
-                    $new = $original.$checkUser.',';
+                    //check user is shared before or not
+                  
+                    $splitedUsers = explode(',', $row['shared_users']);
+                    for($i=0; $i<count($splitedUsers); $i++){
+                        if(($splitedUsers[$i]== $checkUser) || ($splitedUsers[$i] == $username)){
+                            $found = 1;
+                        }
+                    }
+                    if($found == 0){
+                        //store original value
+                        $original = $row['shared_users'];
+                        //add new share user with original value
+                        $new = $original.$checkUser.',';
+                       
+                    }
+
                 }
-                    $query2 = $con->prepare("UPDATE Files SET shared_users = ? WHERE filename = ? && username = ?");
-                    $query2->execute([$new, $fileName, $username]);
+
+                if($found == 1){
+                    $status = "shared";
+                }else{
+                    $query2 = $con->prepare("UPDATE Files SET shared_users = ? WHERE filename = ? && username = ? && is_insidevault =?");
+                    $query2->execute([$new, $fileName, $username, $set]);
+                    if($query2){
+                        $status = "success";
+                    }else{
+                        $status = "fail";
+                    }
+
+                }
             }
-            echo json_encode($isUserExist);
+            echo json_encode($status);
         }
 
         //Problem: IF USER WANT TO UNSHARE THE FILE
@@ -670,15 +687,17 @@
         if($action == "previewFile"){
             $return_arr = array();
             $fileID = $_POST['file'];
-            $fetchInfo = $con->prepare("SELECT filepath FROM Files WHERE id = ?");
+            $fetchInfo = $con->prepare("SELECT filetype, filepath FROM Files WHERE id = ?");
             $fetchInfo->execute([$fileID]);
         
             while($row = $fetchInfo->fetch()){
                 $file = $row['filepath'];
+                $type = getFileType($row['filetype']);
                 $info = pathinfo($file);
                 $path = substr($row['filepath'], 2);
                 $return_arr['path'] = $path;
-                $return_arr['filetype'] = $info["extension"];
+                $return_arr['shortType'] = $type['shortType'];
+                $return_arr['filetype'] = $row['filetype'];
             }
 
 

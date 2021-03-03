@@ -187,10 +187,6 @@
                         $("div.message1").text("File uploaded successfully!");
                         $("div.message1").fadeIn(300).delay(1500).fadeOut(400);
 
-                        setTimeout(function(){
-                            $('#uploadModal').modal('hide');
-                          }, 3000);
-
                           $("#main").load(location.href + " #main");
                        
                       
@@ -204,13 +200,20 @@
                             var displayFile = "displayVaultFileList";
                             displayFileList(displayFile, state, sortType);
                         }
-                    }else{
+                    }else if (status == "size"){
                        
                         if($("div.message1").hasClass("alert-success")){
                             $("div.message1").removeClass("alert-success");
                          }
                         $("div.message1").addClass('alert-danger');
-                        $("div.message1").text("Fail to upload file!");
+                        $("div.message1").text("File size is too big!");
+                        $("div.message1").fadeIn(300).delay(1500).fadeOut(400);
+                    }else{
+                        if($("div.message1").hasClass("alert-success")){
+                            $("div.message1").removeClass("alert-success");
+                         }
+                        $("div.message1").addClass('alert-danger');
+                        $("div.message1").text("Failed to upload file!");
                         $("div.message1").fadeIn(300).delay(1500).fadeOut(400);
                     }
                     
@@ -276,11 +279,11 @@
             success: function(fileList){
                 
                 if(page == "sharebox"){
-
-                    $('#shareBoxRight').show();
-                    $('#shareBoxRightMobile').show();
                     $('#myBoxRightMobile').hide();
                     $('#myBoxRight').hide();
+                    $('#shareBoxRight').show();
+                    $('#shareBoxRightMobile').show();
+                  
 
                     $('#addButton, #closeVaultButton').removeClass("d-flex");
                     $('#shareButton, #addToVaultButton,#removeFromVaultButton, #delButton, #delButtonMobile, #emptybinButton, #restoreButton').removeClass("d-md-flex");
@@ -401,14 +404,9 @@
 
                   
                     if(($('#'+rowID).hasClass('on-select'))){
-
-                        if(fileID == "" || fileID == undefined){
-                            action = "showFileInfoMyBox";
-                            showFileInfo(filename, action);
-                        } else{
-                            action = "showFileInfoShareBox";
+                            action = "showFileInfo";
                             showFileInfo(fileID, action);
-                        }
+                        
                     }else{
                         clearFileInfo();
                         setFile(em, em,em);
@@ -711,6 +709,9 @@
             if(status == "success"){
                 $("#row_"+id).remove();
                 $("div.message5").fadeIn(300).delay(1500).fadeOut(400);
+                setTimeout(function(){
+                    $('#addtovaultModal').modal('hide')
+                  }, 2000);
               
             }else{
                 console.log("fail");
@@ -868,23 +869,51 @@
             data: {file: file, action: action},
             dataType: 'JSON',
             success: function(return_arr){
-                var type = return_arr['filetype'];
+                var shortType = return_arr['shortType'];
                 var path = return_arr['path'];
+                var type = return_arr['filetype'];
                 var imgbox = document.getElementById("previewImg");
                 var framebox = document.getElementById("previewFrame");
+                var videobox = document.getElementById("previewVideo");
+                var audiobox = document.getElementById("previewAudio");
                 imgbox.style.display = "none";
                 framebox.style.display = "none";
+                videobox.style.display = "none";
+                audiobox.style.display = "none";
+           
+         
                 
-                if(type == "jpg" || type == "png" ){  
+                if(shortType == "Image" ){  
                     //use <img>
+                    videobox.style.display = "none";
                     framebox.style.display = "none";
+                    audiobox.style.display = "none";
                     imgbox.style.display = "block";
+                 
                     $('#previewImg').attr("src", src="./" + path);
                     //$('#previewImg').attr("src", src="https://catboxtest.000webhostapp.com/" + path);
-                }else{ 
+                }else if(shortType == "Video"){
+                    framebox.style.display = "none";
+                    imgbox.style.display = "none";
+                    videobox.style.display = "block";
+                    audiobox.style.display = "none";
+                    $('#previewVideo').attr("src",src="./" + path);
+                    $('#previewVideo').attr("type", type="video/"+type );
+                   
+                }else if(shortType == "Audio"){
+                    framebox.style.display = "none";
+                    imgbox.style.display = "none";
+                    videobox.style.display = "none";
+                    audiobox.style.display = "block";
+                    $('#previewAudio').attr("src", src="./" + path);
+                    $('#previewAudio').attr("type", type="audio/"+type );
+                }
+                else{ 
                     //use <iframe>
                     imgbox.style.display = "none";
                     framebox.style.display = "block";
+                    audiobox.style.display = "none";
+                    videobox.style.display = "none";
                     $("#previewFrame").attr("src", src="https://docs.google.com/viewer?url=https://calibre-ebook.com/downloads/demos/demo.docx&embedded=true");
                 //$("#previewFrame").attr("src", src="https://docs.google.com/viewer?url=https://catboxtest.000webhostapp.com/" + path + "&embedded=true");
                 }
@@ -901,15 +930,25 @@
         type: 'post',
         data: {filename: filename, action: action, checkUser: checkUser},
         dataType: 'JSON',
-        success: function(isUserExist){
+        success: function(status){
             
-            if(isUserExist == "no"){
-                $("div.message2").fadeIn(300).delay(1500).fadeOut(400);
+            if(status == "success"){
+                $('#checkUser').val('');
+                $("div.message2").removeClass("alert-danger");
+                $("div.message2").addClass('alert-success');
+                $("div.message2").text("File shared successfully!");
+            }else {
+                $("div.message2").removeClass("alert-success");
+                $("div.message2").addClass('alert-danger');
+                 if(status == "no exists"){
+                    $("div.message2").text("User does not exist!");
+                 }else if(status == "shared"){
+                    $("div.message2").text("You have shared to this user!");
+                }else{
+                    $("div.message2").text("Failed to share file!");
+                }
             }
-            else{
-                    $('#checkUser').val('');
-                    $('#shareModal').modal('hide');
-            }
+            $("div.message2").fadeIn(300).delay(1500).fadeOut(400);
         }
     });
     }
@@ -924,26 +963,20 @@
             data: {file: file, action: action},
             dataType: 'JSON',
             success: function(return_arr){
-                var act = return_arr['action'];
-                if(act == "showFileInfoMyBox" ){
-                    $(".name").text(return_arr.filename);
-                    $(".type").text(return_arr.filetype);
-                    $(".size").text(return_arr.filesize);
-                    $(".timecreate").text(return_arr.createtime);
-
-                        var shareUser = return_arr.shared_users;
-                        if(shareUser.trim() == ''){
-                            $(".sharewith").text("");
-                        }else{
-                            $(".sharewith").text(shareUser.slice(0,-1));
-                        }
-                }else if(act == "showFileInfoShareBox"){
-                    $(".name").text(return_arr.filename);
-                    $(".type").text(return_arr.filetype);
-                    $(".size").text(return_arr.filesize);
-                    $(".timecreate").text(return_arr.createtime);
-                    $(".shareby").text(return_arr.username);
-                }
+                $(".name").text(return_arr.filename);
+                $(".type").text(return_arr.filetype);
+                $(".size").text(return_arr.filesize);
+                $(".timecreate").text(return_arr.createtime);
+                var user = return_arr.username;
+                 var shareUser = return_arr.shared_users;
+                    if(shareUser.trim() == ''){
+                        $("span.sharewith").text("");
+                    }else{
+                        $("span.sharewith").text(shareUser.slice(0,-1));
+                    }
+         
+                 $(".shareby").text(user);
+                
                 
             }
         });

@@ -125,11 +125,6 @@ body {
   margin: 0;
 }
 
-#shareBoxRight,
-#shareBoxRightMobile {
-  display: none;
-}
-
 .message1,
 .message2,
 .message3,
