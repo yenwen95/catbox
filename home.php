@@ -113,15 +113,15 @@ function minifier($code) {
     <title>myBox</title>
 </head>
 <body>
-
+	
 	<nav class="navbar navbar-expand-lg fixed-top">
 			<div class="container-fluid">
 				<!-- SYSTEM NAME -->
 				<button  type="button" id="openSidebar">&#9776;</button>
 				<img src="./img/logo.png" alt="logo" width="50px" height="40px" />
 				
-				<p class="mr-auto mb-0"><span id="boxName"></span><?php echo $_SESSION['username'] ?></p>
-
+				<p class="mr-auto mb-0">CATBOX<span  id="boxName"></span>@<?php echo $_SESSION['username'] ?></p>
+				
 				<!-- SEARCH BAR
 				<div class="search-container">
 					<input type="text" placeholder="Search..">
@@ -213,19 +213,126 @@ function minifier($code) {
 		</div>
 		<ul class="list-unstyled components">
 			<li>
-				<a href="./index.php" class="">Main Page</a>
+				<a href="./index.php" class="d-flex align-self-end">
+					<svg  class="icon-sidebar" viewBox="0 0 527 527" xmlns="http://www.w3.org/2000/svg">
+						<path d="m498.195312 222.695312c-.011718-.011718-.023437-.023437-.035156-.035156l-208.855468-208.847656c-8.902344-8.90625-20.738282-13.8125-33.328126-13.8125-12.589843 
+								0-24.425781 4.902344-33.332031 13.808594l-208.746093 208.742187c-.070313.070313-.140626.144531-.210938.214844-18.28125 18.386719-18.25 48.21875.089844 66.558594 
+								8.378906 8.382812 19.445312 13.238281 31.277344 13.746093.480468.046876.964843.070313 1.453124.070313h8.324219v153.699219c0 30.414062 24.746094 55.160156 55.167969 
+								55.160156h81.710938c8.28125 0 15-6.714844 15-15v-120.5c0-13.878906 11.289062-25.167969 25.167968-25.167969h48.195313c13.878906 0 25.167969 11.289063 25.167969 25.167969v120.5c0 
+								8.285156 6.714843 15 15 15h81.710937c30.421875 0 55.167969-24.746094 55.167969-55.160156v-153.699219h7.71875c12.585937 0 24.421875-4.902344 33.332031-13.808594 18.359375-18.371093 
+								18.367187-48.253906.023437-66.636719zm0 0"/>
+					</svg>
+					<span class="pl-3">Main Page</span>
+				</a>
 			</li>
 			<li>
-				<a id="gotoMyBox" class="boxes">myBox</a>
+				<a id="gotoMyBox" class="d-flex align-self-end">
+					<svg  class="icon-sidebar" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 510.218 510.218"  xml:space="preserve">
+						<g>
+							<g>
+								<path d="M497.587,188.634c-10.155-11.989-24.981-18.859-40.704-18.859H280.777c-11.541,0-23.104,2.731-33.387,7.893
+									l-58.325,29.141c-7.36,3.691-15.616,5.632-23.851,5.632H53.363c-16.064,0-31.104,7.125-41.28,19.563
+									C1.907,244.442-2.103,260.592,1.054,276.336l29.141,144.512c2.795,15.189,16.043,26.261,31.509,26.261h384.619
+									c15.893,0,29.205-11.413,31.595-26.987L509.47,231.92C512.094,216.41,507.742,200.645,497.587,188.634z"/>
+							</g>
+						</g>
+						<g>
+							<g>
+								<path d="M436.318,105.776H258.334c-8.427,0-16.661-3.413-22.635-9.365l-17.685-17.664c-10.048-10.091-23.445-15.637-37.696-15.637
+									H94.985c-29.397,0-53.333,23.936-53.333,53.333v75.84c3.499-0.704,7.061-1.173,10.709-1.173h112.853
+									c8.235,0,16.491-1.941,23.851-5.632l58.304-29.141c10.304-5.163,21.867-7.893,33.408-7.893h176.789
+									c3.648,0,7.232,0.448,10.752,1.173v-11.84C468.318,120.133,453.961,105.776,436.318,105.776z"/>
+							</g>
+						</g>
+
+					</svg>
+					<span class="pl-3">My Files</span>
+				</a>
 			</li>
 			<li>
-				<a id="gotoShareBox" class="boxes">shareBox</a>
+				<a id="gotoShareBox" class="d-flex align-self-end">
+					<svg class="icon-sidebar" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 268.733 268.733" style="enable-background:new 0 0 268.733 268.733;" xml:space="preserve">
+						<g>
+							<path d="M0,141.467v36.37c0,5.69,4.613,10.304,10.304,10.304h33.425v-39.175c0-13.63,3.309-26.493,9.135-37.864
+								c-12.09-0.718-23.009-5.835-31.187-13.77C8.495,107.539,0,123.506,0,141.467z"/>
+							<path d="M78.616,81.218c-5.225-8.579-8.236-18.646-8.236-29.403c0-6.551,1.13-12.839,3.183-18.697
+								c-5.172-3.171-11.254-5.001-17.765-5.001c-18.8,0-34.041,15.239-34.041,34.04c0,18.8,15.241,34.041,34.041,34.041
+								c2.589,0,5.107-0.299,7.531-0.847C67.813,90.029,72.951,85.282,78.616,81.218z"/>
+							<path d="M171.078,150.335c5.518,0,10.918,1.226,15.834,3.515l8.482-6.204c-0.432-22.684-11.904-42.655-29.279-54.77
+								c-10.175,9.679-23.919,15.639-39.037,15.639c-15.118,0-28.862-5.96-39.038-15.638c-17.712,12.35-29.312,32.86-29.312,56.091v44.552
+								c0,6.971,5.651,12.622,12.622,12.622h66.796c-2.988-5.393-4.696-11.589-4.696-18.178
+								C133.45,167.214,150.33,150.335,171.078,150.335z"/>
+							<circle cx="127.078" cy="51.815" r="41.698"/>
+							<path d="M247.104,215.36c-3.436,0-6.672,0.822-9.558,2.248l-40.529-29.645l40.234-29.431c2.957,1.518,6.301,2.391,9.852,2.391
+								c11.279,0,20.53-8.636,21.529-19.652c1.163-12.944-9.064-23.603-21.529-23.603c-11.944,0-21.628,9.683-21.628,21.628
+								c0,0.99,0.09,1.957,0.219,2.911l-40.359,29.521c-3.96-3.473-9.025-5.393-14.258-5.393c-11.944,0-21.628,9.683-21.628,21.628
+								c0,11.944,9.684,21.628,21.628,21.628c5.273,0,10.329-1.941,14.258-5.394l40.408,29.557c-0.159,1.058-0.268,2.132-0.268,3.234
+								c0,11.944,9.684,21.628,21.628,21.628c11.912,0,21.629-9.655,21.629-21.628C268.733,225.079,259.078,215.36,247.104,215.36z"/>
+						</g>
+					</svg>
+					<span class="pl-3">Shared Files</span>
+				</a>
 			</li>
 			<li>
-				<a id="gotoVault" class="boxes">Vault</a>
+				<a id="gotoVault"  class="d-flex align-self-end">
+					<svg class="icon-sidebar" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 175.833 175.833"  xml:space="preserve">
+						<path d="M157.417,0h-139c-7.72,0-14,6.28-14,14v139c0,7.383,5.746,13.45,13,13.965v3.869c0,2.761,2.239,5,5,5h14.167
+								c2.761,0,5-2.239,5-5V167h91.167v3.833c0,2.761,2.239,5,5,5h14.167c2.761,0,5-2.239,5-5V167h0.5c7.72,0,14-6.28,14-14V14
+								C171.417,6.28,165.136,0,157.417,0z M156.917,139.25c0,7.306-5.944,13.25-13.25,13.25h-113c-7.306,0-13.25-5.944-13.25-13.25V26.75
+								c0-7.306,5.944-13.25,13.25-13.25h113c7.306,0,13.25,5.944,13.25,13.25V139.25z M70.461,83.25c0,6.341-5.159,11.5-11.5,11.5
+								s-11.5-5.159-11.5-11.5s5.159-11.5,11.5-11.5S70.461,76.909,70.461,83.25z M143.667,23.5h-113c-1.792,0-3.25,1.458-3.25,3.25v112.5
+								c0,1.792,1.458,3.25,3.25,3.25h113c1.792,0,3.25-1.458,3.25-3.25V26.75C146.917,24.958,145.459,23.5,143.667,23.5z M58.961,104.75
+								c-11.855,0-21.5-9.645-21.5-21.5s9.645-21.5,21.5-21.5s21.5,9.645,21.5,21.5S70.816,104.75,58.961,104.75z M98.596,104.833h-2.429
+								c-2.761,0-5-2.239-5-5s2.239-5,5-5h2.429c2.761,0,5,2.239,5,5S101.357,104.833,98.596,104.833z M98.596,88.5h-2.429
+								c-2.761,0-5-2.239-5-5s2.239-5,5-5h2.429c2.761,0,5,2.239,5,5S101.357,88.5,98.596,88.5z M98.596,72.167h-2.429
+								c-2.761,0-5-2.239-5-5s2.239-5,5-5h2.429c2.761,0,5,2.239,5,5S101.357,72.167,98.596,72.167z M115.596,104.833h-2.429
+								c-2.761,0-5-2.239-5-5s2.239-5,5-5h2.429c2.761,0,5,2.239,5,5S118.357,104.833,115.596,104.833z M115.596,88.5h-2.429
+								c-2.761,0-5-2.239-5-5s2.239-5,5-5h2.429c2.761,0,5,2.239,5,5S118.357,88.5,115.596,88.5z M115.596,72.167h-2.429
+								c-2.761,0-5-2.239-5-5s2.239-5,5-5h2.429c2.761,0,5,2.239,5,5S118.357,72.167,115.596,72.167z M132.596,104.833h-2.429
+								c-2.761,0-5-2.239-5-5s2.239-5,5-5h2.429c2.761,0,5,2.239,5,5S135.357,104.833,132.596,104.833z M132.596,88.5h-2.429
+								c-2.761,0-5-2.239-5-5s2.239-5,5-5h2.429c2.761,0,5,2.239,5,5S135.357,88.5,132.596,88.5z M132.596,72.167h-2.429
+								c-2.761,0-5-2.239-5-5s2.239-5,5-5h2.429c2.761,0,5,2.239,5,5S135.357,72.167,132.596,72.167z"/>
+
+
+
+					</svg>
+					<span class="pl-3">Vault</span>
+				</a>
 			</li>
 			<li>
-				<a id="gotoRecycleBin" class="boxes">Recycle Bin</a>
+				<a id="gotoRecycleBin" class="boxes">
+					<svg class="icon-sidebar"  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
+						<g>
+							<g>
+								<path d="M99.534,96.697l12.126,389.173C112.122,500.703,124.107,512,138.948,512h234.106c14.839,0,26.826-11.297,27.287-26.131
+									l12.126-389.172H99.534z M224.985,336.879c-0.485,6.515-5.921,11.478-12.35,11.478c-0.31,0-0.62-0.011-0.932-0.035l-39.996-2.975
+									c-5.601-0.415-10.815-2.891-14.681-6.97c-6.595-6.957-8.063-17.353-3.651-25.867l16.968-32.733l-1.871,0.832
+									c-6.254,2.781-13.583-0.032-16.365-6.289c-2.783-6.256,0.032-13.582,6.289-16.365l34.297-15.256
+									c3.439-1.531,7.387-1.414,10.733,0.315c3.345,1.731,5.721,4.886,6.46,8.578l7.368,36.806c1.344,6.713-3.009,13.245-9.722,14.59
+									c-0.821,0.164-1.64,0.243-2.447,0.243c-5.787,0-10.963-4.074-12.143-9.966l-0.464-2.318l-15.513,29.925l36.575,2.72
+									C220.369,324.105,225.493,330.05,224.985,336.879z M222.343,216.834c-5.571-3.981-6.859-11.724-2.879-17.294l23.318-32.632
+									c3.265-4.57,8.087-7.738,13.579-8.925c9.375-2.021,19.02,2.122,24.002,10.316l19.096,31.401l0.248-1.93
+									c0.872-6.792,7.092-11.593,13.874-10.719c6.791,0.872,11.59,7.084,10.719,13.874l-4.779,37.231
+									c-0.48,3.735-2.629,7.049-5.845,9.009c-1.967,1.199-4.203,1.81-6.451,1.81c-1.427,0-2.86-0.247-4.234-0.746l-35.278-12.821
+									c-6.435-2.338-9.756-9.452-7.417-15.886c2.338-6.435,9.457-9.755,15.886-7.417l2.317,0.842l-17.538-28.832l-21.323,29.841
+									C235.656,219.526,227.913,220.813,222.343,216.834z M359.925,329.587c-3.123,9.067-11.663,15.173-21.252,15.194l-36.866,0.083
+									l1.602,1.273c5.359,4.262,6.249,12.06,1.989,17.419c-2.447,3.078-6.062,4.682-9.711,4.682c-2.705,0-5.426-0.88-7.707-2.694
+									l-29.38-23.362c-2.947-2.343-4.67-5.898-4.681-9.665c-0.011-3.765,1.688-7.332,4.62-9.693l29.234-23.547
+									c5.332-4.296,13.137-3.455,17.432,1.878c4.296,5.332,3.455,13.136-1.878,17.432l-1.842,1.484l33.708-0.076l-14.492-33.692
+									c-2.706-6.29,0.2-13.582,6.489-16.287c6.29-2.708,13.582,0.2,16.287,6.489l15.848,36.843
+									C361.539,318.506,361.755,324.275,359.925,329.587z"/>
+							</g>
+						</g>
+						<g>
+							<g>
+								<path d="M407.667,23.555h-87.859c0.415-1.24,0.657-3.221,0.657-4.896C320.465,8.389,312.139,0,301.869,0h-91.739
+									c-10.27,0-18.596,8.389-18.596,18.659c0,1.675,0.242,3.656,0.657,4.896h-87.859c-18.022,0-33.049,14.536-33.049,32.557v15.791
+									h369.433V56.112C440.717,38.09,425.689,23.555,407.667,23.555z"/>
+							</g>
+						</g>
+					</svg>
+					<span class="pl-3">Recycle Bin</span>
+				</a>
 			</li>
 		</ul>
 		
@@ -235,7 +342,7 @@ function minifier($code) {
 	<!--  MAIN CONTAINER -->
 	<div id="main">
 	
-	<!-- Scrollable DIV -->
+		<!-- Scrollable DIV -->
 		<div class=" container-fluid m-0 mr-1 mt-n3 p-0 w-100" id="myBox">
 			
 			<div class="row mb-0">
@@ -570,7 +677,7 @@ function minifier($code) {
 									</svg>
 
 								</a>
-								<a class="btn button btn-function rounded-circle d-none  d-md-flex justify-content-center p-1 pr-2  " id="addToVaultButton"  data-toggle="tooltip" data-placement="bottom" title="Save To Vault">
+								<a class="btn button btn-function rounded-circle d-none d-md-flex justify-content-center p-1 pr-2  " id="addToVaultButton"  data-toggle="tooltip" data-placement="bottom" title="Save To Vault">
 									<svg  class="icon-function" version="1.1"  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="-45 0 550 550" xml:space="preserve">
 										<g>
 											<g>
@@ -644,7 +751,7 @@ function minifier($code) {
 										</g>
 									</svg>
 								</a>
-								<a class="btn button btn-function rounded-circle d-none d-md-flex justify-content-center p-1 pr-2 pt-2" id="emptybinButton" data-toggle="tooltip" data-placement="bottom" title="Empty Bin">
+								<a class="btn button btn-function rounded-circle d-flex justify-content-center p-1 pr-2 pt-2" id="emptybinButton" data-toggle="tooltip" data-placement="bottom" title="Empty Bin">
 									<svg class="icon-function" viewBox="-45 0 530 530"  xmlns="http://www.w3.org/2000/svg">
 										<g>
 											<path d="m415.157 86.566-93.9 26.865c-.104.034-.208.068-.312.104-10.041 3.493-16.788 12.982-16.788 23.614v27.223h-92.79l106.051-106.05c5.858-5.858 5.858-15.355
@@ -702,8 +809,6 @@ function minifier($code) {
 						</div>
 
 						
-
-
 						<!-- FILE TITLE -->
 						<div id="sortFile" class="row row-middle m-0 p-0">
 							<div id="sortByName" class="col-12 col-md-4 pb-1 pt-1 sortClass" >Name <i id="nameArrow" ></i></div>
@@ -779,7 +884,8 @@ function minifier($code) {
 									<a class="btn btn-box btn-block" id="downloadButtonMobile"  href="">Download</a>
 									<a class="btn btn-box btn-block" id="previewButtonMobile">Preview</a>
 									<a class="btn btn-box btn-block" id="addToVaultButtonMobile">Save To Vault</a>
-									<a class="btn btn-box btn-block" id="removeFromVaultButtonMobile">Remove From Vault</a>
+									<a class="btn btn-box btn-block" id="delButtonMobile">Delete</a>
+									<a class="btn btn-box btn-block" id="restoreButtonMobile">Restore</a>
 								</div>
 
 
@@ -867,8 +973,18 @@ function minifier($code) {
 		</div>
 	</div>
 
+
 	<div class="overlay"></div>
 	<div class="d-md-none overlayMobile"></div>
+	<div id="overlayLoading" class="overlayLoading"></div>
+	<div id="loading" class="load loadingContainer">
+		<div class="load top-left"></div>
+		<div class="load top-right"></div>
+		<div class="load bottom-left"></div>
+		<div class="load bottom-right"></div>
+	</div>
+
+	
 	
 	
 	<!--  jquery, popper.js, bootstrap script  -->
@@ -878,6 +994,8 @@ function minifier($code) {
 	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
 	 <script src="./js/homeScript.js"></script>
+
+
 	
 </body>
 

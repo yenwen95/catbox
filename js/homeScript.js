@@ -4,7 +4,7 @@
     //Problem: if it can store other language file or not
     //Problem: click "no" or "close" button should reset the selected file, so that it no need to click twice to reselect for mobile view
     //Problem: create function allow user to change file name before upload to the system
-    //Problem: limit the file size when uploading
+    
 
         var order, FILEID, NUM, FILENAME, em = "";
         var idleTime = 0;
@@ -115,23 +115,18 @@
                 $('.overlay').addClass('active');
             });
 
-          
-       
-            
         
             //Automatic show the user's file when enter the user page
             var page = "mybox";
             var displayFile = "displayFileList";
             var sortType = "sortByDefault";
-            $("#boxName").text("myBox@");
+            $("#boxName").text("--MyFiles");
             displayFileList(displayFile, page, sortType);
 
             document.querySelector('#getFile').onchange = function(){
                 document.querySelector('#getFileName').textContent = this.files[0].name;
             }
         
-   
-            
             $('#uploadModal').on('click', '#uploadButton', function(){
                 var state = "mybox";
                 uploadFile(state);
@@ -142,8 +137,6 @@
                 uploadFile(state);
             });
 
-
-       
             //CHECK IDLE TIME
             let idleInterval = setInterval(timerIncrement, 1000);
 
@@ -159,6 +152,8 @@
     
         }
     );
+
+
 
     function uploadFile(state){
         var action = "uploadFile";
@@ -177,6 +172,11 @@
                 dataType: 'JSON',
                 contentType: false,
                 processData: false,
+                beforeSend: function(){
+                    $('.overlayLoading').addClass('active');
+                    $("#loading").show();
+                   
+                },
                 success: function(status){
                     console.log(status);
                     if(status == "success"){
@@ -217,6 +217,13 @@
                         $("div.message1").fadeIn(300).delay(1500).fadeOut(400);
                     }
                     
+                },
+                complete: function(){
+                 
+                        $('.overlayLoading').removeClass('active');
+                        $("#loading").hide();
+                
+                   
                 }
             });
             }
@@ -276,61 +283,70 @@
             type: 'GET',
             data: {displayFile: displayFile, sortType: sortType},
             dataType: 'html',
+            beforeSend: function(){
+                $('.overlayLoading').addClass('active');
+                $("#loading").show();
+            },
             success: function(fileList){
-                
-                if(page == "sharebox"){
-                    $('#myBoxRightMobile').hide();
-                    $('#myBoxRight').hide();
-                    $('#shareBoxRight').show();
-                    $('#shareBoxRightMobile').show();
-                  
+                 //Refresh the file list
+                 $('#mainContainer').append(fileList);
 
-                    $('#addButton, #closeVaultButton').removeClass("d-flex");
-                    $('#shareButton, #addToVaultButton,#removeFromVaultButton, #delButton, #delButtonMobile, #emptybinButton, #restoreButton').removeClass("d-md-flex");
-                    $('#shareButton, #delButton,#delButtonMobile, #shareButtonMobile, #addToVaultButton,#removeFromVaultButton, #closeVaultButton, #addButton, #addToVaultButtonMobile, #removeFromVaultButtonMobile, #closeVaultButtonMobile, #emptybinButton, #restoreButton ').addClass("d-none");
-               
+                if(page == "sharebox"){
+                    $('#myBoxRightMobile, #myBoxRight').hide();
+                    $('#shareBoxRight, #shareBoxRightMobile').show();
+
+                    $('#addButton, #closeVaultButton, #emptybinButton').removeClass("d-flex");
+                    $('#shareButton, #addToVaultButton,#removeFromVaultButton, #delButton, #delButtonMobile, #restoreButton, #restoreButtonMobile').removeClass("d-md-flex");
+                    $('#shareButton, #delButton,#delButtonMobile, #shareButtonMobile, #addToVaultButton,#removeFromVaultButton, #closeVaultButton, #addButton, #addToVaultButtonMobile, #removeFromVaultButtonMobile,#emptybinButton, #closeVaultButtonMobile, #restoreButton ').addClass("d-none");
 
                     $('#buttonrow').removeClass("w-50");
                     $('#buttonrow').addClass("w-25");
 
-                   
+             
                     $('#sortByDeletedTime').attr('id', 'sortByTime');
                     $('#labelSort').text('Created At ');
-                    $("#boxName").text("SHAREBOX@");
+                    $("#boxName").text("--SharedFiles");
                 }else if(page == "mybox"){
-                    $('#shareBoxRight').hide();
-                    $('#shareBoxRightMobile').hide();
-                    $('#myBoxRightMobile').show();
-                    $('#myBoxRight').show();
+                    $('#shareBoxRight, #shareBoxRightMobile').hide();
+                    $('#myBoxRightMobile,#myBoxRight').show();
+                 
 
-                    $("#boxName").text("MYBOX@");
+                    $("#boxName").text("--MyFiles");
                     $('#labelSort').text('Created At ');
                     $('#uploadToVaultButton').attr('id', 'uploadButton');
                     $('#sortByDeletedTime').attr('id', 'sortByTime');
+               
 
-                    $('#closeVaultButton').removeClass("d-flex");
-                    $('#removeFromVaultButton, #delButton, #delButtonMobile, #emptybinButton, #restoreButton').removeClass("d-md-flex");
-                    $('#closeVaultButton, #delButton, #delButtonMobile, #closeVaultButtonMobile, #removeFromVaultButton, #removeFromVaultButtonMobile, #emptybinButton, #restoreButton').addClass("d-none");
+                    $('#closeVaultButton, #emptybinButton').removeClass("d-flex");
+                    $('#removeFromVaultButton, #delButton, #delButtonMobile, #restoreButton, #restoreButtonMobile').removeClass("d-md-flex");
+                    $('#closeVaultButton, #delButton, #delButtonMobile, #closeVaultButtonMobile, #removeFromVaultButton, #removeFromVaultButtonMobile, #emptybinButton, #restoreButton, #restoreButtonMobile').addClass("d-none");
                   
                  
                  
 
                 }else if (page == "vault"){
-                    $("#boxName").text("VAULT@");
+                    $("#boxName").text("--Vault");
                     $('#sortByDeletedTime').attr('id', 'sortByTime');
                     $('#labelSort').text('Created At ');
                     $('#uploadButton').attr('id', 'uploadToVaultButton');
+         
 
-                    $('#shareButton, #addToVaultButton,#delButton, #delButtonMobile, #emptybinButton, #restoreButton').removeClass("d-md-flex");
-                    $('#shareButton, #shareButtonMobile, #delButton, #delButtonMobile,#addToVaultButton, #addToVaultButtonMobile, #emptybinButton, #restoreButton').addClass("d-none");
+                    $('#shareBoxRight, #shareBoxRightMobile, #myBoxRightMobile,#myBoxRight').hide();
+                    $('#emptybinButton').removeClass('d-flex');
+                    $('#shareButton, #addToVaultButton,#delButton, #delButtonMobile, #restoreButton, #restoreButtonMobile').removeClass("d-md-flex");
+                    $('#shareButton, #shareButtonMobile, #delButton, #delButtonMobile,#addToVaultButton, #addToVaultButtonMobile, #restoreButton,#restoreButtonMobile, #emptybinButton').addClass("d-none");
                   
                    
                 }else if(page == "bin"){
-                    $("#boxName").text("BIN@");
+                    $("#boxName").text("--Bin");
+                    $('#shareBoxRight, #shareBoxRightMobile').hide();
+                    $('#myBoxRightMobile,#myBoxRight ').show();
+       
 
-                    $('#removeButton, #shareButton, #downloadButton, #previewButton, #addToVaultButton, #removeFromVaultButton').removeClass("d-md-flex");
-                    $('#addButton, #removeButton, #shareButton, #downloadButton, #previewButton, #addToVaultButton, #removeFromVaultButton, #closeVaultButton').addClass("d-none");
+                    $('#removeButton,#removeButtonMobile, #shareButton, #shareButtonMobile, #downloadButton, #downloadButtonMobile, #previewButton,#previewButtonMobile, #addToVaultButton, #addToVaultButtonMobile, #removeFromVaultButton, #removeFromVaultButtonMobile').removeClass("d-md-flex");
                     $('#addButton, #closeVaultButton').removeClass('d-flex');
+                    $('#addButton, #removeButton,#removeButtonMobile, #shareButton, #shareButtonMobile, #downloadButton,#downloadButtonMobile, #previewButton,#previewButtonMobile, #addToVaultButton, #addToVaultButtonMobile, #removeFromVaultButton, #removeFromVaultButtonMobile, #closeVaultButton').addClass("d-none");
+                   
                     
 
                     $('#sortByTime').attr('id', 'sortByDeletedTime');
@@ -339,8 +355,15 @@
                     $('#buttonrow').addClass("w-25");
                 }
 
-                //Refresh the file list
-                $('#mainContainer').append(fileList);
+                if($('#myBoxMiddle').children().length<=0){
+                    $('#myBoxMiddle').append("<div class='mt-5 ml-3 mr-5 p-5 styled-box'>Your box is empty, try to add some files!</div>");
+                }
+                if($('#vaultMiddle').children().length<=0){
+                    $('#vaultMiddle').append("<div class='mt-5 ml-3 mr-5 p-5 styled-box'>Your vault is empty, try to add some files!</div>");
+                }
+                if($('#shareBoxMiddle').children().length<=0){
+                    $('#shareBoxMiddle').append("<div class='mt-5 ml-3 mr-5 p-5 styled-box'>You have no shared files....</div>");
+                }
 
                 $('#getFile').val('');
                 $('#getFileName').text('');
@@ -420,18 +443,19 @@
 
                 $("#deleteModal").off('click', '#delete-btn');
                 $('#deleteModal').on('click', '#delete-btn', function(){
-                 
+                  var filename = getFILENAME();
                     var num = getNUM();
                     var fileID = getFILEID();
-                    if(page == "bin"){
+                    if(page == 'bin'){
                         action = "deletePermanentlyFile";
-                        delFile(fileID, action, num);
-                    }else{
+                        delFile(fileID, filename, action, num);
+                    }else if(page == 'sharebox'){
                         action = "deleteSharedFile";
-                        delFile(fileID, action, num);
+                        delFile(fileID, filename, action, num);
                     }
-             
+                       
 
+                        
                 });
 
                 $("#removefromvaultModal").off('click', '#removefromvault-btn');
@@ -484,44 +508,21 @@
 
                      
                 $('#main').off('click', '#downloadButton, #downloadButtonMobile');
-                $('#main').on('click', '#downloadButton', function(){
+                $('#main').on('click', '#downloadButton, #downloadButtonMobile', function(){
                     var fileID = getFILEID();
-    
                     var num = getNUM();
                     if (num == ""){
                         $("div.message3").fadeIn(300).delay(1500).fadeOut(400);
                     }else{
-
-                        
                             action = "downloadFile";
                             document.getElementById("downloadButton").href = "downloadFile.php?action=" + action + "&path=" + fileID;
-                            
-                        
+                            document.getElementById("downloadButtonMobile").href = "downloadFile.php?action=" + action + "&path=" + fileID;
                     }
                     
         
                 });
 
-                $('#main').on('click', '#downloadButtonMobile', function(){
-                    var fileID = getFILEID();
-                    var filename = getFILENAME();
-                    var num = getNUM();
-                    if (num == ""){
-                        $("div.message3").fadeIn(300).delay(1500).fadeOut(400);
-                    }else{
-                        if(fileID == "" || fileID == undefined){
-                            action = "downloadFile";
-                            document.getElementById("downloadButtonMobile").href = "downloadFile.php?action=" + action + "&path=" + filename;
-                        } else{
-                            action = "downloadShareFile";
-                            document.getElementById("downloadButtonMobile").href = "downloadFile.php?action=" + action + "&path=" + fileID;
-                            
-                        }
-                    }
-                
-        
-                }
-                );
+            
 
                 $('#main').on('click', '#closeVaultButton', function(){
                     action = "closeVault";
@@ -533,15 +534,23 @@
                     action = "movetoBin";
                     $('#fileInfoMobile').addClass('fileInfoMobileClose');
                     $('.overlayMobile').removeClass('active');
-                  
                     var filename = getFILENAME();
                     var num = getNUM();
-                    if (num == "" || num == undefined){
-                        $("div.message3").fadeIn(300).delay(1500).fadeOut(400);
+
+                    if(page == 'sharebox'){
+                       $('#deleteModal').modal('show');
                     }else{
-                   
-                        moveToBin(filename, action, page, num);
+                        if (num == "" || num == undefined){
+                            $("div.message3").fadeIn(300).delay(1500).fadeOut(400);
+                        }else{
+                       
+                            moveToBin(filename, action, page, num);
+                        }
+
                     }
+                    
+
+                    
                 });
 
                 $('#emptybinModal').on('click', '#emptybin-btn', function(){
@@ -549,7 +558,7 @@
                     emptyBin(action);
                 });
 
-                $('#main').on('click', '#restoreButton', function(){
+                $('#main').on('click', '#restoreButton, #restoreButtonMobile', function(){
                     action = "restorefile";
                     var fileID = getFILEID();
                     var num = getNUM();
@@ -630,6 +639,10 @@
               
              
 
+            },
+            complete: function(){
+                 $('.overlayLoading').removeClass('active');
+                $("#loading").hide();
             }
 
         });
@@ -789,6 +802,10 @@
             type: 'post',
             data: {action: action},
             dataType: 'JSON',
+            beforeSend: function(){
+                $('.overlayLoading').addClass('active');
+                $("#loading").show();
+            },
             success:function(status){
                 console.log(status);
                 if($("div.message4").hasClass("alert-danger")){
@@ -797,6 +814,10 @@
                 $("div.message4").addClass('alert-success');
                 $("div.message4").text("OTP has sent! Check your email! Your OTP will be valid for 5 minutes!");
                 $("div.message4").fadeIn(300).delay(3000).fadeOut(400);
+            },
+            complete: function(){
+                $('.overlayLoading').removeClass('active');
+                 $("#loading").hide();
             }
         });
     }
@@ -985,16 +1006,18 @@
 
 
     //DELETE FUNCTION
-    function delFile(fileID, action, id){
+    function delFile(fileID,filename, action, id){
         $.ajax({
             url: 'fileInfo.php',
             type: 'post',
-            data: {fileID: fileID, action: action},
-            dataType: 'JSON',
+            data: {fileID: fileID, filename: filename, action: action},
+            dataType: 'JSON', 
+            beforeSend: function(){
+                $('.overlayLoading').addClass('active');
+                $("#loading").show();
+            },
             success: function(status){
-                console.log(status);
                 if(status == "success"){
-                  
                     $("#row_"+id).remove();
                     $("#deleteModal").modal('hide');
                     $('.overlayMobile').removeClass('active');
@@ -1002,6 +1025,10 @@
                 }else{
                     console.log("fail");
                 }
+            },
+            complete: function(){
+                $('.overlayLoading').removeClass('active');
+                $("#loading").hide();
             }
         });
     }
@@ -1030,12 +1057,20 @@
             data: {action: action},
             type: 'post',
             dataType: 'json',
+            beforeSend: function(){
+                $('.overlayLoading').addClass('active');
+                $("#loading").show();
+            },
             success: function(status){
                if(status == "success"){
                 $("#emptybinModal").modal('hide');
                }else{
                 console.log("fail");
                }
+            },
+            complete: function(){
+                $('.overlayLoading').removeClass('active');
+                $("#loading").hide();
             }
 
         });
@@ -1051,6 +1086,8 @@
                 console.log(status);
                 if(status == "success"){
                     $("#row_"+num).remove();
+                    $('.overlayMobile').removeClass('active');
+                    $('#fileInfoMobile').addClass('fileInfoMobileClose');
                 }else{
                     console.log('fail');
                 }

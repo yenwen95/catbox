@@ -172,22 +172,20 @@
           
             $num=1;
           
-
-            while($row = $fetchFile->fetch()){
-                $x = $row['id'];
-                $type = $row['filetype'];
-                $returnArr = getFileType($type);
-                echo '<div class="row-file row row-middle m-0 p-0 off-select" id="row_'.$num.'" value="'.$x.'">';
-                echo '<div class="col-12 col-md-4 p-0 pb-2 pt-2 pt-md-1 pb-md-1 d-flex d-md-block"><div class="long mr-1 col-7 col-sm-9 col-md-12 d-md-block" id="file_'.$num.'"><i class="pr-2 fas fa-file'.$returnArr['icon'].'"></i>'.$row['filename'].'</div><p class="m-0 pt-1 mr-2 small d-md-none">Created at: '.$row['createtime'].'</p></div>';
-                echo '<div class="d-none d-md-block col-md-3  pb-1 pt-1">'.$row['createtime'].'</div>';           
-                echo '<div class="d-none d-md-block col-md-3  pt-1 ">'.$returnArr['shortType'].'</div>';
-                echo '<div class="d-none d-md-block col-md-2  pb-1 pt-1">'.$row['filesize'].'</div>';
-                echo '</div>';
-                                
-                $num++; 
-            }
-                    
-                            
+                while($row = $fetchFile->fetch()){
+                    $x = $row['id'];
+                    $type = $row['filetype'];
+                    $returnArr = getFileType($type);
+                    echo '<div class="row-file row row-middle m-0 p-0 off-select" id="row_'.$num.'" value="'.$x.'">';
+                    echo '<div class="col-12 col-md-4 p-0 pb-2 pt-2 pt-md-1 pb-md-1 d-flex d-md-block"><div class="long mr-1 col-7 col-sm-9 col-md-12 d-md-block" id="file_'.$num.'"><i class="pr-2 fas fa-file'.$returnArr['icon'].'"></i>'.$row['filename'].'</div><p class="m-0 pt-1 mr-2 small d-md-none">Created at: '.$row['createtime'].'</p></div>';
+                    echo '<div class="d-none d-md-block col-md-3  pb-1 pt-1">'.$row['createtime'].'</div>';           
+                    echo '<div class="d-none d-md-block col-md-3  pt-1 ">'.$returnArr['shortType'].'</div>';
+                    echo '<div class="d-none d-md-block col-md-2  pb-1 pt-1">'.$row['filesize'].'</div>';
+                    echo '</div>';
+                                    
+                    $num++; 
+                }
+           
             echo '</div>';
         }
 
@@ -442,14 +440,15 @@
             echo json_encode($return_arr);
         }
 
-        if($action == "deletePermanentlyFile"){   //move to recycle bin
+    
+        if($action == "deletePermanentlyFile"){   
             $fileID = $_POST['fileID'];
+            $fileName = $_POST['filename'];
             $status = "";
-            $set = "1";
             
             //delete filepath from database
-            $query = $con->prepare("DELETE FROM Files WHERE id = ? && username = ? && is_insiderecyclebin = ?");
-            $query->execute([$fileID, $username, $set]);
+            $query = $con->prepare("DELETE FROM Files WHERE id = ?");
+            $query->execute([$fileID]);
 
             //delete the file in server
            
@@ -557,7 +556,7 @@
         }
 
         if($action == "deleteSharedFile"){
-            $fileID = $_POST['file'];
+            $fileID = $_POST['fileID'];
             $status = "";
 
             $query = $con->prepare("SELECT shared_users FROM Files WHERE id = ?");
@@ -717,7 +716,7 @@
         }
 
         if($action == "removeFromVault"){
-            $fileName = $_POST['file'];
+            $fileName = $_POST['filename'];
             $status = "";
             $oriSet = '1';
             $set = '0';

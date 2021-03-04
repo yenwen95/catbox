@@ -84,7 +84,7 @@ include 'controllers/authController.php'
 		<nav class="navbar navbar-expand-lg  fixed-top">
 			<!-- SYSTEM NAME -->
             <a href="./index.php"><img width="50px" height="40px" src="img/logo.png" alt="logo" /></a>
-            <p class="mr-auto mb-0">catBox</p>
+            <p class="mr-auto mb-0">CATBOX</p>
          
 
 
