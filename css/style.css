@@ -7,6 +7,7 @@ body {
   font-family: "IBM Plex Sans", sans-serif;
   font-family: "Noto Sans", sans-serif;
   padding-top: 23px;
+  overflow-x: hidden;
 }
 
 @media only screen and (max-width: 768px) {
@@ -103,6 +104,7 @@ a.btn-box:hover {
 .btn-design2 {
   background-color: #074b78;
   color: #f1f1f1;
+
   box-shadow: 0 8px 16px 0 rgb(0, 0, 0), 0 6px 20px 0 rgb(0, 0, 0);
   box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
@@ -186,4 +188,10 @@ div.form-row > a {
 }
 .modal-body > label {
   color: rgb(0, 0, 0);
+}
+
+.icon-log {
+  fill: #fff;
+  width: 15%;
+  height: auto;
 }

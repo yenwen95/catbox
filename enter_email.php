@@ -46,7 +46,7 @@ include 'controllers/authController.php'
         <link rel="preconnect" href="https://fonts.gstatic.com">
         <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300&family=Noto+Sans&display=swap" rel="stylesheet">
 
-        <title>Reset Password</title>
+        <title>CATBOX Reset Password</title>
     </head>
     <body class="body-color">
     <nav class="navbar fixed-top">

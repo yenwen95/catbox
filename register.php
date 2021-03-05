@@ -45,7 +45,7 @@ include 'controllers/authController.php'
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300&family=Noto+Sans&display=swap" rel="stylesheet">
 <script src="https://kit.fontawesome.com/b48b20acd1.js"></script>
 
-    <title>Registration</title>
+    <title>CATBOX Registration</title>
 </head>
 <body class="body-color">
 
@@ -56,7 +56,20 @@ include 'controllers/authController.php'
         <p class="mr-auto mb-0">catBox</p>
 
         <!-- LOGIN BUTTON -->
-        <a id="loginButton" class="btn btn-box" >Login</a>
+        <div class="col-4 col-md-2">
+                <a id="loginButton" class="btn btn-block btn-box" >
+                    <span>Login</span>
+                    <svg class="icon-log" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 485 485"  xml:space="preserve">
+                        <g>
+                            <polygon points="234.394,291.894 255.606,313.106 326.213,242.5 255.606,171.894 234.394,193.106 268.787,227.5 7.5,227.5 
+                                7.5,257.5 268.787,257.5 	"/>
+                            <polygon points="132.5,0 132.5,172.5 162.5,172.5 162.5,30 447.5,30 447.5,455 162.5,455 162.5,312.5 132.5,312.5 132.5,485 
+                                477.5,485 477.5,0 	"/>
+                        </g>
+                    </svg>
+                    
+                </a>
+            </div>
     </nav>
 
 
