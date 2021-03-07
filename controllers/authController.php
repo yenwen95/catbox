@@ -38,70 +38,80 @@ if(isset($_POST['register-btn'])){
     }
 
 
-$username = $_POST["username"];
-$email = $_POST["email"];
-$token = bin2hex(random_bytes(50));
-$password1 = $_POST["password1"];
+    $username = $_POST["username"];
+    $email = $_POST["email"];
+    $token = bin2hex(random_bytes(50));
+    $password1 = $_POST["password1"];
 
-//Infinityfree does not suppport argon2, 000webhost is supported
-$hash = password_hash($password1, PASSWORD_ARGON2I);
+    //Infinityfree does not suppport argon2, 000webhost is supported
+    $hash = password_hash($password1, PASSWORD_ARGON2I);
 
-$verified="0";
-$action = "register";
-
-$check_username = $con->prepare("SELECT * FROM Users WHERE username = ?");
-$check_email =  $con->prepare("SELECT * FROM Users WHERE email = ?");
-
-$check_username->execute([$username]);
-$row = $check_username->fetch(PDO::FETCH_ASSOC);
-
-$check_email->execute([$email]);
-$row1 = $check_email->fetch(PDO::FETCH_ASSOC);
-
-    if($row > 0){
-        $errors['username'] = "Username already exists";
+    /* infinityfree
+    if(defined('PASSWORD_ARGON2I')) {
+        $hash = password_hash($password1, PASSWORD_ARGON2ID);
+    } else if(defined('PASSWORD_ARGON2ID')){
+        $hash = password_hash($password1, PASSWORD_ARGON2ID);
+    }else {
+        $hash = password_hash($password1, PASSWORD_DEFAULT);
     }
-    if($row1 > 0){
-        $errors['email'] = "Email already exists";
-    }
-    if(count($errors) === 0){
-        
-       try{
-            $query = $con->prepare("INSERT INTO Users (username, email, password, token, verified, role)
-            VALUES(:username, :email, :password, :token,:verified,:role)");
-            $query->bindParam(':username',$username); 
-            $query->bindParam(':email',$email);          
-            $query->bindParam(':password',$hash);
-            $query->bindParam(':token',$token);
-            $query->bindParam(':verified',$verified);
-            $query->bindParam(':role',$role);
-            $query->execute();
 
-            if($query){
+    */
+    $verified="0";
+    $action = "register";
 
-                sendVerificationEmail($email, $token);
-                $user_id = $con->lastInsertId();
-                $_SESSION['id'] = $user_id;
-                $_SESSION['username'] = $username;
-                $_SESSION['email'] = $email;
-                $_SESSION['verified'] = false;
-                $_SESSION['action'] = $action;
-               
-                header('location: verify.php');
-                exit();
-            }else{
-                echo "Error";
-            }
+    $check_username = $con->prepare("SELECT * FROM Users WHERE username = ?");
+    $check_email =  $con->prepare("SELECT * FROM Users WHERE email = ?");
 
-           
-       }catch(PDOException $e){
-           echo "Database error: Could not register user";
-       }
+    $check_username->execute([$username]);
+    $row = $check_username->fetch(PDO::FETCH_ASSOC);
+
+    $check_email->execute([$email]);
+    $row1 = $check_email->fetch(PDO::FETCH_ASSOC);
+
+        if($row > 0){
+            $errors['username'] = "Username already exists";
+        }
+        if($row1 > 0){
+            $errors['email'] = "Email already exists";
+        }
+        if(count($errors) === 0){
             
+        try{
+                $query = $con->prepare("INSERT INTO Users (username, email, password, token, verified, role)
+                VALUES(:username, :email, :password, :token,:verified,:role)");
+                $query->bindParam(':username',$username); 
+                $query->bindParam(':email',$email);          
+                $query->bindParam(':password',$hash);
+                $query->bindParam(':token',$token);
+                $query->bindParam(':verified',$verified);
+                $query->bindParam(':role',$role);
+                $query->execute();
+
+                if($query){
+
+                    sendVerificationEmail($email, $token);
+                    $user_id = $con->lastInsertId();
+                    $_SESSION['id'] = $user_id;
+                    $_SESSION['username'] = $username;
+                    $_SESSION['email'] = $email;
+                    $_SESSION['verified'] = false;
+                    $_SESSION['action'] = $action;
+                
+                    header('location: verify.php');
+                    exit();
+                }else{
+                    echo "Error";
+                }
+
+            
+        }catch(PDOException $e){
+            echo "Database error: Could not register user";
+        }
+                
+                
             
         
-       
-    }
+        }
 
     
 

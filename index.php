@@ -116,8 +116,34 @@ include 'controllers/authController.php'
 
         <!-- CONTENT -->
         <div class="main">
+          
                 <!--First Content -->
             <div class="container-fluid first ">
+                  <!-- DISPLAY ERROR -->
+            <div class="row m-0 d-flex justify-content-center">
+                <?php if (count($errors) > 0): ?>
+                    <div class="alert alert-danger">
+                        <?php foreach ($errors as $error): ?>
+                            <li>
+                                <?php echo $error; ?>
+                            </li>
+                        <?php endforeach;?>
+                    </div>
+                <?php endif;?>
+            </div>  
+
+            <!-- DISPLAY MESSAGE FROM VERIFICATION -->
+            <div class="row m-0 d-flex justify-content-center">
+                <?php if (isset($_SESSION['message'])): ?>
+                    <div class="alert alert-success">
+                        <?php
+                            echo $_SESSION['message'];
+                            unset($_SESSION['message']);
+                            unset($_SESSION['type']);
+                        ?>
+                    </div>
+                <?php endif; ?>
+            </div>
                 <div class="row m-0 d-flex justify-content-center ">
                   <div class="mt-4 pt-5 col-8 text-center">
                     <h1 class="bounceIn">Welcome to CATBOX</h1> 
@@ -130,6 +156,7 @@ include 'controllers/authController.php'
                     <div class="col-12 col-md-4">
                         <a href="register.php" class="btn btn-lg btn-block btn-design2 index-btn">Register now!</a>
                     </div>
+                   
                 </div>
             </div>
             <div class="container capture-container">

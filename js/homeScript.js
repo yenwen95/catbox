@@ -129,12 +129,28 @@
         
             $('#uploadModal').on('click', '#uploadButton', function(){
                 var state = "mybox";
-                uploadFile(state);
+                var files = $('#getFile')[0].files[0];
+                if(files.size < 10485760){
+                    uploadFile(state);
+                }else{
+                    $("div.message1").removeClass("alert-success");
+                    $("div.message1").addClass('alert-danger');
+                    $("div.message1").text("File size is too big!");
+                    $("div.message1").fadeIn(300).delay(1500).fadeOut(400);
+                }
             });
 
             $('#uploadModal').on('click', '#uploadToVaultButton', function(){
                 var state = "vault";
-                uploadFile(state);
+                var files = $('#getFile')[0].files[0];
+                if(files.size < 10485760){
+                    uploadFile(state);
+                }else{
+                    $("div.message1").removeClass("alert-success");
+                    $("div.message1").addClass('alert-danger');
+                    $("div.message1").text("File size is too big!");
+                    $("div.message1").fadeIn(300).delay(1500).fadeOut(400);
+                }
             });
 
             //CHECK IDLE TIME
@@ -161,6 +177,7 @@
         var files = $('#getFile')[0].files;
       
         if(files.length > 0){
+            
             formData.append('getFile', files[0]);
             formData.append('action',action);
             formData.append('state',state);
@@ -175,59 +192,49 @@
                 beforeSend: function(){
                     $('.overlayLoading').addClass('active');
                     $("#loading").show();
-                   
-                },
-                success: function(status){
-                    console.log(status);
-                    if(status == "success"){
-                        if($("div.message1").hasClass("alert-danger")){
-                            $("div.message1").removeClass("alert-danger");
-                         }
-                        $("div.message1").addClass('alert-success');
-                        $("div.message1").text("File uploaded successfully!");
-                        $("div.message1").fadeIn(300).delay(1500).fadeOut(400);
-
-                          $("#main").load(location.href + " #main");
-                       
-                      
-                        var sortType = "sortByDefault"
-                        if(state == "mybox"){
-                            var displayFile = "displayFileList";
-                            var page = "mybox";
-                            
-                            displayFileList(displayFile, page, sortType);
-                        }else{
-                            var displayFile = "displayVaultFileList";
-                            displayFileList(displayFile, state, sortType);
-                        }
-                    }else if (status == "size"){
-                       
-                        if($("div.message1").hasClass("alert-success")){
-                            $("div.message1").removeClass("alert-success");
-                         }
-                        $("div.message1").addClass('alert-danger');
-                        $("div.message1").text("File size is too big!");
-                        $("div.message1").fadeIn(300).delay(1500).fadeOut(400);
-                    }else{
-                        if($("div.message1").hasClass("alert-success")){
-                            $("div.message1").removeClass("alert-success");
-                         }
-                        $("div.message1").addClass('alert-danger');
-                        $("div.message1").text("Failed to upload file!");
-                        $("div.message1").fadeIn(300).delay(1500).fadeOut(400);
-                    }
                     
                 },
-                complete: function(){
-                 
-                        $('.overlayLoading').removeClass('active');
-                        $("#loading").hide();
-                
-                   
+                success: function(status){
+                    $('.overlayLoading').removeClass('active');
+                    $("#loading").hide();
+                    console.log(status);
+                        if(status == "success"){
+                            if($("div.message1").hasClass("alert-danger")){
+                                $("div.message1").removeClass("alert-danger");
+                                }
+                            $("div.message1").addClass('alert-success');
+                            $("div.message1").text("File uploaded successfully!");
+                            $("div.message1").fadeIn(300).delay(1500).fadeOut(400);
+    
+                                $("#main").load(location.href + " #main");
+                            
+                            
+                            var sortType = "sortByDefault"
+                            if(state == "mybox"){
+                                var displayFile = "displayFileList";
+                                var page = "mybox";
+                                
+                                displayFileList(displayFile, page, sortType);
+                            }else{
+                                var displayFile = "displayVaultFileList";
+                                displayFileList(displayFile, state, sortType);
+                            }
+                        }else{
+                            if($("div.message1").hasClass("alert-success")){
+                                $("div.message1").removeClass("alert-success");
+                                }
+                            $("div.message1").addClass('alert-danger');
+                            $("div.message1").text("Failed to upload file!");
+                            $("div.message1").fadeIn(300).delay(1500).fadeOut(400);
+                        }
                 }
             });
-            }
+        }
+    
 
+            
+
+           
     }
 
     //CHANGING Between mybox and sharebox at SideBar
@@ -297,7 +304,7 @@
 
                     $('#addButton, #closeVaultButton, #emptybinButton').removeClass("d-flex");
                     $('#shareButton, #addToVaultButton,#removeFromVaultButton, #delButton, #delButtonMobile, #restoreButton, #restoreButtonMobile').removeClass("d-md-flex");
-                    $('#shareButton, #delButton,#delButtonMobile, #shareButtonMobile, #addToVaultButton,#removeFromVaultButton, #closeVaultButton, #addButton, #addToVaultButtonMobile, #removeFromVaultButtonMobile,#emptybinButton, #closeVaultButtonMobile, #restoreButton ').addClass("d-none");
+                    $('#shareButton, #delButton,#delButtonMobile, #shareButtonMobile, #addToVaultButton,#removeFromVaultButton, #closeVaultButton, #addButton, #addToVaultButtonMobile, #removeFromVaultButtonMobile,#emptybinButton, #closeVaultButtonMobile, #restoreButton, #restoreButtonMobile ').addClass("d-none");
 
                     $('#buttonrow').removeClass("w-50");
                     $('#buttonrow').addClass("w-25");
@@ -537,17 +544,17 @@
                     var filename = getFILENAME();
                     var num = getNUM();
 
-                    if(page == 'sharebox'){
-                       $('#deleteModal').modal('show');
-                    }else{
                         if (num == "" || num == undefined){
                             $("div.message3").fadeIn(300).delay(1500).fadeOut(400);
                         }else{
-                       
-                            moveToBin(filename, action, page, num);
+                            if(page == 'sharebox'){
+                                $('#deleteModal').modal('show');
+                             } else{
+                                 moveToBin(filename, action, page, num);
+                            }
                         }
 
-                    }
+                
                     
 
                     
@@ -1058,21 +1065,29 @@
             type: 'post',
             dataType: 'json',
             beforeSend: function(){
+               $("#emptybinModal").modal('hide');
                 $('.overlayLoading').addClass('active');
                 $("#loading").show();
+        
             },
             success: function(status){
-               if(status == "success"){
-                $("#emptybinModal").modal('hide');
-               }else{
-                console.log("fail");
-               }
-            },
-            complete: function(){
+               
                 $('.overlayLoading').removeClass('active');
                 $("#loading").hide();
+               
+               if(status == "success"){
+                 
+                    $("#main").load(location.href + " #main");
+                  
+                    var displayFile = "displayRecycleBin";
+                    var page = "bin";
+                    var sortType = "sortByDefault";
+                    displayFileList(displayFile, page, sortType);
+                   
+               }else{
+                    console.log("fail");
+               }
             }
-
         });
     }
 
