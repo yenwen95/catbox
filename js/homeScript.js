@@ -919,7 +919,6 @@
                     imgbox.style.display = "block";
                  
                     $('#previewImg').attr("src", src="./" + path);
-                    //$('#previewImg').attr("src", src="https://catboxtest.000webhostapp.com/" + path);
                 }else if(shortType == "Video"){
                     framebox.style.display = "none";
                     imgbox.style.display = "none";
@@ -943,7 +942,7 @@
                     audiobox.style.display = "none";
                     videobox.style.display = "none";
                     $("#previewFrame").attr("src", src="https://docs.google.com/viewer?url=https://calibre-ebook.com/downloads/demos/demo.docx&embedded=true");
-                //$("#previewFrame").attr("src", src="https://docs.google.com/viewer?url=https://catboxtest.000webhostapp.com/" + path + "&embedded=true");
+                    //$("#previewFrame").attr("src", src="https://docs.google.com/viewer?url=http://localhost/" + path + "&embedded=true");
                 }
             }
         });
