@@ -64,8 +64,6 @@ use PHPMailer\PHPMailer\Exception;
                 <body>
                         <div class="wrapper">
                             <p>Thank you for signing up on our site. Please click on the link below to verify your account: </p>
-                           
-                            <!--a class="btn-box" href="https://catboxtest.000webhostapp.com/verify_email.php?token=' . $token . '">Verify Email!</a -->
                             <a class="btn-box" href="http://localhost/verify_email.php?token=' . $token . '">Verify Email</a>  
                         </div>
                 </body>
@@ -133,7 +131,6 @@ function sendPasswordResetEmail($userEmail, $token){
                 <body>
                         <div class="wrapper">
                             <p>Please click on the link below to change your password:  </p>
-                            <!-- <a class="btn-box" href="https://catboxtest.000webhostapp.com/reset_password.php?token=' . $token . '">Reset Password</a> -->
                             <a class="btn-box" href="http://localhost/reset_password.php?token=' . $token . '">Reset Password</a>  
                         </div>
                 </body>
